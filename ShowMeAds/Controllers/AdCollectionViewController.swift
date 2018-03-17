@@ -34,6 +34,19 @@ class AdCollectionViewController: UICollectionViewController {
         self.collectionView?.backgroundColor = .white
 
         self.offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
+
+        AdService(endpoint: Endpoint.adUrl).get(completion: { (objectIds) in
+            for objectId in objectIds {
+                DispatchQueue.main.async {
+                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                        let mainContext = appDelegate.persistentContainer.viewContext
+                        if let ad = mainContext.object(with: objectId) as? Ads {
+                            print(ad)
+                        }
+                    }
+                }
+            }
+        })
     }
 
     @objc func didTapOfflineMode() {
