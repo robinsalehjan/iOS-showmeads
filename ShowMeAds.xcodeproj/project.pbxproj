@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		6C205D21205C3ED7002B8BAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D20205C3ED7002B8BAA /* AppDelegate.swift */; };
-		6C205D23205C3ED7002B8BAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D22205C3ED7002B8BAA /* ViewController.swift */; };
-		6C205D26205C3ED7002B8BAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D24205C3ED7002B8BAA /* Main.storyboard */; };
+		6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D22205C3ED7002B8BAA /* AdCollectionViewController.swift */; };
 		6C205D29205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D27205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld */; };
 		6C205D2B205C3ED7002B8BAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D2A205C3ED7002B8BAA /* Assets.xcassets */; };
 		6C205D2E205C3ED7002B8BAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */; };
 		6C205D39205C3ED7002B8BAA /* ShowMeAdsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D38205C3ED7002B8BAA /* ShowMeAdsTests.swift */; };
+		6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D43205C4557002B8BAA /* AdCollectionViewCell.swift */; };
+		6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,8 +30,7 @@
 /* Begin PBXFileReference section */
 		6C205D1D205C3ED7002B8BAA /* ShowMeAds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowMeAds.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C205D20205C3ED7002B8BAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6C205D22205C3ED7002B8BAA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		6C205D25205C3ED7002B8BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6C205D22205C3ED7002B8BAA /* AdCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewController.swift; sourceTree = "<group>"; };
 		6C205D28205C3ED7002B8BAA /* ShowMeAds.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShowMeAds.xcdatamodel; sourceTree = "<group>"; };
 		6C205D2A205C3ED7002B8BAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C205D2D205C3ED7002B8BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -38,6 +38,8 @@
 		6C205D34205C3ED7002B8BAA /* ShowMeAdsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShowMeAdsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C205D38205C3ED7002B8BAA /* ShowMeAdsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMeAdsTests.swift; sourceTree = "<group>"; };
 		6C205D3A205C3ED7002B8BAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C205D43205C4557002B8BAA /* AdCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewCell.swift; sourceTree = "<group>"; };
+		6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +81,13 @@
 		6C205D1F205C3ED7002B8BAA /* ShowMeAds */ = {
 			isa = PBXGroup;
 			children = (
+				6CC72474205C7BEF00E7D103 /* Components */,
+				6CC4E3CE205C6A99007587B6 /* Controllers */,
+				6CC72477205C7C4900E7D103 /* Services */,
 				6C205D20205C3ED7002B8BAA /* AppDelegate.swift */,
-				6C205D22205C3ED7002B8BAA /* ViewController.swift */,
-				6C205D24205C3ED7002B8BAA /* Main.storyboard */,
-				6C205D2A205C3ED7002B8BAA /* Assets.xcassets */,
 				6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */,
 				6C205D2F205C3ED7002B8BAA /* Info.plist */,
-				6C205D27205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld */,
+				6C205D2A205C3ED7002B8BAA /* Assets.xcassets */,
 			);
 			path = ShowMeAds;
 			sourceTree = "<group>";
@@ -97,6 +99,55 @@
 				6C205D3A205C3ED7002B8BAA /* Info.plist */,
 			);
 			path = ShowMeAdsTests;
+			sourceTree = "<group>";
+		};
+		6CC4E3CE205C6A99007587B6 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				6C205D22205C3ED7002B8BAA /* AdCollectionViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		6CC72474205C7BEF00E7D103 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6CC72475205C7BF700E7D103 /* Cells */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		6CC72475205C7BF700E7D103 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */,
+				6C205D43205C4557002B8BAA /* AdCollectionViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		6CC72477205C7C4900E7D103 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				6CC72479205C7CF300E7D103 /* API */,
+				6CC72478205C7CD100E7D103 /* CoreData */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		6CC72478205C7CD100E7D103 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				6C205D27205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		6CC72479205C7CF300E7D103 /* API */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -183,8 +234,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C205D2E205C3ED7002B8BAA /* LaunchScreen.storyboard in Resources */,
+				6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */,
 				6C205D2B205C3ED7002B8BAA /* Assets.xcassets in Resources */,
-				6C205D26205C3ED7002B8BAA /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,7 +253,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C205D23205C3ED7002B8BAA /* ViewController.swift in Sources */,
+				6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */,
+				6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */,
 				6C205D21205C3ED7002B8BAA /* AppDelegate.swift in Sources */,
 				6C205D29205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld in Sources */,
 			);
@@ -227,14 +279,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		6C205D24205C3ED7002B8BAA /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6C205D25205C3ED7002B8BAA /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
