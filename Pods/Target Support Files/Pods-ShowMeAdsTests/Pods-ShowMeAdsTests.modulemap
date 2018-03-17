@@ -1,0 +1,6 @@
+framework module Pods_ShowMeAdsTests {
+  umbrella header "Pods-ShowMeAdsTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
