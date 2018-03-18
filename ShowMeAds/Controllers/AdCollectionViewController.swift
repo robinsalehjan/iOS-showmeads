@@ -9,6 +9,12 @@
 import UIKit
 
 class AdCollectionViewController: UICollectionViewController {
+
+    // MARK: Properties
+
+    fileprivate var ads: [Ads] = []
+    fileprivate var isOffline: Bool = false
+
     fileprivate let leftTitleLabel: UILabel = {
         let label = UILabel()
         let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)]
@@ -22,6 +28,11 @@ class AdCollectionViewController: UICollectionViewController {
         return offlineSwitch
     }()
 
+    override init(collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(collectionViewLayout: layout)
+        fetchData()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftTitleLabel)
@@ -34,26 +45,37 @@ class AdCollectionViewController: UICollectionViewController {
         self.collectionView?.backgroundColor = .white
 
         self.offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
+    }
 
-        AdService(endpoint: Endpoint.adUrl).get(completion: { (objectIds, isOffline) in
+    func fetchData() {
+        self.ads = []
+
+        AdService(endpoint: Endpoint.adUrl).get(completion: { [unowned self] (objectIds, isOffline) in
+            if isOffline { print("[INFO]: The device is offline") } else { print("[INFO]: Successfully fetched data") }
+            self.isOffline = isOffline
+            
             for objectId in objectIds {
                 DispatchQueue.main.async {
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                         let mainContext = appDelegate.persistentContainer.viewContext
                         if let ad = mainContext.object(with: objectId) as? Ads {
-                            // If we are offline show the offline banner
-                            if let imageUrl = ad.imageUrl {
-
-                            }
+                            self.ads.append(ad)
                         }
                     }
                 }
+            }
+            DispatchQueue.main.async {
+                self.collectionView?.reloadData()
             }
         })
     }
 
     @objc func didTapOfflineMode() {
-        print("Go to offline mode")
+        print("Turn on offline mode")
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Not implemented")
     }
 
     override func didReceiveMemoryWarning() {
@@ -69,14 +91,30 @@ extension AdCollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return self.ads.count == 0 ? 10 : self.ads.count
     }
 
     override func collectionView(_ collectionView: UICollectionView,
                                  cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let adCell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.identifier,
-                                                        for: indexPath)
-        return adCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.identifier,
+                                           for: indexPath)
+
+        if  let adCell = cell as? AdCollectionViewCell {
+            guard self.ads.count > 0 else { return cell }
+            let ad = self.ads[indexPath.row]
+
+            var imageUrl = ""
+            var location = ""
+            var title = ""
+
+            if let adUrl = ad.imageUrl { imageUrl = adUrl }
+            if let adLocation = ad.location { location = adLocation }
+            if let adTitle = ad.title { title = adTitle }
+
+            adCell.setup(imageUrl: imageUrl, price: ad.price, location: location, title: title)
+        }
+
+        return cell
     }
 }
 

@@ -11,7 +11,7 @@ import CoreData
 
 struct AdStruct {
     var imageUrl: String = ""
-    var price: Int = 0
+    var price: Int32 = 0
     var location: String = ""
     var title: String = ""
 }

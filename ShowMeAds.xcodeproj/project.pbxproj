@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C055789205EAD90005703D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C055788205EAD90005703D9 /* Assets.xcassets */; };
 		6C0F613D205D13A300F4BF71 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613C205D13A300F4BF71 /* AdService.swift */; };
 		6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */; };
 		6C0F6141205D182600F4BF71 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F6140205D182600F4BF71 /* Endpoint.swift */; };
@@ -15,7 +16,6 @@
 		6C205D21205C3ED7002B8BAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D20205C3ED7002B8BAA /* AppDelegate.swift */; };
 		6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D22205C3ED7002B8BAA /* AdCollectionViewController.swift */; };
 		6C205D29205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D27205C3ED7002B8BAA /* ShowMeAds.xcdatamodeld */; };
-		6C205D2B205C3ED7002B8BAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D2A205C3ED7002B8BAA /* Assets.xcassets */; };
 		6C205D2E205C3ED7002B8BAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */; };
 		6C205D39205C3ED7002B8BAA /* ShowMeAdsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D38205C3ED7002B8BAA /* ShowMeAdsTests.swift */; };
 		6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D43205C4557002B8BAA /* AdCollectionViewCell.swift */; };
@@ -38,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		004CFF2B33925371513ABB9D /* Pods-ShowMeAdsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowMeAdsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShowMeAdsTests/Pods-ShowMeAdsTests.release.xcconfig"; sourceTree = "<group>"; };
+		6C055788205EAD90005703D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C0F613C205D13A300F4BF71 /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
 		6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdProcessorService.swift; sourceTree = "<group>"; };
 		6C0F6140205D182600F4BF71 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
@@ -47,7 +48,6 @@
 		6C205D20205C3ED7002B8BAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C205D22205C3ED7002B8BAA /* AdCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewController.swift; sourceTree = "<group>"; };
 		6C205D28205C3ED7002B8BAA /* ShowMeAds.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ShowMeAds.xcdatamodel; sourceTree = "<group>"; };
-		6C205D2A205C3ED7002B8BAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C205D2D205C3ED7002B8BAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6C205D2F205C3ED7002B8BAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C205D34205C3ED7002B8BAA /* ShowMeAdsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShowMeAdsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,8 +140,8 @@
 				6C0F6148205D2F8200F4BF71 /* Models */,
 				6C0F6142205D1CE100F4BF71 /* Utilities */,
 				6C205D20205C3ED7002B8BAA /* AppDelegate.swift */,
+				6C055788205EAD90005703D9 /* Assets.xcassets */,
 				6C205D2F205C3ED7002B8BAA /* Info.plist */,
-				6C205D2A205C3ED7002B8BAA /* Assets.xcassets */,
 			);
 			path = ShowMeAds;
 			sourceTree = "<group>";
@@ -310,8 +310,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C205D2E205C3ED7002B8BAA /* LaunchScreen.storyboard in Resources */,
+				6C055789205EAD90005703D9 /* Assets.xcassets in Resources */,
 				6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */,
-				6C205D2B205C3ED7002B8BAA /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

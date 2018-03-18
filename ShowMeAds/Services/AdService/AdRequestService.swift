@@ -31,9 +31,10 @@ final class AdRequestService {
             fatalError("[ERROR]: The URL is of invalid format")
         }
 
-        let task = URLSession.shared.dataTask(with: endpointURL as URL!) { (data, response, error) in
+        URLSession.shared.dataTask(with: endpointURL as URL!) { (data, response, error) in
             guard error == nil else {
-                print("[ERROR]: Failed to make network request: \(error!) ")
+                print("[ERROR]: Failed to make a network request: \(error!)")
+                self.getLocal(completion: completion)
                 return
             }
 
@@ -45,10 +46,10 @@ final class AdRequestService {
                 default:
                     print("[INFO]: Not supported status code: \(response.statusCode)" +
                         " headers: \(response.allHeaderFields)")
+                    self.getLocal(completion: completion)
                 }
             }
-        }
-        task.resume()
+        }.resume()
     }
 
     fileprivate func getLocal(completion: @escaping ((_ objectIds: [NSManagedObjectID], _ isOffline: Bool) -> Void)) {

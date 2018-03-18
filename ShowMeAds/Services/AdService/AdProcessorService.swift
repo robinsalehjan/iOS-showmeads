@@ -91,7 +91,7 @@ final class AdProcessorService {
                         }
                     }
                     if let priceDictionary = itemDictionary["price"] as? [String: Any] {
-                        if let price = priceDictionary["value"] as? Int {
+                        if let price = priceDictionary["value"] as? Int32 {
                             ad.price = price
                         }
                     }
