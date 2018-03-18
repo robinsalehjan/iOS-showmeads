@@ -18,13 +18,7 @@ final class AdService {
         self.adRequestService = AdRequestService.init(endpoint: endpoint, adProcessorService: self.adProcessorService)
     }
 
-    func get(completion: @escaping ([NSManagedObjectID]) -> Void) {
-        // 1. Check if we are online
-        if Reachability.isConnectedToNetwork() {
-            // 2. If yes, ask adRequestService to fetch remote
-            self.adRequestService.getRequest(completion: completion)
-        } else {
-            // 3. If no, ask adProcessorService to fetch local
-        }
+    func get(completion: @escaping (_ objectIds: [NSManagedObjectID], _ isOffline: Bool) -> Void) {
+        self.adRequestService.getRequest(completion: completion)
     }
 }

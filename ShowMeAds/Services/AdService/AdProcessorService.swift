@@ -43,6 +43,26 @@ final class AdProcessorService {
         return objectIds
     }
 
+    func fetchFromCoreData() -> [NSManagedObjectID] {
+        var objectIds: [NSManagedObjectID] = []
+
+        let backgroundContext = self.persistentContainer.newBackgroundContext()
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
+
+        do {
+            let result = try backgroundContext.fetch(request)
+            if let ads = result as? [Ads] {
+                for ad in ads {
+                    objectIds.append(ad.objectID)
+                }
+            }
+        } catch {
+            print("[ERROR]: Failed to fetch data from CoreData")
+        }
+
+        return objectIds
+    }
+
     // MARK: - Private functions
 
     private func serializeToDictionary(data: Data?) -> [String: Any] {
@@ -113,26 +133,6 @@ final class AdProcessorService {
             }
 
             objectIds.append(newAd.objectID)
-        }
-
-        return objectIds
-    }
-
-    private func fetchFromCoreData() -> [NSManagedObjectID] {
-        var objectIds: [NSManagedObjectID] = []
-
-        let backgroundContext = self.persistentContainer.newBackgroundContext()
-        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
-
-        do {
-            let result = try backgroundContext.fetch(request)
-            if let ads = result as? [Ads] {
-                for ad in ads {
-                    objectIds.append(ad.objectID)
-                }
-            }
-        } catch {
-            print("[ERROR]: Failed to fetch data from CoreData")
         }
 
         return objectIds

@@ -18,9 +18,17 @@ final class AdRequestService {
         self.adProcessorService = adProcessorService
     }
 
-    func getRequest(completion: @escaping ([NSManagedObjectID]) -> Void) {
+    func getRequest(completion: @escaping ((_ objectIds: [NSManagedObjectID], _ isOffline: Bool) -> Void)) {
+        if Reachability.isConnectedToNetwork() {
+            getRemote(completion: completion)
+        } else {
+            getLocal(completion: completion)
+        }
+    }
+
+    fileprivate func getRemote(completion: @escaping ((_ objectIds: [NSManagedObjectID], _ isOffline: Bool) -> Void)) {
         guard let endpointURL =  URL.init(string: self.endpoint) else {
-            fatalError("[ERROR]: The URL is of valid format")
+            fatalError("[ERROR]: The URL is of invalid format")
         }
 
         let task = URLSession.shared.dataTask(with: endpointURL as URL!) { (data, response, error) in
@@ -32,8 +40,8 @@ final class AdRequestService {
             if let response = response as? HTTPURLResponse {
                 switch response.statusCode {
                 case 200:
-                    let ads = self.adProcessorService.storeData(data: data)
-                    completion(ads)
+                    let objectIds = self.adProcessorService.storeData(data: data)
+                    completion(objectIds, false)
                 default:
                     print("[INFO]: Not supported status code: \(response.statusCode)" +
                         " headers: \(response.allHeaderFields)")
@@ -43,4 +51,8 @@ final class AdRequestService {
         task.resume()
     }
 
+    fileprivate func getLocal(completion: @escaping ((_ objectIds: [NSManagedObjectID], _ isOffline: Bool) -> Void)) {
+        let objectIds = self.adProcessorService.fetchFromCoreData()
+        completion(objectIds, true)
+    }
 }

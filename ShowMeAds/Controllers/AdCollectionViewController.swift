@@ -35,13 +35,16 @@ class AdCollectionViewController: UICollectionViewController {
 
         self.offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
 
-        AdService(endpoint: Endpoint.adUrl).get(completion: { (objectIds) in
+        AdService(endpoint: Endpoint.adUrl).get(completion: { (objectIds, isOffline) in
             for objectId in objectIds {
                 DispatchQueue.main.async {
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
                         let mainContext = appDelegate.persistentContainer.viewContext
                         if let ad = mainContext.object(with: objectId) as? Ads {
-                            print(ad)
+                            // If we are offline show the offline banner
+                            if let imageUrl = ad.imageUrl {
+
+                            }
                         }
                     }
                 }
