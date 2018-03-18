@@ -7,7 +7,8 @@ target 'ShowMeAds' do
 
   # Pods for ShowMeAds
   pod 'SwiftLint'
-
+  pod 'SDWebImage', '~> 4.0'
+  
   target 'ShowMeAdsTests' do
     inherit! :search_paths
     # Pods for testing
