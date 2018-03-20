@@ -38,7 +38,7 @@ class AdsFacade {
             return
         }
 
-        self.adService.fetchRemote(completionHandler: { [unowned self] (ads, isOffline) in
+        self.adService.fetchRemote(completionHandler: { (ads, isOffline) in
             // In case the request fails for whatever reason
             // Default to show favorited ads
             guard ads.count > 0 else {

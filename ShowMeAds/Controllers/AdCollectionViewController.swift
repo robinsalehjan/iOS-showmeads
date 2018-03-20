@@ -96,6 +96,11 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     // MARK: - Private
     
     fileprivate func fetchAds(onCompletion: @escaping (() -> Void)) {
+        guard self.isOffline == false else {
+            onCompletion()
+            return
+        }
+        
         let spinnerView = UIViewController.displaySpinner(onView: self.collectionView!)
         
         AdsFacade.shared.fetchAds { (ads, isOffline) in
