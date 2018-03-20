@@ -24,11 +24,10 @@ class AdPersistenceService {
 
         return container
     }()
-    
+
     // MARK: Public functions
 
     func fetchFavoriteAds(completionHandler: ((_ ads: [AdItem]) -> Void)) {
-        print("[INFO]: Fetching favorites from CoreData")
         var ads: [AdItem] = []
 
         let backgroundContext = self.persistentContainer.newBackgroundContext()

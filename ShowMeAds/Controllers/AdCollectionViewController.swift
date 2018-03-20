@@ -8,8 +8,7 @@
 
 import UIKit
 
-class AdCollectionViewController: UICollectionViewController {
-
+class AdCollectionViewController: UICollectionViewController, AdCollectionViewCellDelegate {
     // MARK: Properties
 
     fileprivate var ads: [AdItem] = []
@@ -50,13 +49,11 @@ class AdCollectionViewController: UICollectionViewController {
 
     @objc func didTapOfflineMode() {
         if self.offlineSwitch.isOn == true {
-            print("[INFO]: Set to offline")
             self.isOffline = true
             self.ads = []
             self.fetchFavoriteAds()
             print("[INFO]: offline ad count: \(self.ads.count)")
         } else {
-            print("[INFO]: Set to online")
             self.isOffline = false
             self.ads = []
             self.fetchAds()
@@ -111,7 +108,7 @@ extension AdCollectionViewController {
         if  let adCell = cell as? AdCollectionViewCell {
             guard self.ads.count > 0 else { return cell }
             let ad = self.ads[indexPath.row]
-            adCell.setup(ad: ad)
+            adCell.setup(row: indexPath.row, ad: ad)
         }
 
         return cell
@@ -139,5 +136,13 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
         let cellHeight = self.view.frame.height * 0.30
 
         return CGSize(width: cellWidth, height: cellHeight)
+    }
+}
+
+// MARK: - AdCollectionViewCellDelegate
+
+extension AdCollectionViewController {
+    func removeAdFromCollectionView(row: Int) {
+        print("Got told to remove: \(row)")
     }
 }

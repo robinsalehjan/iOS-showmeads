@@ -41,7 +41,6 @@ final class AdService {
             if let response = response as? HTTPURLResponse {
                 switch response.statusCode {
                 case 200:
-                    print("[INFO]: Successfully fetched data")
                     ads = self.adProcessorService.parseData(data: data)
                     completionHandler(ads, isOffline)
                 default:

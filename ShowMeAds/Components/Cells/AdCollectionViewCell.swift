@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import SDWebImage
 
 class AdCollectionViewCell: UICollectionViewCell {
+    // MARK: - Properties
+
     public static let nib = "AdCollectionViewCell"
     public static let identifier = "AdCollectionViewCellIdentifier"
+    
+    var ad: AdItem? = nil
+    var row: Int = 0
+    weak var delegate: AdCollectionViewCellDelegate?
 
     @IBOutlet weak var adImageView: UIImageView!
     @IBOutlet weak var heartButton: UIButton!
@@ -20,27 +27,71 @@ class AdCollectionViewCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.adImageView.layer.cornerRadius = 3
+        self.adImageView.backgroundColor = UIColor(red: 0.00, green: 0.67, blue: 0.94, alpha: 1.0)
+        self.adImageView.layer.cornerRadius = 10
         self.adImageView.layer.masksToBounds = true
-        self.priceLabel.layer.cornerRadius = 3
+
+        self.priceLabel.layer.cornerRadius = 10
+        self.priceLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMaxYCorner]
         self.priceLabel.layer.masksToBounds = true
+
+        let unfilledHeartIcon = UIImage.init(named: "empty-heart")
+        let filledHeartIcon = UIImage.init(named: "filled-heart")
+        self.heartButton.setImage(unfilledHeartIcon, for: .normal)
+        self.heartButton.setImage(filledHeartIcon, for: .selected)
+        self.heartButton.addTarget(self, action: #selector(didTapHeartButton), for: .touchUpInside)
     }
 
-    func setup(imageUrl: String, price: Int32, location: String, title: String) {
+    override func prepareForReuse() {
+        self.ad = nil
+        self.row = 0
+        self.heartButton.isSelected = false
+    }
+
+    func setup(row: Int, ad: AdItem) {
+        self.row = row
+        self.ad = ad
         
-        if price == 0 { self.priceLabel.text = "Gis bort" } else { self.priceLabel.text = "\(price),-" }
-        self.locationLabel.text = location
-        self.titleLabel.text = title
+        loadimage(imageUrl: (self.ad?.imageUrl)!)
+
+        self.locationLabel.text = self.ad?.location
+        self.titleLabel.text = self.ad?.title
+
+        if self.ad?.price == 0 {
+            self.priceLabel.text = "Gis bort"
+        } else {
+            self.priceLabel.text = "\(self.ad!.price),-"
+        }
+
+        if self.ad!.isFavorited { self.heartButton.isSelected = true }
     }
 
-    fileprivate func fetchImage(imageUrl: String) {
-        if Reachability.isConnectedToNetwork() {
-            getRemote(imageUrl: imageUrl)
+    @objc func didTapHeartButton() {
+        if self.heartButton.isSelected {
+            self.heartButton.isSelected = false
+            if ad != nil {
+                delegate?.removeAdFromCollectionView(row: self.row)
+                AdsFacade.shared.remove(ad: self.ad!)
+            }
         } else {
-            getLocal(imageUrl: imageUrl)
+            self.heartButton.isSelected = true
+            self.ad?.isFavorited = true
+            if ad != nil { AdsFacade.shared.save(ad: self.ad!)}
         }
     }
 
-    fileprivate func getRemote(imageUrl: String) { }
-    fileprivate func getLocal(imageUrl: String) { }
+    fileprivate func loadimage(imageUrl: String) {
+        guard let url =  URL.init(string: imageUrl) else {
+            fatalError("[ERROR]: The URL is of invalid format")
+        }
+
+        self.adImageView.sd_setShowActivityIndicatorView(true)
+        self.adImageView.sd_setIndicatorStyle(.whiteLarge)
+
+        self.adImageView.sd_setImage(with: url) { (_, error, _, _) in
+            if error != nil {
+                // Set fallback image
+            }
+        }
+    }
 }

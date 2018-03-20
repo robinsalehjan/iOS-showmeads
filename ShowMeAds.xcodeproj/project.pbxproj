@@ -21,6 +21,7 @@
 		6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */; };
 		6C2183E3205D57EE009E57EF /* Ads+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2183E1205D57ED009E57EF /* Ads+CoreDataClass.swift */; };
 		6C2183E4205D57EE009E57EF /* Ads+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2183E2205D57EE009E57EF /* Ads+CoreDataProperties.swift */; };
+		6C3764122061834F00233E98 /* AdCollectionViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3764112061834F00233E98 /* AdCollectionViewCellDelegate.swift */; };
 		6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B4E20603AD40046DB50 /* AdsFacade.swift */; };
 		6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B5120603DF60046DB50 /* AdPersistenceService.swift */; };
 		8648193BEEBFE80EFD2C2216 /* Pods_ShowMeAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE429DE4F7328E5D10BF6F7 /* Pods_ShowMeAds.framework */; };
@@ -57,6 +58,7 @@
 		6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdCollectionViewCell.xib; sourceTree = "<group>"; };
 		6C2183E1205D57ED009E57EF /* Ads+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ads+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6C2183E2205D57EE009E57EF /* Ads+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ads+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		6C3764112061834F00233E98 /* AdCollectionViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewCellDelegate.swift; sourceTree = "<group>"; };
 		6C527B4E20603AD40046DB50 /* AdsFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsFacade.swift; sourceTree = "<group>"; };
 		6C527B5120603DF60046DB50 /* AdPersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPersistenceService.swift; sourceTree = "<group>"; };
 		6DE429DE4F7328E5D10BF6F7 /* Pods_ShowMeAds.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShowMeAds.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -197,6 +199,7 @@
 			children = (
 				6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */,
 				6C205D43205C4557002B8BAA /* AdCollectionViewCell.swift */,
+				6C3764112061834F00233E98 /* AdCollectionViewCellDelegate.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C2183E3205D57EE009E57EF /* Ads+CoreDataClass.swift in Sources */,
+				6C3764122061834F00233E98 /* AdCollectionViewCellDelegate.swift in Sources */,
 				6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */,
 				6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */,
 				6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */,
