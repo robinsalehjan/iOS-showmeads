@@ -9,13 +9,9 @@
 import Foundation
 import SystemConfiguration
 
-/**
- * Code snippet is from: https://stackoverflow.com/questions/30743408/check-for-internet-connection-with-swift
- **/
+/** Check if we have network availability
+ */
 public class Reachability {
-    /// Check if we have network availability
-    ///
-    /// - Returns: False if we do not have an internet connection, true otherwise.
     class func isConnectedToNetwork() -> Bool {
 
         var zeroAddress = sockaddr_in(sin_len: 0,

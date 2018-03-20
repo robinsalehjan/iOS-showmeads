@@ -9,24 +9,26 @@
 import Foundation
 import CoreData
 
+/** Provides an API to interact with Core Data
+ */
 class AdPersistenceService {
 
     // MARK: Properties
 
     fileprivate lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ShowMeAds")
-
         container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
-
         return container
     }()
 
-    // MARK: Public functions
-
+    // MARK: Public
+    
+    /** Fetch ads that has been favorited from Core Data
+     */
     func fetchFavoriteAds(completionHandler: ((_ ads: [AdItem]) -> Void)) {
         var ads: [AdItem] = []
 
@@ -44,8 +46,10 @@ class AdPersistenceService {
             completionHandler(ads)
         }
     }
-
-    func save(ad: AdItem) {
+    
+    /** Insert an ad into Core Data
+     */
+    func insert(ad: AdItem) {
         let backgroundContext = self.persistentContainer.newBackgroundContext()
         let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext)
 
@@ -67,8 +71,10 @@ class AdPersistenceService {
                 " title: \(ad.title)")
         }
     }
-
-    func remove(ad: AdItem) {
+    
+    /** Delete an ad from Core Data
+     */
+    func delete(ad: AdItem) {
         let backgroundContext = self.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
         fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", ad.imageUrl)
@@ -85,7 +91,9 @@ class AdPersistenceService {
             print("[ERROR]: Failed to delete data from CoreData")
         }
     }
-
+    
+    /** Check if ad exists in Core Data
+     */
     func exists(ad: AdItem) -> AdItem? {
         let backgroundContext = self.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")

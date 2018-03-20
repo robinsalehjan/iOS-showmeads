@@ -9,5 +9,5 @@
 import Foundation
 
 protocol AdCollectionViewCellDelegate: NSObjectProtocol {
-    func removeAdFromCollectionView(row: Int)
+    func removeAdFromCollectionView(cell: AdCollectionViewCell)
 }

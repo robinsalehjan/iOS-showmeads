@@ -8,6 +8,8 @@
 
 import Foundation
 
+/** Provides an API to interact with the remote API
+ */
 final class AdService {
 
     // MARK: - Properties
@@ -20,8 +22,9 @@ final class AdService {
         self.adProcessorService = AdProcessorService.init()
     }
 
-    // MARK: - Public functions
-
+    // MARK: - Public
+    /** Send an GET request to the API
+    */
     func fetchRemote(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
         guard let endpointURL =  URL.init(string: self.endpoint) else {
             fatalError("[ERROR]: The URL is of invalid format")

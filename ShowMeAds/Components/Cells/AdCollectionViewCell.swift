@@ -10,21 +10,24 @@ import UIKit
 import SDWebImage
 
 class AdCollectionViewCell: UICollectionViewCell {
+    
     // MARK: - Properties
 
     public static let nib = "AdCollectionViewCell"
     public static let identifier = "AdCollectionViewCellIdentifier"
-    
-    var ad: AdItem? = nil
-    var row: Int = 0
-    weak var delegate: AdCollectionViewCellDelegate?
+
+    public weak var delegate: AdCollectionViewCellDelegate?
+
+    var ad: AdItem = AdItem()
 
     @IBOutlet weak var adImageView: UIImageView!
     @IBOutlet weak var heartButton: UIButton!
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var titleLabel: UILabel!
-
+    
+    // MARK: - Lifecycle
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.adImageView.backgroundColor = UIColor(red: 0.00, green: 0.67, blue: 0.94, alpha: 1.0)
@@ -43,42 +46,36 @@ class AdCollectionViewCell: UICollectionViewCell {
     }
 
     override func prepareForReuse() {
-        self.ad = nil
-        self.row = 0
         self.heartButton.isSelected = false
     }
-
-    func setup(row: Int, ad: AdItem) {
-        self.row = row
-        self.ad = ad
-        
-        loadimage(imageUrl: (self.ad?.imageUrl)!)
-
-        self.locationLabel.text = self.ad?.location
-        self.titleLabel.text = self.ad?.title
-
-        if self.ad?.price == 0 {
-            self.priceLabel.text = "Gis bort"
-        } else {
-            self.priceLabel.text = "\(self.ad!.price),-"
-        }
-
-        if self.ad!.isFavorited { self.heartButton.isSelected = true }
-    }
+    
+    // MARK: - Selectors
 
     @objc func didTapHeartButton() {
         if self.heartButton.isSelected {
             self.heartButton.isSelected = false
-            if ad != nil {
-                delegate?.removeAdFromCollectionView(row: self.row)
-                AdsFacade.shared.remove(ad: self.ad!)
-            }
+            delegate?.removeAdFromCollectionView(cell: self)
+            AdsFacade.shared.delete(ad: self.ad)
         } else {
             self.heartButton.isSelected = true
-            self.ad?.isFavorited = true
-            if ad != nil { AdsFacade.shared.save(ad: self.ad!)}
+            self.ad.isFavorited = true
+            AdsFacade.shared.insert(ad: self.ad)
         }
     }
+    
+    // MARK: - Public
+    
+    func setup(ad: AdItem) {
+        self.ad = ad
+        
+        loadimage(imageUrl: self.ad.imageUrl)
+        self.locationLabel.text = self.ad.location
+        self.titleLabel.text = self.ad.title
+        self.priceLabel.text = (self.ad.price == 0) ?  "Gis bort" : "\(self.ad.price),-"
+        self.heartButton.isSelected  = (self.ad.isFavorited == true) ? true : false
+    }
+    
+    // MARK: - Private
 
     fileprivate func loadimage(imageUrl: String) {
         guard let url =  URL.init(string: imageUrl) else {

@@ -9,18 +9,23 @@
 import Foundation
 import UIKit
 
+/** Provides an API to parse and serialize responses from the remote API into AdItem instances
+ */
 final class AdProcessorService {
 
-    // MARK: - Public functions
-
+    // MARK: - Public
+    /** Parse an Data response from the API to an list of ads
+    */
     func parseData(data: Data?) -> [AdItem] {
         let dictionary = serializeToDictionary(data: data)
         let parsedAds: [AdItem] = parse(dictionary: dictionary)
         return parsedAds
     }
 
-    // MARK: - Private functions
-
+    // MARK: - Private
+    
+    /** Serialize the response into a JSON object
+     */
     private func serializeToDictionary(data: Data?) -> [String: Any] {
         var dictionary: [String: Any] = [:]
 
@@ -32,7 +37,9 @@ final class AdProcessorService {
         }
         return dictionary
     }
-
+    
+    /** Deserialize the JSON object into an ad
+     */
     private func parse(dictionary: [String: Any]) -> [AdItem] {
         var ads: [AdItem] = []
 

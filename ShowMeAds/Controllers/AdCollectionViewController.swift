@@ -9,11 +9,22 @@
 import UIKit
 
 class AdCollectionViewController: UICollectionViewController, AdCollectionViewCellDelegate {
-    // MARK: Properties
+    
+    // MARK: - Properties
 
     fileprivate var ads: [AdItem] = []
     fileprivate var isOffline: Bool = false
-
+    fileprivate let sectionCount = 1
+    
+    fileprivate let emptyViewController = EmptyViewController()
+    
+    fileprivate let refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        return refreshControl
+    }()
+    
     fileprivate let leftTitleLabel: UILabel = {
         let label = UILabel()
         let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)]
@@ -27,46 +38,73 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
         let offlineSwitch = UISwitch()
         return offlineSwitch
     }()
-
+    
+    // MARK: - Initalizers
+    
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        fetchAds()
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftTitleLabel)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-
+        
         self.collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
                                       forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         self.collectionView?.delegate = self
         self.collectionView?.dataSource = self
         self.collectionView?.backgroundColor = .white
-
+        self.collectionView?.refreshControl = self.refreshControl
+        
         self.offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("Not implemented")
+    }
+    
+    // MARK: - Lifecycle
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fetchAds(onCompletion: {})
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    // MARK: - Selectors
+    
     @objc func didTapOfflineMode() {
         if self.offlineSwitch.isOn == true {
             self.isOffline = true
             self.ads = []
             self.fetchFavoriteAds()
-            print("[INFO]: offline ad count: \(self.ads.count)")
         } else {
             self.isOffline = false
             self.ads = []
-            self.fetchAds()
+            fetchAds(onCompletion: {})
         }
     }
-
-    fileprivate func fetchAds() {
+    
+    @objc func pullToRefresh() {
+        fetchAds(onCompletion: { self.refreshControl.endRefreshing() })
+    }
+    
+    // MARK: - Private
+    
+    fileprivate func fetchAds(onCompletion: @escaping (() -> Void)) {
+        let spinnerView = UIViewController.displaySpinner(onView: self.collectionView!)
+        
         AdsFacade.shared.fetchAds { (ads, isOffline) in
-            self.isOffline = isOffline
             self.ads = ads
-
+            
             DispatchQueue.main.async {
+                spinnerView.removeFromSuperview()
                 self.collectionView?.reloadData()
+                onCompletion()
             }
         }
     }
@@ -75,24 +113,30 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
         AdsFacade.shared.fetchFavoriteAds { (ads) in
             self.ads = ads
             DispatchQueue.main.async {
+                if self.ads.count == 0 {
+                    self.showEmptyViewController()
+                    self.goOnline()
+                }
                 self.collectionView?.reloadData()
             }
         }
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("Not implemented")
+    
+    fileprivate func showEmptyViewController() {
+        self.navigationController?.pushViewController(self.emptyViewController, animated: true)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    
+    fileprivate func goOnline() {
+        self.isOffline = false
+        self.offlineSwitch.isOn = false
     }
 }
 
 // MARK: - UICollectionViewControllerDataSource
+
 extension AdCollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return self.sectionCount
     }
 
     override func collectionView(_ collectionView: UICollectionView,
@@ -106,11 +150,14 @@ extension AdCollectionViewController {
                                            for: indexPath)
 
         if  let adCell = cell as? AdCollectionViewCell {
-            guard self.ads.count > 0 else { return cell }
-            let ad = self.ads[indexPath.row]
-            adCell.setup(row: indexPath.row, ad: ad)
+            //  Get notified when cell is liked
+            adCell.delegate = self
+            
+            if self.ads.count > 0 {
+                let ad = self.ads[indexPath.row]
+                adCell.setup(ad: ad)
+            }
         }
-
         return cell
     }
 }
@@ -142,7 +189,20 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
 // MARK: - AdCollectionViewCellDelegate
 
 extension AdCollectionViewController {
-    func removeAdFromCollectionView(row: Int) {
-        print("Got told to remove: \(row)")
+    func removeAdFromCollectionView(cell: AdCollectionViewCell) {
+        let indexPath = self.collectionView!.indexPath(for: cell)!
+        
+        guard self.ads.count > 1 else {
+            self.ads.remove(at: indexPath.row)
+            self.showEmptyViewController()
+            self.goOnline()
+            self.collectionView?.reloadData()
+            return
+        }
+        
+        self.collectionView?.performBatchUpdates({
+            self.ads.remove(at: indexPath.row)
+            self.collectionView?.deleteItems(at: [indexPath])
+        }, completion: { (_) in })
     }
 }
