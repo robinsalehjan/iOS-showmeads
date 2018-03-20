@@ -12,7 +12,7 @@ class AdCollectionViewController: UICollectionViewController {
 
     // MARK: Properties
 
-    fileprivate var ads: [Ads] = []
+    fileprivate var ads: [AdItem] = []
     fileprivate var isOffline: Bool = false
 
     fileprivate let leftTitleLabel: UILabel = {
@@ -20,6 +20,7 @@ class AdCollectionViewController: UICollectionViewController {
         let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)]
         let attributeString = NSMutableAttributedString(string: "Kun favoritter", attributes: attributes)
         label.attributedText = attributeString
+        label.textColor = .white
         return label
     }()
 
@@ -30,7 +31,7 @@ class AdCollectionViewController: UICollectionViewController {
 
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        fetchData()
+        fetchAds()
     }
 
     override func viewDidLoad() {
@@ -47,31 +48,39 @@ class AdCollectionViewController: UICollectionViewController {
         self.offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
 
-    func fetchData() {
-        self.ads = []
+    @objc func didTapOfflineMode() {
+        if self.offlineSwitch.isOn == true {
+            print("[INFO]: Set to offline")
+            self.isOffline = true
+            self.ads = []
+            self.fetchFavoriteAds()
+            print("[INFO]: offline ad count: \(self.ads.count)")
+        } else {
+            print("[INFO]: Set to online")
+            self.isOffline = false
+            self.ads = []
+            self.fetchAds()
+        }
+    }
 
-        AdService(endpoint: Endpoint.adUrl).get(completion: { [unowned self] (objectIds, isOffline) in
-            if isOffline { print("[INFO]: The device is offline") } else { print("[INFO]: Successfully fetched data") }
+    fileprivate func fetchAds() {
+        AdsFacade.shared.fetchAds { (ads, isOffline) in
             self.isOffline = isOffline
-            
-            for objectId in objectIds {
-                DispatchQueue.main.async {
-                    if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                        let mainContext = appDelegate.persistentContainer.viewContext
-                        if let ad = mainContext.object(with: objectId) as? Ads {
-                            self.ads.append(ad)
-                        }
-                    }
-                }
-            }
+            self.ads = ads
+
             DispatchQueue.main.async {
                 self.collectionView?.reloadData()
             }
-        })
+        }
     }
 
-    @objc func didTapOfflineMode() {
-        print("Turn on offline mode")
+    fileprivate func fetchFavoriteAds() {
+        AdsFacade.shared.fetchFavoriteAds { (ads) in
+            self.ads = ads
+            DispatchQueue.main.async {
+                self.collectionView?.reloadData()
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -102,16 +111,7 @@ extension AdCollectionViewController {
         if  let adCell = cell as? AdCollectionViewCell {
             guard self.ads.count > 0 else { return cell }
             let ad = self.ads[indexPath.row]
-
-            var imageUrl = ""
-            var location = ""
-            var title = ""
-
-            if let adUrl = ad.imageUrl { imageUrl = adUrl }
-            if let adLocation = ad.location { location = adLocation }
-            if let adTitle = ad.title { title = adTitle }
-
-            adCell.setup(imageUrl: imageUrl, price: ad.price, location: location, title: title)
+            adCell.setup(ad: ad)
         }
 
         return cell

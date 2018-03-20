@@ -18,5 +18,6 @@ extension Ads {
     @NSManaged public var price: Int32
     @NSManaged public var location: String?
     @NSManaged public var title: String?
+    @NSManaged public var isFavorited: Bool
 
 }
