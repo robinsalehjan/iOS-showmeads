@@ -20,7 +20,7 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     
     fileprivate let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.attributedTitle = NSAttributedString(string: "Oppdaterer")
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         return refreshControl
     }()
