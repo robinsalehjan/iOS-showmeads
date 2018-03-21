@@ -1,0 +1,6 @@
+framework module Pods_ShowMeAds {
+  umbrella header "Pods-ShowMeAds-umbrella.h"
+
+  export *
+  module * { export * }
+}
