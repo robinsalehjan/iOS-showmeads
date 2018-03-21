@@ -1,4 +1,6 @@
 # Description
+![Alt Text](https://github.com/robinsalehjan/showmeads/blob/master/showmeads.gif)
+
 ## Folders
 - Components: UI classes and related XIB files
 - Controllers: Application logic
