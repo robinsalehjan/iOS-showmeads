@@ -2,10 +2,10 @@
 ![Alt Text](https://github.com/robinsalehjan/showmeads/blob/master/showmeads.gif)
 
 ## Folders
-- Components: UI classes and related XIB files
+- Components: UI and XIB related files
 - Controllers: Application logic
-- Services: Abstraction for the remote API and the Core Data services
-- Utilities: Helper functions
+- Services: Abstraction for external services such as the JSON API and Core Data
+- Utilities: Helper classes
 - Extensions: Functions added as extensions to the `Foundation` classes
 
 ## Classes
