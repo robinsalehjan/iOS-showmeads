@@ -1,5 +1,3 @@
-# showmeads
-
 # Description
 ## Folders
 - Components: UI classes and related XIB files
