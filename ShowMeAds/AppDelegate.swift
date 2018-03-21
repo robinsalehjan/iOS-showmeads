@@ -23,7 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        self.purgeData()
         let adCollectionViewController = AdCollectionViewController.init(collectionViewLayout: adCollectionViewLayout)
         let navigationViewController = UINavigationController.init(rootViewController: adCollectionViewController)
 
@@ -52,7 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(_ application: UIApplication) {
         self.saveContext()
-        self.purgeData()
     }
 
     // MARK: - Core Data stack
