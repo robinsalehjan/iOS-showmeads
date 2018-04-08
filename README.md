@@ -1,5 +1,5 @@
 # Description
-![Alt Text](https://github.com/robinsalehjan/showmeads/blob/dev/showmeads.gif)
+![Alt Text](https://github.com/robinsalehjan/showmeads/blob/master/showmeads.gif)
 
 ## Folders
 - Components: UI and XIB related files
