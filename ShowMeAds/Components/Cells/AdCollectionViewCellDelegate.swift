@@ -10,4 +10,5 @@ import Foundation
 
 protocol AdCollectionViewCellDelegate: NSObjectProtocol {
     func removeAdFromCollectionView(cell: AdCollectionViewCell)
+    func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem)
 }

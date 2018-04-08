@@ -206,8 +206,15 @@ extension AdCollectionViewController {
         }
         
         self.collectionView?.performBatchUpdates({
-            self.ads.remove(at: indexPath.row)
+            let adItem = self.ads.remove(at: indexPath.row)
+            AdsFacade.shared.delete(ad: adItem)
+            
             self.collectionView?.deleteItems(at: [indexPath])
         }, completion: { (_) in })
+    }
+    
+    func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem) {
+        let indexPath = self.collectionView!.indexPath(for: cell)!
+        AdsFacade.shared.insert(ad: adItem)
     }
 }
