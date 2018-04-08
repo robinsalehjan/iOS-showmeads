@@ -55,11 +55,10 @@ class AdCollectionViewCell: UICollectionViewCell {
         if self.heartButton.isSelected {
             self.heartButton.isSelected = false
             delegate?.removeAdFromCollectionView(cell: self)
-            AdsFacade.shared.delete(ad: self.ad)
         } else {
             self.heartButton.isSelected = true
             self.ad.isFavorited = true
-            AdsFacade.shared.insert(ad: self.ad)
+            delegate?.saveAdFromCollectionView(cell: self, adItem: self.ad)
         }
     }
     
