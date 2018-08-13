@@ -1,17 +1,3 @@
-PODS:
-  - SDWebImage (4.3.3):
-    - SDWebImage/Core (= 4.3.3)
-  - SDWebImage/Core (4.3.3)
-  - SwiftLint (0.25.0)
+PODFILE CHECKSUM: 5226441db8b73af1dbb0e81c0584a2644d178c0f
 
-DEPENDENCIES:
-  - SDWebImage (~> 4.0)
-  - SwiftLint
-
-SPEC CHECKSUMS:
-  SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
-  SwiftLint: e14651157288e9e01d6e1a71db7014fb5744a8ea
-
-PODFILE CHECKSUM: 710a9850c1cb8a39cc3bc6bd46d72133cdce5f67
-
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3

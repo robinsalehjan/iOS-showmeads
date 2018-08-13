@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 class AdCollectionViewCell: UICollectionViewCell {
     
@@ -67,7 +66,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     func setup(ad: AdItem) {
         self.ad = ad
         
-        loadimage(imageUrl: self.ad.imageUrl)
+        // loadimage(imageUrl: self.ad.imageUrl)
         self.locationLabel.text = self.ad.location
         self.titleLabel.text = self.ad.title
         self.priceLabel.text = (self.ad.price == 0) ?  "Gis bort" : "\(self.ad.price),-"
@@ -79,15 +78,6 @@ class AdCollectionViewCell: UICollectionViewCell {
     fileprivate func loadimage(imageUrl: String) {
         guard let url =  URL.init(string: imageUrl) else {
             fatalError("[ERROR]: The URL is of invalid format")
-        }
-
-        self.adImageView.sd_setShowActivityIndicatorView(true)
-        self.adImageView.sd_setIndicatorStyle(.whiteLarge)
-
-        self.adImageView.sd_setImage(with: url) { (_, error, _, _) in
-            if error != nil {
-                // Set fallback image
-            }
         }
     }
 }
