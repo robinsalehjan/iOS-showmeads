@@ -68,9 +68,7 @@ class AdsFacade {
     /** Insert an ad into Core Data
     */
     public func insert(ad: AdItem) {
-        if ad.imageUrl == nil { return }
-        if ad.location == nil { return }
-        if ad.title == nil    { return }
+        guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
         self.adPersistenceService.insert(ad: ad)
     }
     

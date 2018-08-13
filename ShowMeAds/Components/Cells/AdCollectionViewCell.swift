@@ -66,7 +66,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     func setup(ad: AdItem) {
         self.ad = ad
         
-        // loadimage(imageUrl: self.ad.imageUrl)
+        loadImage(imageUrl: self.ad.imageUrl)
         self.locationLabel.text = self.ad.location
         self.titleLabel.text = self.ad.title
         self.priceLabel.text = (self.ad.price == 0) ?  "Gis bort" : "\(self.ad.price),-"
@@ -75,9 +75,9 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Private
 
-    fileprivate func loadimage(imageUrl: String) {
-        guard let url =  URL.init(string: imageUrl) else {
-            fatalError("[ERROR]: The URL is of invalid format")
-        }
+    fileprivate func loadImage(imageUrl: String) {
+        guard let _ =  URL.init(string: imageUrl) else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
+        
+        
     }
 }

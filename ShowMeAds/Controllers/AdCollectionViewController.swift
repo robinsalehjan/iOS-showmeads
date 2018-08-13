@@ -214,7 +214,7 @@ extension AdCollectionViewController {
     }
     
     func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem) {
-        let indexPath = self.collectionView!.indexPath(for: cell)!
+        let _ = self.collectionView!.indexPath(for: cell)!
         AdsFacade.shared.insert(ad: adItem)
     }
 }

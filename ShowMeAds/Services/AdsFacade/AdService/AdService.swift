@@ -26,11 +26,14 @@ final class AdService {
     /** Send an GET request to the API
     */
     func fetchRemote(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
-        guard let endpointURL =  URL.init(string: self.endpoint) else {
-            fatalError("[ERROR]: The URL is of invalid format")
+        guard let url =  URL.init(string: self.endpoint) else {
+            fatalError("[ERROR]: The URL string: \(self.endpoint) is not valid")
         }
-
-        URLSession.shared.dataTask(with: endpointURL as URL!) { (data, response, error) in
+        guard let endpoint = url as URL? else {
+            fatalError("[ERROR]: Could not construct a URL instance with the given url: \(url)")
+        }
+        
+        URLSession.shared.dataTask(with: endpoint) { (data, response, error) in
             var ads: [AdItem] = []
             var isOffline = false
 
