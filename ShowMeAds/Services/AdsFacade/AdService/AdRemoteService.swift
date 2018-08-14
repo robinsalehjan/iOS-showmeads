@@ -10,7 +10,7 @@ import Foundation
 
 /** Provides an API to interact with the remote API
  */
-final class AdService {
+final class AdRemoteService {
 
     // MARK: - Properties
 
@@ -26,11 +26,9 @@ final class AdService {
     /** Send an GET request to the API
     */
     func fetchRemote(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
-        guard let url =  URL.init(string: self.endpoint) else {
-            fatalError("[ERROR]: The URL string: \(self.endpoint) is not valid")
-        }
-        guard let endpoint = url as URL? else {
-            fatalError("[ERROR]: Could not construct a URL instance with the given url: \(url)")
+        guard let endpoint = URL.isValid(self.endpoint) else {
+            print("[ERROR]: Could not construct a valid URL instance with the given url: \(self.endpoint)")
+            return
         }
         
         URLSession.shared.dataTask(with: endpoint) { (data, response, error) in

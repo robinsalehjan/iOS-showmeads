@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6C055789205EAD90005703D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C055788205EAD90005703D9 /* Assets.xcassets */; };
-		6C0F613D205D13A300F4BF71 /* AdService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613C205D13A300F4BF71 /* AdService.swift */; };
+		6C0F613D205D13A300F4BF71 /* AdRemoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613C205D13A300F4BF71 /* AdRemoteService.swift */; };
 		6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */; };
 		6C0F6141205D182600F4BF71 /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F6140205D182600F4BF71 /* Endpoint.swift */; };
 		6C0F6147205D2C0700F4BF71 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F6146205D2C0600F4BF71 /* Reachability.swift */; };
@@ -29,6 +29,9 @@
 		6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B5120603DF60046DB50 /* AdPersistenceService.swift */; };
 		8648193BEEBFE80EFD2C2216 /* Pods_ShowMeAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DE429DE4F7328E5D10BF6F7 /* Pods_ShowMeAds.framework */; };
 		BE8F82540A19C271B027EC46 /* Pods_ShowMeAdsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80BFA4D2A0BE28709C81C0BA /* Pods_ShowMeAdsTests.framework */; };
+		F2D107F52121A67F00BF4E4A /* AdCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107F42121A67F00BF4E4A /* AdCacheService.swift */; };
+		F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */; };
+		F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,7 +47,7 @@
 /* Begin PBXFileReference section */
 		004CFF2B33925371513ABB9D /* Pods-ShowMeAdsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowMeAdsTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShowMeAdsTests/Pods-ShowMeAdsTests.release.xcconfig"; sourceTree = "<group>"; };
 		6C055788205EAD90005703D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		6C0F613C205D13A300F4BF71 /* AdService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdService.swift; sourceTree = "<group>"; };
+		6C0F613C205D13A300F4BF71 /* AdRemoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdRemoteService.swift; sourceTree = "<group>"; };
 		6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdProcessorService.swift; sourceTree = "<group>"; };
 		6C0F6140205D182600F4BF71 /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
 		6C0F6146205D2C0600F4BF71 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -72,6 +75,9 @@
 		80BFA4D2A0BE28709C81C0BA /* Pods_ShowMeAdsTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ShowMeAdsTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D25AE967189E2EA0FD8F1EC2 /* Pods-ShowMeAdsTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowMeAdsTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShowMeAdsTests/Pods-ShowMeAdsTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EE9CF33997AF03197637D4A6 /* Pods-ShowMeAds.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShowMeAds.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShowMeAds/Pods-ShowMeAds.debug.xcconfig"; sourceTree = "<group>"; };
+		F2D107F42121A67F00BF4E4A /* AdCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCacheService.swift; sourceTree = "<group>"; };
+		F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validation.swift"; sourceTree = "<group>"; };
+		F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDiskCacheService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +192,7 @@
 			isa = PBXGroup;
 			children = (
 				6C3764212061C63F00233E98 /* UIViewController+Spinner.swift */,
+				F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -195,6 +202,7 @@
 			children = (
 				6C527B4E20603AD40046DB50 /* AdsFacade.swift */,
 				6CC72479205C7CF300E7D103 /* AdService */,
+				F2D107F32121A64600BF4E4A /* AdCacheService */,
 				6C527B5020603D7F0046DB50 /* AdPersistenceService */,
 			);
 			path = AdsFacade;
@@ -248,7 +256,7 @@
 		6CC72479205C7CF300E7D103 /* AdService */ = {
 			isa = PBXGroup;
 			children = (
-				6C0F613C205D13A300F4BF71 /* AdService.swift */,
+				6C0F613C205D13A300F4BF71 /* AdRemoteService.swift */,
 				6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */,
 			);
 			path = AdService;
@@ -272,6 +280,15 @@
 				004CFF2B33925371513ABB9D /* Pods-ShowMeAdsTests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		F2D107F32121A64600BF4E4A /* AdCacheService */ = {
+			isa = PBXGroup;
+			children = (
+				F2D107F42121A67F00BF4E4A /* AdCacheService.swift */,
+				F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */,
+			);
+			path = AdCacheService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -423,12 +440,15 @@
 				6C3764122061834F00233E98 /* AdCollectionViewCellDelegate.swift in Sources */,
 				6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */,
 				6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */,
+				F2D107F52121A67F00BF4E4A /* AdCacheService.swift in Sources */,
 				6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */,
-				6C0F613D205D13A300F4BF71 /* AdService.swift in Sources */,
+				6C0F613D205D13A300F4BF71 /* AdRemoteService.swift in Sources */,
 				6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */,
 				6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */,
+				F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */,
 				6C0F6141205D182600F4BF71 /* Endpoint.swift in Sources */,
 				6C0F6147205D2C0700F4BF71 /* Reachability.swift in Sources */,
+				F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */,
 				6C205D21205C3ED7002B8BAA /* AppDelegate.swift in Sources */,
 				6C3764222061C63F00233E98 /* UIViewController+Spinner.swift in Sources */,
 				6C2183E4205D57EE009E57EF /* Ads+CoreDataProperties.swift in Sources */,
