@@ -202,7 +202,7 @@
 			children = (
 				6C527B4E20603AD40046DB50 /* AdsFacade.swift */,
 				6CC72479205C7CF300E7D103 /* AdService */,
-				F2D107F32121A64600BF4E4A /* AdCacheService */,
+				F2D107F32121A64600BF4E4A /* AdImageCacheService */,
 				6C527B5020603D7F0046DB50 /* AdPersistenceService */,
 			);
 			path = AdsFacade;
@@ -282,13 +282,13 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		F2D107F32121A64600BF4E4A /* AdCacheService */ = {
+		F2D107F32121A64600BF4E4A /* AdImageCacheService */ = {
 			isa = PBXGroup;
 			children = (
 				F2D107F42121A67F00BF4E4A /* AdCacheService.swift */,
 				F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */,
 			);
-			path = AdCacheService;
+			path = AdImageCacheService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

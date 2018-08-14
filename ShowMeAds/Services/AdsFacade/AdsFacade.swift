@@ -36,7 +36,7 @@ class AdsFacade {
             return
         }
 
-        self.adRemoteService.fetchRemote(completionHandler: { (ads, isOffline) in
+        self.adRemoteService.fetchRemote(completionHandler: { [unowned self] (ads, isOffline) in
             // In case the request fails for whatever reason
             // Default to show favorited ads
             guard ads.count > 0 else {
@@ -51,8 +51,6 @@ class AdsFacade {
                 if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
             }
             
-            // MARK: TODO - Fetch images from remote source and add to memory cache
-            
             completionHandler(alreadyFavorited, isOffline)
         })
     }
@@ -61,7 +59,8 @@ class AdsFacade {
      */
     public func fetchFavoriteAds(completionHandler: @escaping ((_ ads: [AdItem]) -> Void)) {
         
-        // MARK: TODO - Fetch ads from disk cache
+        // MARK: TODO - Load resources from disk into cache
+        
         self.adPersistenceService.fetchFavoriteAds(completionHandler: { (ads) in
             completionHandler(ads)
         })
@@ -72,8 +71,7 @@ class AdsFacade {
     public func insert(ad: AdItem) {
         guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
         
-        // MARK: TODO - Add to memory cache
-        // MARK: TODO - Add to disk cache
+        // MARK: TODO - Save resource to disk cache
         
         self.adPersistenceService.insert(ad: ad)
     }
@@ -82,9 +80,16 @@ class AdsFacade {
      */
     public func delete(ad: AdItem) {
         
-        // MARK: TODO - Evict from memory cache
-        // MARK: TODO - Evict from disk cache
+        // MARK: TODO - Evict resource from disk cache
         
         self.adPersistenceService.delete(ad: ad)
+    }
+    
+    /** Fetch resource from Cache
+     */
+    public func fetchFromCache(url: String,  onCompletion: @escaping (_ data: NSData) -> Void) {
+        self.adCacheService.fetchFromCache(url: url) { (data) in
+            onCompletion(data)
+        }
     }
 }
