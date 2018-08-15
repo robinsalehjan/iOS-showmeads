@@ -16,7 +16,6 @@ class AdsFacade {
     // MARK: - Properties
     
     fileprivate var adRemoteService = AdRemoteService.init(endpoint: Endpoint.adUrl)
-    fileprivate var adCacheService = AdCacheService.shared
     fileprivate var adPersistenceService = AdPersistenceService()
     
     static let shared = AdsFacade()
@@ -83,13 +82,5 @@ class AdsFacade {
         // MARK: TODO - Evict resource from disk cache
         
         self.adPersistenceService.delete(ad: ad)
-    }
-    
-    /** Fetch resource from Cache
-     */
-    public func fetchFromCache(url: String,  onCompletion: @escaping (_ data: NSData) -> Void) {
-        self.adCacheService.fetchFromCache(url: url) { (data) in
-            onCompletion(data)
-        }
     }
 }

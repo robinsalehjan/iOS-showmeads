@@ -16,18 +16,13 @@ class GenericCacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjec
     func getObject(forKey: KeyType) -> ObjectType? { return nil }
 }
 
-/** Client API to interact with the caching service
+/** Client API to interact with the image caching service for Ads
  */
-class AdCacheService: GenericCacheService<NSString, NSData> {
+class AdImageCacheService: GenericCacheService<NSString, NSData> {
     
     // MARK - Private properties
     
     fileprivate var diskCache = AdDiskCacheService()
-
-    // MARK - Public properties
-
-    static let shared = AdCacheService()
-    override private init() { }
     
     // MARK - Public methods
     
@@ -73,7 +68,4 @@ class AdCacheService: GenericCacheService<NSString, NSData> {
         onCompletion(valueInCache)
         return
     }
-    
-    func cacheToDiskCache(url: String, data: NSData) { }
-    func evictFromDiskCache(url: String) { }
 }
