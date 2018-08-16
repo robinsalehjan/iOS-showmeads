@@ -12,21 +12,19 @@ class EmptyViewController: UIViewController {
     // MARK: - Properties
     
     @IBOutlet weak var titleLabel: UILabel!
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Offline"
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismiss))
-        self.view.addGestureRecognizer(tapGestureRecognizer)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.isNavigationBarHidden = true
+        view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     @objc fileprivate func dismiss(sender: UILongPressGestureRecognizer) {
-        self.navigationController?.popViewController(animated: false)
+        navigationController?.popViewController(animated: false)
     }
     
     override func didReceiveMemoryWarning() {
