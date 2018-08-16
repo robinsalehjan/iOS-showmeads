@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 class AdCollectionViewCell: UICollectionViewCell {
     
@@ -30,13 +29,13 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.adImageView.backgroundColor = UIColor(red: 0.00, green: 0.67, blue: 0.94, alpha: 1.0)
-        self.adImageView.layer.cornerRadius = 10
-        self.adImageView.layer.masksToBounds = true
+        adImageView.backgroundColor = UIColor(red: 0.00, green: 0.67, blue: 0.94, alpha: 1.0)
+        adImageView.layer.cornerRadius = 10
+        adImageView.layer.masksToBounds = true
 
-        self.priceLabel.layer.cornerRadius = 10
-        self.priceLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMaxYCorner]
-        self.priceLabel.layer.masksToBounds = true
+        priceLabel.layer.cornerRadius = 10
+        priceLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMaxYCorner]
+        priceLabel.layer.masksToBounds = true
 
         let unfilledHeartIcon = UIImage.init(named: "empty-heart")
         let filledHeartIcon = UIImage.init(named: "filled-heart")
@@ -52,13 +51,13 @@ class AdCollectionViewCell: UICollectionViewCell {
     // MARK: - Selectors
 
     @objc func didTapHeartButton() {
-        if self.heartButton.isSelected {
-            self.heartButton.isSelected = false
+        if heartButton.isSelected {
+            heartButton.isSelected = false
             delegate?.removeAdFromCollectionView(cell: self)
         } else {
-            self.heartButton.isSelected = true
-            self.ad.isFavorited = true
-            delegate?.saveAdFromCollectionView(cell: self, adItem: self.ad)
+            heartButton.isSelected = true
+            ad.isFavorited = true
+            delegate?.saveAdFromCollectionView(cell: self, adItem: ad)
         }
     }
     
@@ -67,26 +66,24 @@ class AdCollectionViewCell: UICollectionViewCell {
     func setup(ad: AdItem) {
         self.ad = ad
         
-        loadimage(imageUrl: self.ad.imageUrl)
-        self.locationLabel.text = self.ad.location
-        self.titleLabel.text = self.ad.title
-        self.priceLabel.text = (self.ad.price == 0) ?  "Gis bort" : "\(self.ad.price),-"
-        self.heartButton.isSelected  = (self.ad.isFavorited == true) ? true : false
+        loadImage(imageUrl: ad.imageUrl)
+        locationLabel.text = ad.location
+        titleLabel.text = ad.title
+        priceLabel.text = (ad.price == 0) ?  "Gis bort" : "\(ad.price),-"
+        heartButton.isSelected  = (ad.isFavorited == true) ? true : false
     }
     
     // MARK: - Private
 
-    fileprivate func loadimage(imageUrl: String) {
-        guard let url =  URL.init(string: imageUrl) else {
-            fatalError("[ERROR]: The URL is of invalid format")
-        }
-
-        self.adImageView.sd_setShowActivityIndicatorView(true)
-        self.adImageView.sd_setIndicatorStyle(.whiteLarge)
-
-        self.adImageView.sd_setImage(with: url) { (_, error, _, _) in
-            if error != nil {
-                // Set fallback image
+    fileprivate func loadImage(imageUrl: String) {
+        guard let _ =  URL.init(string: imageUrl) else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
+        
+        CacheFacade.shared.fetch(cacheType: .image, key: imageUrl) { [unowned self] (data: NSData) in
+            let toData = data as Data
+            let image = UIImage.init(data: toData)
+            
+            DispatchQueue.main.async {
+                self.adImageView.image = image
             }
         }
     }

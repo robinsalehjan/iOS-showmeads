@@ -12,8 +12,7 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     
     // MARK: - Properties
 
-    fileprivate var ads: [AdItem] = []
-    fileprivate var isOffline: Bool = false
+    fileprivate var ads: [AdItem] = [] 
     fileprivate let sectionCount = 1
     
     fileprivate let emptyViewController = EmptyViewController()
@@ -43,17 +42,18 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftTitleLabel)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftTitleLabel)
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
         
-        self.collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
-                                      forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
-        self.collectionView?.delegate = self
-        self.collectionView?.dataSource = self
-        self.collectionView?.backgroundColor = .white
-        self.collectionView?.refreshControl = self.refreshControl
+        collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
+                                 forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         
-        self.offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.backgroundColor = .white
+        collectionView?.refreshControl = refreshControl
+        
+        offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -68,7 +68,8 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.isNavigationBarHidden = false
+        self.offlineSwitch.isOn = false
+        navigationController?.isNavigationBarHidden = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -78,62 +79,59 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     // MARK: - Selectors
     
     @objc func didTapOfflineMode() {
-        if self.offlineSwitch.isOn == true {
-            self.isOffline = true
-            self.ads = []
-            self.fetchFavoriteAds()
-        } else {
-            self.isOffline = false
-            self.ads = []
+        guard offlineSwitch.isOn else {
             fetchAds(onCompletion: {})
+            return
         }
+        
+        fetchFavoriteAds()
     }
     
     @objc func pullToRefresh() {
-        fetchAds(onCompletion: { self.refreshControl.endRefreshing() })
+        fetchAds(onCompletion: {
+            self.refreshControl.endRefreshing()
+        })
     }
     
     // MARK: - Private
     
     fileprivate func fetchAds(onCompletion: @escaping (() -> Void)) {
-        guard self.isOffline == false else {
-            onCompletion()
+        guard offlineSwitch.isOn else {
+            if let collectionView = collectionView {
+                let spinnerView = UIViewController.displaySpinner(onView: collectionView)
+                
+                AdsFacade.shared.fetchAds { (ads, isOffline) in
+                    self.ads = ads
+                    
+                    DispatchQueue.main.async {
+                        spinnerView.removeFromSuperview()
+                        collectionView.reloadData()
+                        onCompletion()
+                    }
+                }
+            }
             return
         }
         
-        let spinnerView = UIViewController.displaySpinner(onView: self.collectionView!)
-        
-        AdsFacade.shared.fetchAds { (ads, isOffline) in
-            self.ads = ads
-            
-            DispatchQueue.main.async {
-                spinnerView.removeFromSuperview()
-                self.collectionView?.reloadData()
-                onCompletion()
-            }
-        }
+        onCompletion()
     }
 
     fileprivate func fetchFavoriteAds() {
         AdsFacade.shared.fetchFavoriteAds { (ads) in
             self.ads = ads
+            
             DispatchQueue.main.async {
-                if self.ads.count == 0 {
-                    self.showEmptyViewController()
-                    self.goOnline()
+                guard self.ads.count == 0 else {
+                    self.collectionView?.reloadData()
+                    return
                 }
-                self.collectionView?.reloadData()
+                self.showEmptyViewController()
             }
         }
     }
     
     fileprivate func showEmptyViewController() {
-        self.navigationController?.pushViewController(self.emptyViewController, animated: true)
-    }
-    
-    fileprivate func goOnline() {
-        self.isOffline = false
-        self.offlineSwitch.isOn = false
+        self.navigationController?.pushViewController(emptyViewController, animated: true)
     }
 }
 
@@ -141,12 +139,12 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
 
 extension AdCollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.sectionCount
+        return sectionCount
     }
 
     override func collectionView(_ collectionView: UICollectionView,
                                  numberOfItemsInSection section: Int) -> Int {
-        return self.ads.count == 0 ? 10 : self.ads.count
+        return ads.count
     }
 
     override func collectionView(_ collectionView: UICollectionView,
@@ -155,11 +153,9 @@ extension AdCollectionViewController {
                                            for: indexPath)
 
         if  let adCell = cell as? AdCollectionViewCell {
-            //  Get notified when cell is liked
-            adCell.delegate = self
-            
-            if self.ads.count > 0 {
-                let ad = self.ads[indexPath.row]
+            if ads.count > 0 {
+                let ad = ads[indexPath.row]
+                adCell.delegate = self
                 adCell.setup(ad: ad)
             }
         }
@@ -173,7 +169,7 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-
+        
         let leftRightInset = self.view.frame.width * 0.015
         let topBottomInset = self.view.frame.height * 0.02
 
@@ -195,26 +191,15 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension AdCollectionViewController {
     func removeAdFromCollectionView(cell: AdCollectionViewCell) {
-        let indexPath = self.collectionView!.indexPath(for: cell)!
-        
-        guard self.ads.count > 1 else {
-            self.ads.remove(at: indexPath.row)
-            self.showEmptyViewController()
-            self.goOnline()
-            self.collectionView?.reloadData()
-            return
-        }
-        
-        self.collectionView?.performBatchUpdates({
-            let adItem = self.ads.remove(at: indexPath.row)
+        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
+        if ads.count > 0 {
+            let adItem = ads[indexPath.row]
             AdsFacade.shared.delete(ad: adItem)
-            
-            self.collectionView?.deleteItems(at: [indexPath])
-        }, completion: { (_) in })
+        }
     }
     
     func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem) {
-        let indexPath = self.collectionView!.indexPath(for: cell)!
+        guard collectionView?.indexPath(for: cell) != nil else { return }
         AdsFacade.shared.insert(ad: adItem)
     }
 }
