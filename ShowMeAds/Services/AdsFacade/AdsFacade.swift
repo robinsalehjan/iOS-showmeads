@@ -35,7 +35,7 @@ class AdsFacade {
             return
         }
 
-        self.adRemoteService.fetchRemote(completionHandler: { [unowned self] (ads, isOffline) in
+        adRemoteService.fetchRemote(completionHandler: { [unowned self] (ads, isOffline) in
             // In case the request fails for whatever reason
             // Default to show favorited ads
             guard ads.count > 0 else {
@@ -57,10 +57,7 @@ class AdsFacade {
     /** Fetch ads from Core Data
      */
     public func fetchFavoriteAds(completionHandler: @escaping ((_ ads: [AdItem]) -> Void)) {
-        
-        // Load into cache
-        
-        self.adPersistenceService.fetchFavoriteAds(completionHandler: { (ads) in
+        adPersistenceService.fetchFavoriteAds(completionHandler: { (ads) in
             completionHandler(ads)
         })
     }
@@ -76,17 +73,16 @@ class AdsFacade {
             CacheFacade.shared.saveToDisk(key: key, data: data)
         }
         
-        self.adPersistenceService.insert(ad: ad)
+        adPersistenceService.insert(ad: ad)
     }
     
     /** Delete an ad from Core Data
-     Evicts the image data for the related Ad from cache and deletes it from the disk.
+     Removes any related data from the disk cache
      */
     public func delete(ad: AdItem) {
         let key = ad.imageUrl
-        CacheFacade.shared.evict(cacheType: .image, key: key)
         CacheFacade.shared.deleteFromDisk(key: key)
         
-        self.adPersistenceService.delete(ad: ad)
+        adPersistenceService.delete(ad: ad)
     }
 }

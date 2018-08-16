@@ -13,14 +13,13 @@ class GenericCacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjec
     fileprivate let memoryCache = NSCache<KeyType, ObjectType>()
 }
 
-/** Client API to interact with the image caching service for Ads
+/** Image caching service
+ responsible for caching images from both remote endpoints and disk.
  */
 class AdImageCacheService: GenericCacheService<NSString, NSData> {
     
     // MARK - Public methods
     
-    /** Fetches an resource by either loading it from disk or fetching it remotely
-     */
     func fetch(url: String, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard let validUrl = URL.isValid(url) else {
             debugPrint("[ERROR]: The URL string: \(url) is not valid")
@@ -47,11 +46,16 @@ class AdImageCacheService: GenericCacheService<NSString, NSData> {
         return
     }
     
-    func evict(url: String) {
+    func remove(url: String) {
         let key = url as NSString
         guard let _ = memoryCache.object(forKey: key) else { return }
         memoryCache.removeObject(forKey: key)
         debugPrint("[INFO]: Evicted \(url) from cache")
+    }
+    
+    func removeAll() {
+        memoryCache.removeAllObjects()
+        debugPrint("[INFO]: Purged cache")
     }
     
     // MARK: Private methods

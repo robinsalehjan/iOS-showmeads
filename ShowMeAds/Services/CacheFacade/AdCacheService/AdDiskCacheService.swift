@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-/** Disk cache for persisted resources
+/** Disk caching service
+ responsible for fetching and saving resources to and from disk
  */
 class AdDiskCacheService {
     // MARK: Private properties
