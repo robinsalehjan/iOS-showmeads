@@ -18,14 +18,36 @@ final class CacheFacade {
     static let shared = CacheFacade()
     private init() {}
     
-    // MARK: Public methods
+    // MARK: Public methods for the cache
     
-    public func fetchFromCache(cacheType: CacheType, id: String, onCompletion: @escaping (_ data: NSData) -> Void) {
+    public func fetch(cacheType: CacheType, key: String, onCompletion: @escaping (_ data: NSData) -> Void) {
         switch cacheType {
         case .image:
-            self.adImageCacheService.fetchFromCache(url: id) { (data) in
+            self.adImageCacheService.fetch(url: key) { (data: NSData) in
                 onCompletion(data)
             }
         }
+    }
+    
+    public func evict(cacheType: CacheType, key: String) {
+        switch cacheType {
+        case .image:
+            self.adImageCacheService.evict(url: key)
+        }
+    }
+    
+    // MARK: Public methods for the disk cache
+    
+    public func fetchFromDisk(key: String) -> NSData? {
+        guard let data = AdDiskCacheService.shared.fetchFromDisk(key: key) else { return nil }
+        return data
+    }
+    
+    public func saveToDisk(key: String, data: NSData) {
+        AdDiskCacheService.shared.saveToDisk(key: key, data: data)
+    }
+    
+    public func deleteFromDisk(key: String) {
+        AdDiskCacheService.shared.deleteFromDisk(key: key)
     }
 }

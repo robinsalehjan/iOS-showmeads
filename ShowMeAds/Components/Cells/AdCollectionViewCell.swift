@@ -78,7 +78,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     fileprivate func loadImage(imageUrl: String) {
         guard let _ =  URL.init(string: imageUrl) else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
-        CacheFacade.shared.fetchFromCache(cacheType: .image, id: imageUrl) { [unowned self] (data: NSData) in
+        CacheFacade.shared.fetch(cacheType: .image, key: imageUrl) { [unowned self] (data: NSData) in
             let toData = data as Data
             let image = UIImage.init(data: toData)
             

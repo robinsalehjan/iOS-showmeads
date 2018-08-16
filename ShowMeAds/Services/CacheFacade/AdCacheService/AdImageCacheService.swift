@@ -11,61 +11,77 @@ import UIKit
 
 class GenericCacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjectProtocol, ObjectType: NSObjectProtocol {
     fileprivate let memoryCache = NSCache<KeyType, ObjectType>()
-    
-    func setObject(obj: ObjectType, forKey: KeyType) { }
-    func getObject(forKey: KeyType) -> ObjectType? { return nil }
 }
 
 /** Client API to interact with the image caching service for Ads
  */
 class AdImageCacheService: GenericCacheService<NSString, NSData> {
     
-    // MARK - Private properties
-    
-    fileprivate var diskCache = AdDiskCacheService()
-    
     // MARK - Public methods
     
-    /** Caches an resource by either loading it from disk or fetching it remotely
+    /** Fetches an resource by either loading it from disk or fetching it remotely
      */
-    func fetchFromCache(url: String, onCompletion: @escaping (_ data: NSData) -> Void) {
+    func fetch(url: String, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard let validUrl = URL.isValid(url) else {
-            print("[ERROR]: The URL string: \(url) is not valid")
+            debugPrint("[ERROR]: The URL string: \(url) is not valid")
             return
         }
         
-        // MARK: TODO - Need to load resources from disk into memory.
-        
-        guard let valueInCache = memoryCache.object(forKey: validUrl.absoluteString as NSString) else {
-            guard Reachability.isConnectedToNetwork() else { return }
-            URLSession.shared.dataTask(with: validUrl) { [unowned self] (data, response, error) in
-                guard error == nil else {
-                    print("[ERROR]: Failed to send request")
-                    return
-                }
-                
-                if let response = response as? HTTPURLResponse {
-                    switch response.statusCode {
-                    case 200:
-                        guard let responseData = data else { return }
-                        
-                        let keyToNSString = validUrl.absoluteString as NSString
-                        let responseDataToNSData = NSData.init(data: responseData)
-                        
-                        self.memoryCache.setObject(responseDataToNSData, forKey: keyToNSString)
-                        
-                        onCompletion(responseDataToNSData)
-                    default:
-                        print("[INFO]: Not supported status code: \(response.statusCode)" +
-                            " headers: \(response.allHeaderFields)")
-                    }
-                }
-            }.resume()
+        guard let valueInCache = memoryCache.object(forKey: url as NSString) else {
+            guard let valueOnDisk = AdDiskCacheService.shared.fetchFromDisk(key: url) else {
+                // Value does not exist in cache or on disk.
+                fetchFromRemote(url: validUrl, onCompletion: onCompletion)
+                return
+            }
             
+            let key = url as NSString
+            memoryCache.setObject(valueOnDisk, forKey: key)
+            onCompletion(valueOnDisk)
+            
+            debugPrint("[INFO]: Loaded \(url) from disk cache")
             return
         }
         
+        // Value exists in cache
         onCompletion(valueInCache)
         return
+    }
+    
+    func evict(url: String) {
+        let key = url as NSString
+        guard let _ = memoryCache.object(forKey: key) else { return }
+        memoryCache.removeObject(forKey: key)
+        debugPrint("[INFO]: Evicted \(url) from cache")
+    }
+    
+    // MARK: Private methods
+    
+    private func fetchFromRemote(url: URL, onCompletion: @escaping (_ data: NSData) -> Void) {
+        guard Reachability.isConnectedToNetwork() else { return }
+        
+        
+        URLSession.shared.dataTask(with: url) { [unowned self] (data, response, error) in
+            guard error == nil else {
+                debugPrint("[ERROR]: Failed to send request")
+                return
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                switch response.statusCode {
+                case 200:
+                    guard let responseData = data else { return }
+                    
+                    let key = url.absoluteString as NSString
+                    let responseDataToNSData = NSData.init(data: responseData)
+                    
+                    self.memoryCache.setObject(responseDataToNSData, forKey: key)
+                    
+                    onCompletion(responseDataToNSData)
+                default:
+                    debugPrint("[INFO]: Not supported status code: \(response.statusCode)" +
+                        " headers: \(response.allHeaderFields)")
+                }
+            }
+        }.resume()
     }
 }

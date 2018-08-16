@@ -42,7 +42,7 @@ class AdPersistenceService {
                 completionHandler(ads)
             }
         } catch {
-            print("[ERROR]: Failed to fetch data from CoreData")
+            debugPrint("[ERROR]: Failed to fetch data from CoreData")
             completionHandler(ads)
         }
     }
@@ -63,7 +63,7 @@ class AdPersistenceService {
         do {
             try backgroundContext.save()
         } catch {
-            print("[ERROR]: Did not manage to save" +
+            debugPrint("[ERROR]: Did not manage to save" +
                 " objectID: \(newAd.objectID)" +
                 " imageUrl: \(ad.imageUrl)" +
                 " price: \(ad.price)" +
@@ -88,7 +88,7 @@ class AdPersistenceService {
             }
             try backgroundContext.save()
         } catch {
-            print("[ERROR]: Failed to delete data from CoreData")
+            debugPrint("[ERROR]: Failed to delete data from CoreData, error: \(error)")
         }
     }
     
@@ -106,7 +106,7 @@ class AdPersistenceService {
                 if ads.isEmpty { return nil } else { return ads.first?.convertToAdItem() }
             }
         } catch {
-            print("[ERROR]: Failed to fetch data from CoreData")
+            debugPrint("[ERROR]: Failed to fetch data from CoreData, error:\(error)")
         }
 
         return nil

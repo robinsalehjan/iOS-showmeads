@@ -12,56 +12,82 @@ import UIKit
 /** Disk cache for persisted resources
  */
 class AdDiskCacheService {
-    fileprivate let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    // MARK: Private properties
     
-    func isCachedToDisk(url: String) -> URL? {
-        let documentPath = documentDirectory.path
-        let filePath = documentDirectory.appendingPathComponent("\(url)")
+    fileprivate let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
+    
+    // MARK: Public properties
+    
+    static let shared = AdDiskCacheService()
+    private init() {}
+    
+    // MARK: Public methods
+    
+    func fetchFromDisk(key: String) -> NSData? {
+        guard let filePath = AdDiskCacheService.shared.isCachedToDisk(key: key) else { return nil }
+        return NSData.init(contentsOf: filePath)
+    }
+    
+    func saveToDisk(key: String, data: NSData) {
+        guard let documentDirectory = documentDirectory else { return }
+        guard let encodedFileName = key.base64Encode() else { return }
+        let filePath = documentDirectory.appendingPathComponent("\(encodedFileName)")
         
         do {
-            let files = try FileManager.default.contentsOfDirectory(atPath: documentPath)
+            try data.write(to: filePath, options: .atomic)
+            debugPrint("[INFO]: Did save \(key) to disk")
+        } catch {
+            debugPrint("[ERROR]: Could not write data to specified path: \(filePath.absoluteString), error: \(error)")
+        }
+    }
+    
+    func deleteFromDisk(key: String) {
+        guard let documentDirectory = documentDirectory else { return }
+        guard let encodedFileName = key.base64Encode() else { return }
+        
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: documentDirectory.path)
             for file in files {
-                let existingFilePath = "\(documentPath)/\(file)"
-                if existingFilePath == filePath.path {
-                    print("Item already exists in directory")
-                    return filePath
+                guard let decodedFileName = file.base64Decode() else { return }
+                
+                if key == decodedFileName {
+                    let deletableFile = documentDirectory.appendingPathComponent("\(encodedFileName)")
+                    try FileManager.default.removeItem(at: deletableFile)
+                    debugPrint("[INFO]: Deleted \(key) from disk")
                 }
             }
         } catch {
-            print("[ERROR]: Could not add item to directory: \(error)")
+            debugPrint("[ERROR]: Failed to get contents of directory, error: \(error)")
+        }
+    }
+    
+    func clearDisk() {
+        guard let documentDirectory = documentDirectory else { return }
+        do {
+            let items = try FileManager.default.contentsOfDirectory(at: documentDirectory, includingPropertiesForKeys: [])
+            try items.forEach { item in try FileManager.default.removeItem(at: item) }
+        } catch {
+            debugPrint("[ERROR]: Failed to clear disk, error: \(error)")
+        }
+    }
+    
+    // MARK: Private methods
+    
+    private func isCachedToDisk(key: String) -> URL? {
+        guard let documentDirectory = documentDirectory else { return nil }
+        guard let encodedFileName = key.base64Encode() else { return nil }
+        
+        do {
+            let documentPath = documentDirectory.path
+            let files = try FileManager.default.contentsOfDirectory(atPath: documentPath)
+            
+            if let cachedFileName = files.first(where: { $0 == encodedFileName }) {
+                return documentDirectory.appendingPathComponent("\(cachedFileName)")
+            }
+            
+        } catch {
+            debugPrint("[ERROR]: Failed to get contents of directory, error: \(error)")
         }
         return nil
-    }
-    
-    func fetchFromDiskCache(url: String) {
-        guard let filePath = isCachedToDisk(url: url) else { return }
-        let data = NSData.init(contentsOf: filePath)
-    }
-    
-    func saveToDiskCache(url: String, data: NSData) {
-        guard isCachedToDisk(url: url) != nil else {
-            let filePath = documentDirectory.appendingPathComponent("\(url)")
-            if data.write(to: filePath, atomically: true) {
-                print("Successfully wrote bytes to file path: \(filePath)")
-            }
-            return
-        }
-    }
-    
-    func deleteFromDiskCache(url: String) {
-        let documentPath = documentDirectory.path
-        let deletableFile = documentDirectory.appendingPathComponent("\(url)")
-        
-        do {
-            let files = try FileManager.default.contentsOfDirectory(atPath: documentPath)
-            for file in files {
-                let existingFile = "\(documentPath)/\(file)"
-                if existingFile == deletableFile.path {
-                    try FileManager.default.removeItem(atPath: existingFile)
-                }
-            }
-        } catch {
-            print("[ERROR]: Failed to get the directory")
-        }
     }
 }

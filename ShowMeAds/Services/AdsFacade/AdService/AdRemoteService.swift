@@ -27,7 +27,7 @@ final class AdRemoteService {
     */
     func fetchRemote(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
         guard let endpoint = URL.isValid(self.endpoint) else {
-            print("[ERROR]: Could not construct a valid URL instance with the given url: \(self.endpoint)")
+            debugPrint("[ERROR]: Could not construct a valid URL instance with the given url: \(self.endpoint)")
             return
         }
         
@@ -36,7 +36,7 @@ final class AdRemoteService {
             var isOffline = false
 
             guard error == nil else {
-                print("[INFO]: Failed while fetching from remote source")
+                debugPrint("[INFO]: Failed while fetching from remote source")
                 isOffline = true
                 completionHandler(ads, isOffline)
                 return
@@ -48,7 +48,7 @@ final class AdRemoteService {
                     ads = self.adProcessorService.parseData(data: data)
                     completionHandler(ads, isOffline)
                 default:
-                    print("[INFO]: Not supported status code: \(response.statusCode)" +
+                    debugPrint("[INFO]: Not supported status code: \(response.statusCode)" +
                         " headers: \(response.allHeaderFields)")
                     completionHandler(ads, isOffline)
                 }

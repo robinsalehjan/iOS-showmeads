@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import CoreData
+import CoreData 
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -23,13 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        
         let adCollectionViewController = AdCollectionViewController.init(collectionViewLayout: adCollectionViewLayout)
         let navigationViewController = UINavigationController.init(rootViewController: adCollectionViewController)
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = navigationViewController
-
+        
         // Set status bar items to white
         UIApplication.shared.statusBarStyle = .lightContent
         navigationViewController.navigationBar.barTintColor = UIColor(red: 0.00, green: 0.67, blue: 0.94, alpha: 1.0)

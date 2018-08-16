@@ -33,6 +33,8 @@
 		F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */; };
 		F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */; };
 		F2D1080C2124074400BF4E4A /* CacheFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D1080B2124074400BF4E4A /* CacheFacade.swift */; };
+		F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D1080F2124396C00BF4E4A /* String+Hashing.swift */; };
+		F2D10813212556F500BF4E4A /* TestCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D10812212556F500BF4E4A /* TestCache.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validation.swift"; sourceTree = "<group>"; };
 		F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDiskCacheService.swift; sourceTree = "<group>"; };
 		F2D1080B2124074400BF4E4A /* CacheFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFacade.swift; sourceTree = "<group>"; };
+		F2D1080F2124396C00BF4E4A /* String+Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Hashing.swift"; sourceTree = "<group>"; };
+		F2D10812212556F500BF4E4A /* TestCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +171,7 @@
 		6C205D37205C3ED7002B8BAA /* ShowMeAdsTests */ = {
 			isa = PBXGroup;
 			children = (
+				F2D10811212556DF00BF4E4A /* CacheTests */,
 				6C205D38205C3ED7002B8BAA /* ShowMeAdsTests.swift */,
 				6C205D3A205C3ED7002B8BAA /* Info.plist */,
 			);
@@ -195,6 +200,7 @@
 			children = (
 				6C3764212061C63F00233E98 /* UIViewController+Spinner.swift */,
 				F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */,
+				F2D1080F2124396C00BF4E4A /* String+Hashing.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -300,6 +306,14 @@
 				F2D107F32121A64600BF4E4A /* AdCacheService */,
 			);
 			path = CacheFacade;
+			sourceTree = "<group>";
+		};
+		F2D10811212556DF00BF4E4A /* CacheTests */ = {
+			isa = PBXGroup;
+			children = (
+				F2D10812212556F500BF4E4A /* TestCache.swift */,
+			);
+			path = CacheTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -454,6 +468,7 @@
 				F2D107F52121A67F00BF4E4A /* AdImageCacheService.swift in Sources */,
 				6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */,
 				F2D1080C2124074400BF4E4A /* CacheFacade.swift in Sources */,
+				F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */,
 				6C0F613D205D13A300F4BF71 /* AdRemoteService.swift in Sources */,
 				6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */,
 				6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */,
@@ -473,6 +488,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2D10813212556F500BF4E4A /* TestCache.swift in Sources */,
 				6C205D39205C3ED7002B8BAA /* ShowMeAdsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
