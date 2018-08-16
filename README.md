@@ -3,14 +3,17 @@
 ## Network connection
 ![Online](https://github.com/robinsalehjan/showmeads/blob/fix/update-readme/Images/Online.png)
 
-## No network connection and offline turned off
+## No network and offline turned off
 ![No network with offline off](https://github.com/robinsalehjan/showmeads/blob/fix/update-readme/Images/No-Network-Offline-Off.png)
 
 ## No network and offline turned on
 ![No network with offline turned on](https://github.com/robinsalehjan/showmeads/blob/fix/update-readme/Images/No-Network-Offline-On.png)
 
-## No network and saved one 
-![Offline-Nothing-Saved](https://github.com/robinsalehjan/showmeads/blob/fix/update-readme/Images/Offline-Nothing-Saved.png)
+## No network, nothing saved and offline turned off
+![No network with offline turned on](https://github.com/robinsalehjan/showmeads/blob/master/Images/No-Network-Nothing-Saved-Offline-Off.png)
+
+## No network, nothing saved and offline turned on
+![No network with offline turned on](https://github.com/robinsalehjan/showmeads/blob/master/Images/No-Network-Nothing-Saved-Offline-On.png)
 
 ## Folders
 - Components: UI and XIB related files
