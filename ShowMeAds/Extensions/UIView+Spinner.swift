@@ -15,7 +15,7 @@ extension UIView {
     static func displaySpinner(parentView: UIView) -> UIView {
         let spinnerView = UIView.init(frame: parentView.bounds)
         spinnerView.translatesAutoresizingMaskIntoConstraints = false
-        spinnerView.backgroundColor = .lightGray
+        spinnerView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.4)
         
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false

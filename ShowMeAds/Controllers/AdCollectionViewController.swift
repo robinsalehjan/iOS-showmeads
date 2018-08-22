@@ -43,7 +43,7 @@ class AdCollectionViewController: UICollectionViewController {
     fileprivate let noFavoritesLabel: UILabel = {
         let label = UILabel()
         let font = UIFont.scaledFINNFont(fontType: .medium, size: 20) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
-        let attributes = [NSAttributedStringKey.font: font]
+        let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributedString = NSMutableAttributedString(string: "Du har ingen favoritter tilgjengelig", attributes: attributes)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.attributedText = attributedString
@@ -51,8 +51,6 @@ class AdCollectionViewController: UICollectionViewController {
         label.adjustsFontForContentSizeCategory = true
         return label
     }()
-    
-    fileprivate var spinnerView: UIView? = nil
     
     // MARK: - Initalizers
     
@@ -79,8 +77,10 @@ class AdCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        let spinner = UIView.displaySpinner(parentView: view)
+        
         fetchAds(onCompletion: {
-            
+            UIView.removeSpinner(spinner: spinner)
         })
     }
     
@@ -93,7 +93,7 @@ class AdCollectionViewController: UICollectionViewController {
 
 extension AdCollectionViewController {
     private func fetchAds(onCompletion: @escaping (() -> Void)) {
-        AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
+        AdsFacade.shared.fetchAds { [unowned self] (ads, _) in
             self.ads = ads
             
             DispatchQueue.main.async {
@@ -153,11 +153,8 @@ extension AdCollectionViewController {
         case true:
             showNoFavoritesLabel()
         default:
-            spinnerView = UIView.displaySpinner(parentView: collectionView)
             noFavoritesLabel.removeFromSuperview()
         }
-        
-        UIView.removeSpinner(spinner: spinnerView)
         return ads.count
     }
     
