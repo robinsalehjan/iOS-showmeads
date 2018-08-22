@@ -12,10 +12,10 @@ extension UIView {
     
     ///  Adds a loading spinner to an UIView
  
-    class func displaySpinner(parentView: UIView) -> UIView {
+    static func displaySpinner(parentView: UIView) -> UIView {
         let spinnerView = UIView.init(frame: parentView.bounds)
         spinnerView.translatesAutoresizingMaskIntoConstraints = false
-        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.85)
+        spinnerView.backgroundColor = .lightGrey
         
         let activityIndicator = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,9 @@ extension UIView {
     
     /// Removes a loading spinner from an UIView
 
-    class func removeSpinner(spinner: UIView) {
+    static func removeSpinner(spinner: UIView?) {
+        guard let spinner = spinner else { return }
+        
         DispatchQueue.main.async {
             spinner.removeFromSuperview()
         }

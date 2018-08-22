@@ -40,7 +40,7 @@ class AdCollectionViewController: UICollectionViewController {
         return offlineSwitch
     }()
     
-    let noFavoritesLabel: UILabel = {
+    fileprivate let noFavoritesLabel: UILabel = {
         let label = UILabel()
         let font = UIFont.scaledFINNFont(fontType: .medium, size: 20) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font]
@@ -51,6 +51,8 @@ class AdCollectionViewController: UICollectionViewController {
         label.adjustsFontForContentSizeCategory = true
         return label
     }()
+    
+    fileprivate var spinnerView: UIView? = nil
     
     // MARK: - Initalizers
     
@@ -151,9 +153,11 @@ extension AdCollectionViewController {
         case true:
             showNoFavoritesLabel()
         default:
+            spinnerView = UIView.displaySpinner(parentView: collectionView)
             noFavoritesLabel.removeFromSuperview()
         }
         
+        UIView.removeSpinner(spinner: spinnerView)
         return ads.count
     }
     
