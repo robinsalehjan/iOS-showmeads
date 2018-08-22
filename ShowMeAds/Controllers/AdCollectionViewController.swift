@@ -16,7 +16,7 @@ class AdCollectionViewController: UICollectionViewController {
     
     fileprivate let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 10) ?? UIFont.systemFont(ofSize: 10)
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 10) ?? UIFont.systemFont(ofSize: 10, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font]
         refreshControl.attributedTitle = NSMutableAttributedString(string: "Oppdaterer", attributes: attributes)
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
@@ -24,9 +24,9 @@ class AdCollectionViewController: UICollectionViewController {
         return refreshControl
     }()
     
-    fileprivate let leftTitleLabel: UILabel = {
+    fileprivate let favoritesTitleLabel: UILabel = {
         let label = UILabel()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 18) ?? UIFont.systemFont(ofSize: 18)
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributeString = NSMutableAttributedString(string: "Kun favoritter", attributes: attributes)
         label.attributedText = attributeString
@@ -40,16 +40,27 @@ class AdCollectionViewController: UICollectionViewController {
         return offlineSwitch
     }()
     
+    let noFavoritesLabel: UILabel = {
+        let label = UILabel()
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 20) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
+        let attributes = [NSAttributedStringKey.font: font]
+        let attributedString = NSMutableAttributedString(string: "Du har ingen favoritter tilgjengelig", attributes: attributes)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.attributedText = attributedString
+        label.textAlignment = .center
+        label.adjustsFontForContentSizeCategory = true
+        return label
+    }()
+    
     // MARK: - Initalizers
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: leftTitleLabel)
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
         
         collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
                                  forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
-        
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = .white
@@ -66,7 +77,9 @@ class AdCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fetchAds(onCompletion: {})
+        fetchAds(onCompletion: {
+            
+        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -97,6 +110,16 @@ extension AdCollectionViewController {
             }
         }
     }
+    
+    private func showNoFavoritesLabel() {
+        guard let collectionView = collectionView else { return }
+        
+        collectionView.addSubview(noFavoritesLabel)
+        NSLayoutConstraint.activate([
+            noFavoritesLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
+            noFavoritesLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -.veryLargeSpacing),
+        ])
+    }
 }
 
 // MARK: - Selector methods
@@ -124,6 +147,13 @@ extension AdCollectionViewController {
 
 extension AdCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch ads.count == 0 && offlineSwitch.isOn {
+        case true:
+            showNoFavoritesLabel()
+        default:
+            noFavoritesLabel.removeFromSuperview()
+        }
+        
         return ads.count
     }
     

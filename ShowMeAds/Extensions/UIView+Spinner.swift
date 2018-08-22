@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIViewController {
+extension UIView {
     
     ///  Adds a loading spinner to an UIView
  
