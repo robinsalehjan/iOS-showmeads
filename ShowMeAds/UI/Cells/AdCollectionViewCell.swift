@@ -36,6 +36,11 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        priceLabel.adjustsFontForContentSizeCategory = true
+        locationLabel.adjustsFontForContentSizeCategory = true
+        titleLabel.adjustsFontForContentSizeCategory = true
+        
         adImageView.layer.cornerRadius = 10
         adImageView.layer.masksToBounds = true
 

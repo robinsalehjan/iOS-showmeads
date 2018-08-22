@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="FINNTypeWebStrippet-Bold.ttf">
+            <string>FINNTypeWebStrippet-Bold</string>
+        </array>
+        <array key="FINNTypeWebStrippet-Medium.ttf">
+            <string>FINNTypeWebStrippet-Medium</string>
+        </array>
+        <array key="FINNTypeWebStrippet-Regular.ttf">
+            <string>FINNTypeWebStrippet-Regular</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -20,51 +31,31 @@
                 <rect key="frame" x="0.0" y="0.0" width="388" height="285"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhN-tY-peZ">
-                        <rect key="frame" x="3" y="260.5" width="382" height="25"/>
-                        <attributedString key="attributedText">
-                            <fragment content="Tittel">
-                                <attributes>
-                                    <font key="NSFont" size="18" name="Avenir-Book"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tittel" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhN-tY-peZ">
+                        <rect key="frame" x="3" y="266" width="382" height="19.5"/>
+                        <fontDescription key="fontDescription" name="FINNTypeWebStrippet-Regular" family="FINN Type Web Strippet" pointSize="16"/>
+                        <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="buT-Ds-oXy">
-                        <rect key="frame" x="3" y="236" width="382" height="19.5"/>
-                        <attributedString key="attributedText">
-                            <fragment content="Lokasjon">
-                                <attributes>
-                                    <color key="NSColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <font key="NSFont" size="14" name="Avenir-Heavy"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lokasjon" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="buT-Ds-oXy">
+                        <rect key="frame" x="3" y="244" width="382" height="17"/>
+                        <fontDescription key="fontDescription" name="FINNTypeWebStrippet-Bold" family="FINN Type Web Strippet" pointSize="14"/>
+                        <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="60Z-d3-DL6">
-                        <rect key="frame" x="0.0" y="0.0" width="388" height="233"/>
+                        <rect key="frame" x="0.0" y="0.0" width="388" height="241"/>
                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </imageView>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sEu-5A-QbV">
-                        <rect key="frame" x="311" y="7" width="69" height="38.5"/>
-                        <state key="normal" image="empty-heart"/>
+                        <rect key="frame" x="311" y="7" width="69" height="40"/>
+                        <state key="normal" image="favorite-deselected"/>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MRa-xB-dEr">
-                        <rect key="frame" x="1" y="187" width="165" height="46"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pris" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MRa-xB-dEr">
+                        <rect key="frame" x="1" y="193.5" width="165" height="47.5"/>
                         <color key="backgroundColor" red="0.31172966957092285" green="0.29912751913070679" blue="0.29455792903900146" alpha="0.75" colorSpace="custom" customColorSpace="sRGB"/>
-                        <attributedString key="attributedText">
-                            <fragment content="Pris">
-                                <attributes>
-                                    <color key="NSColor" red="0.99999064207077026" green="0.99999362230300903" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                    <font key="NSFont" size="16" name="Avenir-Heavy"/>
-                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                </attributes>
-                            </fragment>
-                        </attributedString>
+                        <fontDescription key="fontDescription" name="FINNTypeWebStrippet-Medium" family="FINN Type Web Strippet" pointSize="18"/>
+                        <color key="textColor" red="0.99999064207077026" green="0.99999362230300903" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -102,6 +93,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="empty-heart" width="24" height="24"/>
+        <image name="favorite-deselected" width="36" height="30"/>
     </resources>
 </document>

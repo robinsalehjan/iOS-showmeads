@@ -12,27 +12,31 @@ class AdCollectionViewController: UICollectionViewController {
     
     // MARK: - Properties
 
-    fileprivate var ads: [AdItem] = [] 
+    fileprivate var ads: [AdItem] = []
     
     fileprivate let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        refreshControl.attributedTitle = NSAttributedString(string: "Oppdaterer")
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 10) ?? UIFont.systemFont(ofSize: 10)
+        let attributes = [NSAttributedStringKey.font: font]
+        refreshControl.attributedTitle = NSMutableAttributedString(string: "Oppdaterer", attributes: attributes)
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
+        
         return refreshControl
     }()
     
     fileprivate let leftTitleLabel: UILabel = {
         let label = UILabel()
-        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16),
-                          NSAttributedStringKey.foregroundColor: UIColor.bleu]
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 18) ?? UIFont.systemFont(ofSize: 18)
+        let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributeString = NSMutableAttributedString(string: "Kun favoritter", attributes: attributes)
         label.attributedText = attributeString
+        label.adjustsFontForContentSizeCategory = true
         return label
     }()
     
     fileprivate let offlineSwitch: UISwitch = {
         let offlineSwitch = UISwitch()
-        offlineSwitch.onTintColor = .bleu
+        offlineSwitch.onTintColor = .softBlue
         return offlineSwitch
     }()
     
