@@ -9,8 +9,8 @@
 import Foundation
 
 extension URL {
-    
     /// Returns a URL instance if the ´url´ parameter is a valid address
+    
     static func isValid(_ url: String) -> URL? {
         guard let endpoint = URL.init(string: url) else {
             debugPrint("[ERROR]: Could not construct a URL instance with the given url: \(url)")

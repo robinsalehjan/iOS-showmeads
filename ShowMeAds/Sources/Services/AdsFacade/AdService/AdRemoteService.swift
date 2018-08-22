@@ -8,12 +8,32 @@
 
 import Foundation
 
+enum Resource {
+    case endpoint
+    case imageBaseUrl
+}
+
+enum Endpoint: String {
+    case url = "https://gist.githubusercontent.com/3lvis/3799feea005ed49942dcb56386ecec2b/raw/63249144485884d279d55f4f3907e37098f55c74/discover.json"
+    case imageBaseUrl = "https://images.finncdn.no/dynamic/480x360c/"
+    
+    static func forResource(type: Resource) -> String {
+        switch type {
+        case .endpoint:
+            return Endpoint.url.rawValue
+            
+        case .imageBaseUrl:
+            return Endpoint.imageBaseUrl.rawValue
+        }
+    }
+}
+
 /** Provides an API to interact with the remote API
  */
 final class AdRemoteService {
 
     // MARK: - Properties
-
+    
     fileprivate var endpoint: String
     fileprivate var adProcessorService: AdProcessorService
 
@@ -21,7 +41,7 @@ final class AdRemoteService {
         self.endpoint = endpoint
         self.adProcessorService = AdProcessorService.init()
     }
-
+    
     // MARK: - Public
     /** Send an GET request to the API
     */

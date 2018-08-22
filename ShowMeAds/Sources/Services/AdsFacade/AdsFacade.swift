@@ -14,13 +14,16 @@ import UIKit
 class AdsFacade {
     
     // MARK: - Properties
-    
-    fileprivate var adRemoteService = AdRemoteService.init(endpoint: Endpoint.adUrl)
-    fileprivate var adPersistenceService = AdPersistenceService()
+    fileprivate var adRemoteService: AdRemoteService
+    fileprivate var adPersistenceService: AdPersistenceService
     
     static let shared = AdsFacade()
 
-    private init() {}
+    private init() {
+        let endpoint = Endpoint.forResource(type: .endpoint)
+        adRemoteService = AdRemoteService.init(endpoint: endpoint)
+        adPersistenceService = AdPersistenceService()
+    }
     
     // MARK: - Public
     
@@ -28,24 +31,12 @@ class AdsFacade {
      */
     public func fetchAds(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
         guard Reachability.isConnectedToNetwork() else {
-            fetchFavoriteAds { (ads) in
-                let isOffline = true
-                completionHandler(ads, isOffline)
-            }
+            let isOffline = true
+            completionHandler([], isOffline)
             return
         }
 
         adRemoteService.fetchRemote(completionHandler: { [unowned self] (ads, isOffline) in
-            // In case the request fails for whatever reason
-            // Default to show favorited ads
-            guard ads.count > 0 else {
-                self.fetchFavoriteAds(completionHandler: { (ads) in
-                    let isOffline = true
-                    completionHandler(ads, isOffline)
-                })
-                return
-            }
-            
             let alreadyFavorited: [AdItem] = ads.map {
                 if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
             }
