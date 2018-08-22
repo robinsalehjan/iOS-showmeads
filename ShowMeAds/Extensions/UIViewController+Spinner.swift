@@ -12,8 +12,8 @@ extension UIViewController {
     
     ///  Adds a loading spinner to an UIView
  
-    class func displaySpinner(onView: UIView) -> UIView {
-        let spinnerView = UIView.init(frame: onView.bounds)
+    class func displaySpinner(parentView: UIView) -> UIView {
+        let spinnerView = UIView.init(frame: parentView.bounds)
         spinnerView.translatesAutoresizingMaskIntoConstraints = false
         spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.85)
         
@@ -28,11 +28,11 @@ extension UIViewController {
                                          activityIndicator.centerXAnchor.constraint(equalTo: spinnerView.centerXAnchor),
                                          activityIndicator.centerYAnchor.constraint(equalTo: spinnerView.centerYAnchor)])
             
-            onView.addSubview(spinnerView)
-            NSLayoutConstraint.activate([spinnerView.heightAnchor.constraint(equalTo: onView.heightAnchor),
-                                         spinnerView.widthAnchor.constraint(equalTo: onView.widthAnchor),
-                                         spinnerView.topAnchor.constraint(equalTo: onView.topAnchor),
-                                         spinnerView.bottomAnchor.constraint(equalTo: onView.bottomAnchor)])
+            parentView.addSubview(spinnerView)
+            NSLayoutConstraint.activate([spinnerView.heightAnchor.constraint(equalTo: parentView.heightAnchor),
+                                         spinnerView.widthAnchor.constraint(equalTo: parentView.widthAnchor),
+                                         spinnerView.topAnchor.constraint(equalTo: parentView.topAnchor),
+                                         spinnerView.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)])
         }
 
         return spinnerView
