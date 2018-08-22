@@ -37,7 +37,6 @@ class AdImageCacheService: GenericCacheService<NSString, NSData> {
             memoryCache.setObject(valueOnDisk, forKey: key)
             onCompletion(valueOnDisk)
             
-            debugPrint("[INFO]: Loaded \(url) from disk cache")
             return
         }
         
@@ -50,12 +49,10 @@ class AdImageCacheService: GenericCacheService<NSString, NSData> {
         let key = url as NSString
         guard let _ = memoryCache.object(forKey: key) else { return }
         memoryCache.removeObject(forKey: key)
-        debugPrint("[INFO]: Evicted \(url) from cache")
     }
     
     func removeAll() {
         memoryCache.removeAllObjects()
-        debugPrint("[INFO]: Purged cache")
     }
     
     // MARK: Private methods
