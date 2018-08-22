@@ -20,7 +20,6 @@ class AdCollectionViewController: UICollectionViewController {
         let attributes = [NSAttributedStringKey.font: font]
         refreshControl.attributedTitle = NSMutableAttributedString(string: "Oppdaterer", attributes: attributes)
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
-        
         return refreshControl
     }()
     
@@ -77,11 +76,16 @@ class AdCollectionViewController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let spinner = UIView.displaySpinner(parentView: view)
         
-        fetchAds(onCompletion: {
-            UIView.removeSpinner(spinner: spinner)
-        })
+        let spinner = UIView.displaySpinner(parentView: view)
+        AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
+            self.ads = ads
+            
+            DispatchQueue.main.async {
+                UIView.removeSpinner(spinner: spinner)
+                self.collectionView?.reloadData()
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -92,27 +96,6 @@ class AdCollectionViewController: UICollectionViewController {
 // MARK: - Private methods
 
 extension AdCollectionViewController {
-    private func fetchAds(onCompletion: @escaping (() -> Void)) {
-        AdsFacade.shared.fetchAds { [unowned self] (ads, _) in
-            self.ads = ads
-            
-            DispatchQueue.main.async {
-                self.collectionView?.reloadData()
-                onCompletion()
-            }
-        }
-    }
-    
-    private func fetchFavoriteAds() {
-        AdsFacade.shared.fetchFavoriteAds { [unowned self] (ads) in
-            self.ads = ads
-            
-            DispatchQueue.main.async {
-                self.collectionView?.reloadData()
-            }
-        }
-    }
-    
     private func showNoFavoritesLabel() {
         guard let collectionView = collectionView else { return }
         
@@ -130,18 +113,30 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            fetchFavoriteAds()
+            AdsFacade.shared.fetchFavoriteAds { [unowned self] (ads) in
+                self.ads = ads
+                DispatchQueue.main.async {
+                    self.collectionView?.reloadData()
+                }
+            }
         case false:
-            fetchAds { [unowned self] in
-                self.collectionView?.reloadData()
+            AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
+                self.ads = ads
+                DispatchQueue.main.async {
+                    self.collectionView?.reloadData()
+                }
             }
         }
     }
     
     @objc func pullToRefresh() {
-        fetchAds(onCompletion: { [unowned self] in
-            self.refreshControl.endRefreshing()
-        })
+        AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
+            self.ads = ads
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+                self.collectionView?.reloadData()
+            }
+        }
     }
 }
 
