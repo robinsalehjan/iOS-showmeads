@@ -36,7 +36,6 @@ class AdDiskCacheService {
         
         do {
             try data.write(to: filePath, options: .atomic)
-            debugPrint("[INFO]: Did save \(key) to disk")
         } catch {
             debugPrint("[ERROR]: Could not write data to specified path: \(filePath.absoluteString), error: \(error)")
         }
@@ -54,7 +53,6 @@ class AdDiskCacheService {
                 if key == decodedFileName {
                     let deletableFile = documentDirectory.appendingPathComponent("\(encodedFileName)")
                     try FileManager.default.removeItem(at: deletableFile)
-                    debugPrint("[INFO]: Deleted \(key) from disk")
                 }
             }
         } catch {
