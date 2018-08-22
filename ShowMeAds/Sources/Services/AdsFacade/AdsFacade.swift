@@ -14,13 +14,16 @@ import UIKit
 class AdsFacade {
     
     // MARK: - Properties
-    
-    fileprivate var adRemoteService = AdRemoteService.init(endpoint: Endpoint.adUrl)
-    fileprivate var adPersistenceService = AdPersistenceService()
+    fileprivate var adRemoteService: AdRemoteService
+    fileprivate var adPersistenceService: AdPersistenceService
     
     static let shared = AdsFacade()
 
-    private init() {}
+    private init() {
+        let endpoint = Endpoint.forResource(type: .endpoint)
+        adRemoteService = AdRemoteService.init(endpoint: endpoint)
+        adPersistenceService = AdPersistenceService()
+    }
     
     // MARK: - Public
     

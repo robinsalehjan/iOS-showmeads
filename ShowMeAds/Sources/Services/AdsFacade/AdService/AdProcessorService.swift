@@ -50,7 +50,8 @@ final class AdProcessorService {
                 if let itemDictionary = item as? [String: Any] {
                     if let imageDictionary = itemDictionary["image"] as? [String: Any] {
                         if let imageUrl = imageDictionary["url"] as? String {
-                            ad.imageUrl = "\(Endpoint.imageBaseUrl)\(imageUrl)"
+                            let resourceEndpoint = Endpoint.forResource(type: .imageBaseUrl)
+                            ad.imageUrl = "\(resourceEndpoint)\(imageUrl)"
                         }
                     }
                     if let priceDictionary = itemDictionary["price"] as? [String: Any] {
