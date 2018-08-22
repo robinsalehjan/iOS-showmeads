@@ -21,10 +21,15 @@
 		6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */; };
 		6C2183E3205D57EE009E57EF /* Ads+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2183E1205D57ED009E57EF /* Ads+CoreDataClass.swift */; };
 		6C2183E4205D57EE009E57EF /* Ads+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2183E2205D57EE009E57EF /* Ads+CoreDataProperties.swift */; };
-		6C3764122061834F00233E98 /* AdCollectionViewCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3764112061834F00233E98 /* AdCollectionViewCellDelegate.swift */; };
 		6C3764222061C63F00233E98 /* UIViewController+Spinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C3764212061C63F00233E98 /* UIViewController+Spinner.swift */; };
 		6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B4E20603AD40046DB50 /* AdsFacade.swift */; };
 		6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B5120603DF60046DB50 /* AdPersistenceService.swift */; };
+		F2586DEE212C50AF0043DC25 /* UIColor+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2586DED212C50AF0043DC25 /* UIColor+Colors.swift */; };
+		F2586DFA212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2586DF6212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf */; };
+		F2586DFB212C59C40043DC25 /* FINNTypeWebStrippet-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2586DF7212C59C40043DC25 /* FINNTypeWebStrippet-Bold.ttf */; };
+		F2586DFC212C59C40043DC25 /* FINNTypeWebStrippet-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2586DF8212C59C40043DC25 /* FINNTypeWebStrippet-Medium.ttf */; };
+		F2586DFD212C59C40043DC25 /* FINNTypeWebStrippet-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2586DF9212C59C40043DC25 /* FINNTypeWebStrippet-Regular.ttf */; };
+		F2586DFF212C5CFD0043DC25 /* UIFont+Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2586DFE212C5CFD0043DC25 /* UIFont+Fonts.swift */; };
 		F2D107F52121A67F00BF4E4A /* AdImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */; };
 		F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */; };
 		F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */; };
@@ -62,10 +67,15 @@
 		6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdCollectionViewCell.xib; sourceTree = "<group>"; };
 		6C2183E1205D57ED009E57EF /* Ads+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ads+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6C2183E2205D57EE009E57EF /* Ads+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ads+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6C3764112061834F00233E98 /* AdCollectionViewCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCollectionViewCellDelegate.swift; sourceTree = "<group>"; };
 		6C3764212061C63F00233E98 /* UIViewController+Spinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Spinner.swift"; sourceTree = "<group>"; };
 		6C527B4E20603AD40046DB50 /* AdsFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsFacade.swift; sourceTree = "<group>"; };
 		6C527B5120603DF60046DB50 /* AdPersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPersistenceService.swift; sourceTree = "<group>"; };
+		F2586DED212C50AF0043DC25 /* UIColor+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Colors.swift"; sourceTree = "<group>"; };
+		F2586DF6212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FINNTypeWebStrippet-Light.ttf"; sourceTree = "<group>"; };
+		F2586DF7212C59C40043DC25 /* FINNTypeWebStrippet-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FINNTypeWebStrippet-Bold.ttf"; sourceTree = "<group>"; };
+		F2586DF8212C59C40043DC25 /* FINNTypeWebStrippet-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FINNTypeWebStrippet-Medium.ttf"; sourceTree = "<group>"; };
+		F2586DF9212C59C40043DC25 /* FINNTypeWebStrippet-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FINNTypeWebStrippet-Regular.ttf"; sourceTree = "<group>"; };
+		F2586DFE212C5CFD0043DC25 /* UIFont+Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Fonts.swift"; sourceTree = "<group>"; };
 		F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdImageCacheService.swift; sourceTree = "<group>"; };
 		F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validation.swift"; sourceTree = "<group>"; };
 		F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDiskCacheService.swift; sourceTree = "<group>"; };
@@ -132,14 +142,12 @@
 		6C205D1F205C3ED7002B8BAA /* ShowMeAds */ = {
 			isa = PBXGroup;
 			children = (
-				6CC72474205C7BEF00E7D103 /* Components */,
-				6CC4E3CE205C6A99007587B6 /* Controllers */,
-				6CC72477205C7C4900E7D103 /* Services */,
-				6C0F6142205D1CE100F4BF71 /* Utilities */,
 				6C3764202061C62C00233E98 /* Extensions */,
+				6CC72474205C7BEF00E7D103 /* UI */,
+				6CC4E3CE205C6A99007587B6 /* Controllers */,
+				F2586DF0212C579C0043DC25 /* Sources */,
+				F2586DEF212C578F0043DC25 /* Resources */,
 				6C205D20205C3ED7002B8BAA /* AppDelegate.swift */,
-				6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */,
-				6C055788205EAD90005703D9 /* Assets.xcassets */,
 				6C205D2F205C3ED7002B8BAA /* Info.plist */,
 			);
 			path = ShowMeAds;
@@ -161,6 +169,8 @@
 				6C3764212061C63F00233E98 /* UIViewController+Spinner.swift */,
 				F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */,
 				F2D1080F2124396C00BF4E4A /* String+Hashing.swift */,
+				F2586DED212C50AF0043DC25 /* UIColor+Colors.swift */,
+				F2586DFE212C5CFD0043DC25 /* UIFont+Fonts.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -192,12 +202,12 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
-		6CC72474205C7BEF00E7D103 /* Components */ = {
+		6CC72474205C7BEF00E7D103 /* UI */ = {
 			isa = PBXGroup;
 			children = (
 				6CC72475205C7BF700E7D103 /* Cells */,
 			);
-			path = Components;
+			path = UI;
 			sourceTree = "<group>";
 		};
 		6CC72475205C7BF700E7D103 /* Cells */ = {
@@ -205,7 +215,6 @@
 			children = (
 				6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */,
 				6C205D43205C4557002B8BAA /* AdCollectionViewCell.swift */,
-				6C3764112061834F00233E98 /* AdCollectionViewCellDelegate.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -226,6 +235,36 @@
 				6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */,
 			);
 			path = AdService;
+			sourceTree = "<group>";
+		};
+		F2586DEF212C578F0043DC25 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F2586DF1212C59580043DC25 /* Fonts */,
+				6C055788205EAD90005703D9 /* Assets.xcassets */,
+				6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F2586DF0212C579C0043DC25 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6CC72477205C7C4900E7D103 /* Services */,
+				6C0F6142205D1CE100F4BF71 /* Utilities */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		F2586DF1212C59580043DC25 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F2586DF7212C59C40043DC25 /* FINNTypeWebStrippet-Bold.ttf */,
+				F2586DF6212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf */,
+				F2586DF8212C59C40043DC25 /* FINNTypeWebStrippet-Medium.ttf */,
+				F2586DF9212C59C40043DC25 /* FINNTypeWebStrippet-Regular.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		F2D107F32121A64600BF4E4A /* AdCacheService */ = {
@@ -337,8 +376,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2586DFA212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf in Resources */,
 				6C205D2E205C3ED7002B8BAA /* LaunchScreen.storyboard in Resources */,
+				F2586DFB212C59C40043DC25 /* FINNTypeWebStrippet-Bold.ttf in Resources */,
 				6C055789205EAD90005703D9 /* Assets.xcassets in Resources */,
+				F2586DFC212C59C40043DC25 /* FINNTypeWebStrippet-Medium.ttf in Resources */,
+				F2586DFD212C59C40043DC25 /* FINNTypeWebStrippet-Regular.ttf in Resources */,
 				6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -358,7 +401,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C2183E3205D57EE009E57EF /* Ads+CoreDataClass.swift in Sources */,
-				6C3764122061834F00233E98 /* AdCollectionViewCellDelegate.swift in Sources */,
 				6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */,
 				6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */,
 				F2D107F52121A67F00BF4E4A /* AdImageCacheService.swift in Sources */,
@@ -366,8 +408,10 @@
 				F2D1080C2124074400BF4E4A /* CacheFacade.swift in Sources */,
 				F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */,
 				6C0F613D205D13A300F4BF71 /* AdRemoteService.swift in Sources */,
+				F2586DEE212C50AF0043DC25 /* UIColor+Colors.swift in Sources */,
 				6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */,
 				6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */,
+				F2586DFF212C5CFD0043DC25 /* UIFont+Fonts.swift in Sources */,
 				F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */,
 				6C0F6141205D182600F4BF71 /* Endpoint.swift in Sources */,
 				6C0F6147205D2C0700F4BF71 /* Reachability.swift in Sources */,

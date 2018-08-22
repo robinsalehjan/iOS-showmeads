@@ -8,16 +8,23 @@
 
 import UIKit
 
+protocol AdCollectionViewCellDelegate: NSObjectProtocol {
+    func removeAdFromCollectionView(cell: AdCollectionViewCell)
+    func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem)
+}
+
 class AdCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Properties
+    // MARK: - Public properties
 
     public static let nib = "AdCollectionViewCell"
     public static let identifier = "AdCollectionViewCellIdentifier"
-
+    
     public weak var delegate: AdCollectionViewCellDelegate?
-
-    var ad: AdItem = AdItem()
+    
+    // MARK: - Private properties
+    
+    private var ad: AdItem = AdItem()
 
     @IBOutlet weak var adImageView: UIImageView!
     @IBOutlet weak var heartButton: UIButton!
@@ -29,39 +36,25 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        adImageView.backgroundColor = UIColor(red: 0.00, green: 0.67, blue: 0.94, alpha: 1.0)
         adImageView.layer.cornerRadius = 10
         adImageView.layer.masksToBounds = true
 
         priceLabel.layer.cornerRadius = 10
-        priceLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMaxYCorner]
         priceLabel.layer.masksToBounds = true
+        priceLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMaxYCorner]
 
-        let unfilledHeartIcon = UIImage.init(named: "empty-heart")
-        let filledHeartIcon = UIImage.init(named: "filled-heart")
-        self.heartButton.setImage(unfilledHeartIcon, for: .normal)
-        self.heartButton.setImage(filledHeartIcon, for: .selected)
-        self.heartButton.addTarget(self, action: #selector(didTapHeartButton), for: .touchUpInside)
+        let unfilledHeartIcon = UIImage.init(named: "favorite-deselected")
+        let filledHeartIcon = UIImage.init(named: "favorite-selected")
+        heartButton.setImage(unfilledHeartIcon, for: .normal)
+        heartButton.setImage(filledHeartIcon, for: .selected)
+        heartButton.addTarget(self, action: #selector(didTapHeartButton), for: .touchUpInside)
     }
 
     override func prepareForReuse() {
         self.heartButton.isSelected = false
     }
     
-    // MARK: - Selectors
-
-    @objc func didTapHeartButton() {
-        if heartButton.isSelected {
-            heartButton.isSelected = false
-            delegate?.removeAdFromCollectionView(cell: self)
-        } else {
-            heartButton.isSelected = true
-            ad.isFavorited = true
-            delegate?.saveAdFromCollectionView(cell: self, adItem: ad)
-        }
-    }
-    
-    // MARK: - Public
+    // MARK: - Public methods
     
     func setup(ad: AdItem) {
         self.ad = ad
@@ -72,11 +65,28 @@ class AdCollectionViewCell: UICollectionViewCell {
         priceLabel.text = (ad.price == 0) ?  "Gis bort" : "\(ad.price),-"
         heartButton.isSelected  = (ad.isFavorited == true) ? true : false
     }
-    
-    // MARK: - Private
+}
 
+// MARK: - Selector methods
+
+extension AdCollectionViewCell {
+    @objc func didTapHeartButton() {
+        if heartButton.isSelected {
+            heartButton.isSelected = false
+            delegate?.removeAdFromCollectionView(cell: self)
+        } else {
+            heartButton.isSelected = true
+            ad.isFavorited = true
+            delegate?.saveAdFromCollectionView(cell: self, adItem: ad)
+        }
+    }
+}
+
+// MARK: - Private methods
+
+extension AdCollectionViewCell {
     fileprivate func loadImage(imageUrl: String) {
-        guard let _ =  URL.init(string: imageUrl) else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
+        guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
         CacheFacade.shared.fetch(cacheType: .image, key: imageUrl) { [unowned self] (data: NSData) in
             let toData = data as Data

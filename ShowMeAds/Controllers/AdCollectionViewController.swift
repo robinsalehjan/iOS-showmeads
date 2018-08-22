@@ -8,14 +8,11 @@
 
 import UIKit
 
-class AdCollectionViewController: UICollectionViewController, AdCollectionViewCellDelegate {
+class AdCollectionViewController: UICollectionViewController {
     
     // MARK: - Properties
 
     fileprivate var ads: [AdItem] = [] 
-    fileprivate let sectionCount = 1
-    
-    fileprivate let emptyViewController = EmptyViewController()
     
     fileprivate let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -26,15 +23,16 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
     
     fileprivate let leftTitleLabel: UILabel = {
         let label = UILabel()
-        let attributes = [NSAttributedStringKey.font: UIFont.boldSystemFont(ofSize: 16)]
+        let attributes = [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 16),
+                          NSAttributedStringKey.foregroundColor: UIColor.bleu]
         let attributeString = NSMutableAttributedString(string: "Kun favoritter", attributes: attributes)
         label.attributedText = attributeString
-        label.textColor = .white
         return label
     }()
-
+    
     fileprivate let offlineSwitch: UISwitch = {
         let offlineSwitch = UISwitch()
+        offlineSwitch.onTintColor = .bleu
         return offlineSwitch
     }()
     
@@ -51,8 +49,8 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = .white
-        collectionView?.refreshControl = refreshControl
         
+        collectionView?.refreshControl = refreshControl
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
@@ -67,98 +65,73 @@ class AdCollectionViewController: UICollectionViewController, AdCollectionViewCe
         fetchAds(onCompletion: {})
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        self.offlineSwitch.isOn = false
-        navigationController?.isNavigationBarHidden = false
-    }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    // MARK: - Selectors
-    
-    @objc func didTapOfflineMode() {
-        guard offlineSwitch.isOn else {
-            fetchAds(onCompletion: {})
-            return
-        }
-        
-        fetchFavoriteAds()
-    }
-    
-    @objc func pullToRefresh() {
-        fetchAds(onCompletion: {
-            self.refreshControl.endRefreshing()
-        })
-    }
-    
-    // MARK: - Private
-    
-    fileprivate func fetchAds(onCompletion: @escaping (() -> Void)) {
-        guard offlineSwitch.isOn else {
-            if let collectionView = collectionView {
-                let spinnerView = UIViewController.displaySpinner(onView: collectionView)
-                
-                AdsFacade.shared.fetchAds { (ads, isOffline) in
-                    self.ads = ads
-                    
-                    DispatchQueue.main.async {
-                        spinnerView.removeFromSuperview()
-                        collectionView.reloadData()
-                        onCompletion()
-                    }
-                }
-            }
-            return
-        }
-        
-        onCompletion()
-    }
+}
 
-    fileprivate func fetchFavoriteAds() {
-        AdsFacade.shared.fetchFavoriteAds { (ads) in
+// MARK: - Private methods
+
+extension AdCollectionViewController {
+    private func fetchAds(onCompletion: @escaping (() -> Void)) {
+        AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
             self.ads = ads
             
             DispatchQueue.main.async {
-                guard self.ads.count == 0 else {
-                    self.collectionView?.reloadData()
-                    return
-                }
-                self.showEmptyViewController()
+                self.collectionView?.reloadData()
+                onCompletion()
             }
         }
     }
     
-    fileprivate func showEmptyViewController() {
-        self.navigationController?.pushViewController(emptyViewController, animated: true)
+    private func fetchFavoriteAds() {
+        AdsFacade.shared.fetchFavoriteAds { [unowned self] (ads) in
+            self.ads = ads
+            
+            DispatchQueue.main.async {
+                self.collectionView?.reloadData()
+            }
+        }
     }
 }
 
-// MARK: - UICollectionViewControllerDataSource
+// MARK: - Selector methods
 
 extension AdCollectionViewController {
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return sectionCount
-    }
-
-    override func collectionView(_ collectionView: UICollectionView,
-                                 numberOfItemsInSection section: Int) -> Int {
-        return ads.count
-    }
-
-    override func collectionView(_ collectionView: UICollectionView,
-                                 cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.identifier,
-                                           for: indexPath)
-
-        if  let adCell = cell as? AdCollectionViewCell {
-            if ads.count > 0 {
-                let ad = ads[indexPath.row]
-                adCell.delegate = self
-                adCell.setup(ad: ad)
+    @objc func didTapOfflineMode() {
+        switch offlineSwitch.isOn {
+        case true:
+            fetchFavoriteAds()
+        case false:
+            fetchAds { [unowned self] in
+                self.collectionView?.reloadData()
             }
         }
+    }
+    
+    @objc func pullToRefresh() {
+        fetchAds(onCompletion: { [unowned self] in
+            self.refreshControl.endRefreshing()
+        })
+    }
+}
+
+// MARK: - UICollectionViewDataSource
+
+extension AdCollectionViewController {
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return ads.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.identifier,
+                                                            for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
+        guard ads.count > 0 else { return cell }
+        
+        let ad = ads[indexPath.row]
+        cell.delegate = self
+        cell.setup(ad: ad)
+        
         return cell
     }
 }
@@ -169,11 +142,12 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        
+
         let leftRightInset = self.view.frame.width * 0.015
         let topBottomInset = self.view.frame.height * 0.02
 
-        return UIEdgeInsets(top: topBottomInset, left: leftRightInset, bottom: topBottomInset, right: leftRightInset)
+        return UIEdgeInsets(top: topBottomInset, left: leftRightInset,
+                            bottom: topBottomInset, right: leftRightInset)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -189,13 +163,11 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - AdCollectionViewCellDelegate
 
-extension AdCollectionViewController {
+extension AdCollectionViewController: AdCollectionViewCellDelegate {
     func removeAdFromCollectionView(cell: AdCollectionViewCell) {
         guard let indexPath = collectionView?.indexPath(for: cell) else { return }
-        if ads.count > 0 {
-            let adItem = ads[indexPath.row]
-            AdsFacade.shared.delete(ad: adItem)
-        }
+        let adItem = ads[indexPath.row]
+        AdsFacade.shared.delete(ad: adItem)
     }
     
     func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem) {

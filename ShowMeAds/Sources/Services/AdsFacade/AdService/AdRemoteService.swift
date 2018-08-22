@@ -21,7 +21,7 @@ final class AdRemoteService {
         self.endpoint = endpoint
         self.adProcessorService = AdProcessorService.init()
     }
-
+    
     // MARK: - Public
     /** Send an GET request to the API
     */

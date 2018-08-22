@@ -9,9 +9,9 @@
 import UIKit
 
 extension UIViewController {
-    /**
-     Adds a loading spinner to an UIView
-     */
+    
+    ///  Adds a loading spinner to an UIView
+ 
     class func displaySpinner(onView: UIView) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)
         spinnerView.translatesAutoresizingMaskIntoConstraints = false
@@ -38,9 +38,9 @@ extension UIViewController {
         return spinnerView
     }
     
-    /**
-     Removes a loading spinner from an UIView
-    */
+    
+    /// Removes a loading spinner from an UIView
+
     class func removeSpinner(spinner: UIView) {
         DispatchQueue.main.async {
             spinner.removeFromSuperview()
