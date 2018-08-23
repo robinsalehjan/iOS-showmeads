@@ -1,5 +1,5 @@
 //
-//  ContentStateViewController.swift
+//  LoadingViewController.swift
 //  ShowMeAds
 //
 //  Created by Saleh-Jan, Robin on 22/08/2018.
@@ -8,10 +8,11 @@
 
 import UIKit
 
-class ContentStateViewController: UIViewController {
+class AdLoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("LoadingViewController - viewDidLoad")
+        view.backgroundColor = .darkGray
     }
 
     override func didReceiveMemoryWarning() {

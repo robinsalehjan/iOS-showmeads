@@ -13,23 +13,15 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-    let flowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 2.5
-        return layout
-    }()
-
+    
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let adCollectionViewController = AdCollectionViewController.init(collectionViewLayout: flowLayout)
-        let navigationViewController = UINavigationController.init(rootViewController: adCollectionViewController)
+        let adStateViewController = AdStateViewController()
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = navigationViewController
+        window?.rootViewController = adStateViewController
         
         return true
     }

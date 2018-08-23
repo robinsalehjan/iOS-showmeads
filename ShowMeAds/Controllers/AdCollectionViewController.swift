@@ -68,11 +68,20 @@ class AdCollectionViewController: UICollectionViewController {
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
-    convenience init() {
+    convenience init(_ ads: [AdItem]) {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 2.5
         self.init(collectionViewLayout: layout)
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("AdCollectionViewController - viewDidLoad")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchAds(onCompletion: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -80,7 +89,32 @@ class AdCollectionViewController: UICollectionViewController {
     }
 }
 
-// MARK: - Private methods
+// MARK: - Private methods for state modifications
+
+extension AdCollectionViewController {
+    private func render(_ ads: [AdItem]) {
+        self.ads = ads
+        collectionView?.reloadData()
+    }
+    
+    private func fetchAds(onCompletion: (() -> Void)?) {
+        AdsFacade.shared.fetchAds { [unowned self] (result) in
+            switch result {
+            case .error(_):
+                DispatchQueue.main.async {
+                    if let completionHandler = onCompletion { completionHandler() }
+                }
+            case .success(let ads):
+                DispatchQueue.main.async {
+                    self.render(ads)
+                    if let completionHandler = onCompletion { completionHandler() }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Private methods for UI modifications
 
 extension AdCollectionViewController {
     private func showNoFavoritesLabel() {
@@ -103,39 +137,18 @@ extension AdCollectionViewController {
             AdsFacade.shared.fetchFavoriteAds { [unowned self] (ads) in
                 self.ads = ads
                 DispatchQueue.main.async {
-                    self.collectionView?.reloadData()
+                    self.render(ads)
                 }
             }
         case false:
-            AdsFacade.shared.fetchAds { [unowned self] (result) in
-                switch result {
-                case .error(_):
-                    // Go to ErrorViewController
-                    return
-                case .success(let ads):
-                    self.ads = ads
-                    DispatchQueue.main.async {
-                        self.collectionView?.reloadData()
-                    }
-                }
-            }
+            fetchAds(onCompletion: nil)
         }
     }
     
     @objc func pullToRefresh() {
-        AdsFacade.shared.fetchAds { [unowned self] (result) in
-            switch result {
-            case .error(_):
-                // Go to ErrorViewController
-                return
-            case .success(let ads):
-                self.ads = ads
-                DispatchQueue.main.async {
-                    self.refreshControl.endRefreshing()
-                    self.collectionView?.reloadData()
-                }
-            }
-        }
+        fetchAds(onCompletion: { [unowned self] in
+            self.refreshControl.endRefreshing()
+        })
     }
 }
 
