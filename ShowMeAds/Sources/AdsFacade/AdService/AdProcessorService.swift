@@ -12,7 +12,10 @@ import UIKit
 /** Provides an API to parse and serialize responses from the remote API into AdItem instances
  */
 final class AdProcessorService {
-
+    
+    // MARK: - Properties
+    fileprivate let imageBaseUrl = "https://images.finncdn.no/dynamic/480x360c/"
+    
     // MARK: - Public
     /** Parse an Data response from the API to an list of ads
     */
@@ -50,8 +53,7 @@ final class AdProcessorService {
                 if let itemDictionary = item as? [String: Any] {
                     if let imageDictionary = itemDictionary["image"] as? [String: Any] {
                         if let imageUrl = imageDictionary["url"] as? String {
-                            let resourceEndpoint = Endpoint.forResource(type: .imageBaseUrl)
-                            ad.imageUrl = "\(resourceEndpoint)\(imageUrl)"
+                            ad.imageUrl = "\(imageBaseUrl)\(imageUrl)"
                         }
                     }
                     if let priceDictionary = itemDictionary["price"] as? [String: Any] {

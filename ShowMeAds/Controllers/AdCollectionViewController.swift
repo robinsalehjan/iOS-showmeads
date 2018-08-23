@@ -10,8 +10,7 @@ import UIKit
 
 class AdCollectionViewController: UICollectionViewController {
     
-    // MARK: - Properties
-
+    // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
     
     fileprivate let refreshControl: UIRefreshControl = {
@@ -55,6 +54,7 @@ class AdCollectionViewController: UICollectionViewController {
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
         
@@ -68,28 +68,15 @@ class AdCollectionViewController: UICollectionViewController {
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
+    convenience init() {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 2.5
+        self.init(collectionViewLayout: layout)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Not implemented")
-    }
-    
-    // MARK: - Lifecycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let spinner = UIView.displaySpinner(parentView: view)
-        AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
-            self.ads = ads
-            
-            DispatchQueue.main.async {
-                UIView.removeSpinner(spinner: spinner)
-                self.collectionView?.reloadData()
-            }
-        }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 }
 
@@ -120,21 +107,33 @@ extension AdCollectionViewController {
                 }
             }
         case false:
-            AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
-                self.ads = ads
-                DispatchQueue.main.async {
-                    self.collectionView?.reloadData()
+            AdsFacade.shared.fetchAds { [unowned self] (result) in
+                switch result {
+                case .error(_):
+                    // Go to ErrorViewController
+                    return
+                case .success(let ads):
+                    self.ads = ads
+                    DispatchQueue.main.async {
+                        self.collectionView?.reloadData()
+                    }
                 }
             }
         }
     }
     
     @objc func pullToRefresh() {
-        AdsFacade.shared.fetchAds { [unowned self] (ads, isOffline) in
-            self.ads = ads
-            DispatchQueue.main.async {
-                self.refreshControl.endRefreshing()
-                self.collectionView?.reloadData()
+        AdsFacade.shared.fetchAds { [unowned self] (result) in
+            switch result {
+            case .error(_):
+                // Go to ErrorViewController
+                return
+            case .success(let ads):
+                self.ads = ads
+                DispatchQueue.main.async {
+                    self.refreshControl.endRefreshing()
+                    self.collectionView?.reloadData()
+                }
             }
         }
     }
@@ -173,8 +172,8 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
 
-        let leftRightInset = self.view.frame.width * 0.015
-        let topBottomInset = self.view.frame.height * 0.02
+        let leftRightInset = collectionView.frame.width * 0.015
+        let topBottomInset = collectionView.frame.height * 0.02
 
         return UIEdgeInsets(top: topBottomInset, left: leftRightInset,
                             bottom: topBottomInset, right: leftRightInset)
@@ -183,9 +182,9 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let cellWidth = self.view.frame.width * 0.475
-        let cellHeight = self.view.frame.height * 0.30
+        
+        let cellWidth = collectionView.frame.width * 0.475
+        let cellHeight = collectionView.frame.height * 0.30
 
         return CGSize(width: cellWidth, height: cellHeight)
     }
