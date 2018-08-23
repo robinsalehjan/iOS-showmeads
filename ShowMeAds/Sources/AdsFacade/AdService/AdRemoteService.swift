@@ -28,6 +28,11 @@ enum Endpoint: String {
     }
 }
 
+enum Result<Value, Error: Swift.Error> {
+    case success(Value)
+    case error(Error)
+}
+
 /** Provides an API to interact with the remote API
  */
 final class AdRemoteService {
@@ -45,7 +50,7 @@ final class AdRemoteService {
     // MARK: - Public
     /** Send an GET request to the API
     */
-    func fetchRemote(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
+    func fetchRemote(completionHandler: @escaping ((Result<[AdItem], NSError>) -> Void)) {
         guard let endpoint = URL.isValid(self.endpoint) else {
             debugPrint("[ERROR]: Could not construct a valid URL instance with the given url: \(self.endpoint)")
             return
@@ -58,7 +63,7 @@ final class AdRemoteService {
             guard error == nil else {
                 debugPrint("[INFO]: Failed while fetching from remote source")
                 isOffline = true
-                completionHandler(ads, isOffline)
+                completionHandler(Result.success(ads))
                 return
             }
 
@@ -66,11 +71,11 @@ final class AdRemoteService {
                 switch response.statusCode {
                 case 200:
                     ads = self.adProcessorService.parseData(data: data)
-                    completionHandler(ads, isOffline)
+                    completionHandler(Result.success(ads))
                 default:
                     debugPrint("[INFO]: Not supported status code: \(response.statusCode)" +
                         " headers: \(response.allHeaderFields)")
-                    completionHandler(ads, isOffline)
+                    completionHandler(Result.error(NSError.ini))
                 }
             }
         }.resume()

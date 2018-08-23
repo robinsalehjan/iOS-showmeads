@@ -10,7 +10,7 @@ import UIKit
 
 extension UIView {
     
-    ///  Adds a loading spinner to an UIView
+    ///  Adds a loading spinner to the given `UIView`
  
     static func displaySpinner(parentView: UIView) -> UIView {
         let spinnerView = UIView.init(frame: parentView.bounds)
@@ -39,7 +39,7 @@ extension UIView {
     }
     
     
-    /// Removes a loading spinner from an UIView
+    /// Removes a loading spinner from the given `UIView`
 
     static func removeSpinner(spinner: UIView?) {
         guard let spinner = spinner else { return }
