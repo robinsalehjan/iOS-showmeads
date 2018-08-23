@@ -31,7 +31,7 @@ class AdsFacade {
                 let alreadyFavorited: [AdItem] = ads.map {
                     if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
                 }
-                completionHandler(Result.success(ads))
+                completionHandler(Result.success(alreadyFavorited))
             case .error(let error):
                 completionHandler(Result.error(error))
             }
