@@ -11,7 +11,6 @@ import UIKit
 class AdErrorViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("AdErrorViewController - viewDidLoad")
         view.backgroundColor = .red
     }
     

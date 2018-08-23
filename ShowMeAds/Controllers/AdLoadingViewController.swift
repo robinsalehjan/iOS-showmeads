@@ -11,10 +11,9 @@ import UIKit
 class AdLoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("LoadingViewController - viewDidLoad")
         view.backgroundColor = .darkGray
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

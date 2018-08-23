@@ -54,10 +54,6 @@ class AdCollectionViewController: UICollectionViewController {
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
-        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-        
         collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
                                  forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         collectionView?.delegate = self
@@ -75,13 +71,18 @@ class AdCollectionViewController: UICollectionViewController {
         self.init(collectionViewLayout: layout)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        print("AdCollectionViewController - viewDidLoad")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
+        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
+        
+        fetchAds(onCompletion: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        fetchAds(onCompletion: nil)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        parent?.navigationItem.leftBarButtonItem = nil
+        parent?.navigationItem.rightBarButtonItem = nil
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -100,7 +101,7 @@ extension AdCollectionViewController {
     private func fetchAds(onCompletion: (() -> Void)?) {
         AdsFacade.shared.fetchAds { [weak self] (result) in
             switch result {
-            case .error(_):
+            case .error(let error):
                 DispatchQueue.main.async {
                     if let completionHandler = onCompletion { completionHandler() }
                 }
