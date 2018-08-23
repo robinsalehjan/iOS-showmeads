@@ -93,12 +93,12 @@ extension AdCollectionViewCell {
     fileprivate func loadImage(imageUrl: String) {
         guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
-        CacheFacade.shared.fetch(cacheType: .image, key: imageUrl) { [unowned self] (data: NSData) in
+        CacheFacade.shared.fetch(cacheType: .image, key: imageUrl) { [weak self] (data: NSData) in
             let toData = data as Data
             let image = UIImage.init(data: toData)
             
             DispatchQueue.main.async {
-                self.adImageView.image = image
+                self?.adImageView.image = image
             }
         }
     }

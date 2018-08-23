@@ -20,7 +20,7 @@ extension UIViewController {
     /// Removes the given controller from the parent controller
     
     public func remove() {
-        guard parent != nil else { return }
+        guard parent != nil else { return }        
         willMove(toParentViewController: nil)
         removeFromParentViewController()
         view.removeFromSuperview()

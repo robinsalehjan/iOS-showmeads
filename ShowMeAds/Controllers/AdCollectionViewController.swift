@@ -98,7 +98,7 @@ extension AdCollectionViewController {
     }
     
     private func fetchAds(onCompletion: (() -> Void)?) {
-        AdsFacade.shared.fetchAds { [unowned self] (result) in
+        AdsFacade.shared.fetchAds { [weak self] (result) in
             switch result {
             case .error(_):
                 DispatchQueue.main.async {
@@ -106,7 +106,7 @@ extension AdCollectionViewController {
                 }
             case .success(let ads):
                 DispatchQueue.main.async {
-                    self.render(ads)
+                    self?.render(ads)
                     if let completionHandler = onCompletion { completionHandler() }
                 }
             }
@@ -134,10 +134,10 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            AdsFacade.shared.fetchFavoriteAds { [unowned self] (ads) in
-                self.ads = ads
+            AdsFacade.shared.fetchFavoriteAds { [weak self] (ads) in
+                self?.ads = ads
                 DispatchQueue.main.async {
-                    self.render(ads)
+                    self?.render(ads)
                 }
             }
         case false:
@@ -146,8 +146,8 @@ extension AdCollectionViewController {
     }
     
     @objc func pullToRefresh() {
-        fetchAds(onCompletion: { [unowned self] in
-            self.refreshControl.endRefreshing()
+        fetchAds(onCompletion: { [weak self] in
+            self?.refreshControl.endRefreshing()
         })
     }
 }
@@ -184,7 +184,6 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-
         let leftRightInset = collectionView.frame.width * 0.015
         let topBottomInset = collectionView.frame.height * 0.02
 

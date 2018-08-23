@@ -17,11 +17,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        let adStateViewController = AdStateViewController()
+        let controller = AdStateViewController()
+        let navController = UINavigationController.init(rootViewController: controller)
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = adStateViewController
+        window?.rootViewController = navController
         
         return true
     }

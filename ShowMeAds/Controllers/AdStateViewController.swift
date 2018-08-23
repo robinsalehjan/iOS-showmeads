@@ -8,35 +8,62 @@
 
 import UIKit
 
+
 class AdStateViewController: UIViewController {
-    fileprivate let stateViewController = StateViewController()
+    private var state: State?
+    private var shownViewController: UIViewController?
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        print("AdStateViewController - viewDidLoad")
-        
-        view.backgroundColor = .white
-        stateViewController.transition(to: .loading)
+        if state == nil {
+            transition(to: .loading)
+        }
         
         fetchAds()
     }
+}
+
+extension AdStateViewController {
+    enum State {
+        case loading
+        case loaded(UIViewController)
+        case error
+    }
+}
+
+extension AdStateViewController {
+    func transition(to newState: State) {
+        shownViewController?.remove()
+        
+        let vc = viewController(for: newState)
+        add(child: vc)
+        
+        state = newState
+        shownViewController = vc
+    }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    private func viewController(for state: State) -> UIViewController {
+        switch state {
+        case .loading:
+            return AdLoadingViewController()
+        case .loaded(let vc):
+            return vc
+        case .error:
+            return AdErrorViewController()
+        }
     }
 }
 
 extension AdStateViewController {
     private func fetchAds() {
-        AdsFacade.shared.fetchAds { [unowned self] (result) in
+        AdsFacade.shared.fetchAds { [weak self] (result) in
             switch result {
             case .error(let error):
                 DispatchQueue.main.async {
-                    self.render(error)
+                    self?.render(error)
                 }
             case .success(let ads):
                 DispatchQueue.main.async {
-                    self.render(ads)
+                    self?.render(ads)
                 }
             }
         }
@@ -44,11 +71,11 @@ extension AdStateViewController {
     
     private func render(_ ads: [AdItem]) {
         let vc = AdCollectionViewController(ads)
-        stateViewController.transition(to: .loaded(vc))
+        transition(to: .loaded(vc))
     }
     
     private func render(_ error: Error) {
-        stateViewController.transition(to: .failed)
+        transition(to: .error)
     }
 }
 
