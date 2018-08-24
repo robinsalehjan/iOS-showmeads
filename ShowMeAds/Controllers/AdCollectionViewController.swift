@@ -9,24 +9,21 @@
 import UIKit
 
 class AdCollectionViewController: UICollectionViewController {
-    
-    // MARK: - Properties
-
+    // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
     
-    fileprivate let refreshControl: UIRefreshControl = {
+    fileprivate lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 10) ?? UIFont.systemFont(ofSize: 10, weight: .medium)
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font]
         refreshControl.attributedTitle = NSMutableAttributedString(string: "Oppdaterer", attributes: attributes)
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
-        
         return refreshControl
     }()
     
-    fileprivate let favoritesTitleLabel: UILabel = {
+    fileprivate lazy var favoritesTitleLabel: UILabel = {
         let label = UILabel()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .medium)
+        let font = UIFont.scaledFINNFont(fontType: .bold, size: 24) ?? UIFont.systemFont(ofSize: 24, weight: .bold)
         let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributeString = NSMutableAttributedString(string: "Kun favoritter", attributes: attributes)
         label.attributedText = attributeString
@@ -34,15 +31,15 @@ class AdCollectionViewController: UICollectionViewController {
         return label
     }()
     
-    fileprivate let offlineSwitch: UISwitch = {
+    fileprivate lazy var offlineSwitch: UISwitch = {
         let offlineSwitch = UISwitch()
         offlineSwitch.onTintColor = .softBlue
         return offlineSwitch
     }()
     
-    fileprivate let noFavoritesLabel: UILabel = {
+    fileprivate lazy var noFavoritesLabel: UILabel = {
         let label = UILabel()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 20) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributedString = NSMutableAttributedString(string: "Du har ingen favoritter tilgjengelig", attributes: attributes)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -56,9 +53,6 @@ class AdCollectionViewController: UICollectionViewController {
     
     override init(collectionViewLayout layout: UICollectionViewLayout) {
         super.init(collectionViewLayout: layout)
-        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
-        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-        
         collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
                                  forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         collectionView?.delegate = self
@@ -69,50 +63,65 @@ class AdCollectionViewController: UICollectionViewController {
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
+    convenience init(_ ads: [AdItem]) {
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 10
+        layout.minimumInteritemSpacing = 2.5
+        self.init(collectionViewLayout: layout)
+        self.ads = ads
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
+        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        parent?.navigationItem.leftBarButtonItem = nil
+        parent?.navigationItem.rightBarButtonItem = nil
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Not implemented")
     }
-    
-    // MARK: - Lifecycle
+}
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let spinner = UIView.displaySpinner(parentView: view)
-        
-        fetchAds(onCompletion: {
-            UIView.removeSpinner(spinner: spinner)
-        })
+// MARK: - Private methods for state modifications
+
+extension AdCollectionViewController {
+    private func fetchAds(onCompletion: (() -> Void)?) {
+        AdsFacade.shared.fetchAds { [weak self] (result) in
+            switch result {
+            case .error(let error):
+                DispatchQueue.main.async {
+                    self?.render(error)
+                    if let completionHandler = onCompletion { completionHandler() }
+                }
+            case .success(let ads):
+                DispatchQueue.main.async {
+                    self?.render(ads)
+                    if let completionHandler = onCompletion { completionHandler() }
+                }
+            }
+        }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    private func render(_ ads: [AdItem]) {
+        self.ads = ads
+        collectionView?.reloadData()
+    }
+    
+    private func render(_ error: Error) {
+        guard let state = parent as? AdStateViewController else { return }
+        state.transition(to: .error)
     }
 }
 
-// MARK: - Private methods
+// MARK: - Private methods for UI modifications
 
 extension AdCollectionViewController {
-    private func fetchAds(onCompletion: @escaping (() -> Void)) {
-        AdsFacade.shared.fetchAds { [unowned self] (ads, _) in
-            self.ads = ads
-            
-            DispatchQueue.main.async {
-                self.collectionView?.reloadData()
-                onCompletion()
-            }
-        }
-    }
-    
-    private func fetchFavoriteAds() {
-        AdsFacade.shared.fetchFavoriteAds { [unowned self] (ads) in
-            self.ads = ads
-            
-            DispatchQueue.main.async {
-                self.collectionView?.reloadData()
-            }
-        }
-    }
-    
     private func showNoFavoritesLabel() {
         guard let collectionView = collectionView else { return }
         
@@ -130,17 +139,21 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            fetchFavoriteAds()
-        case false:
-            fetchAds { [unowned self] in
-                self.collectionView?.reloadData()
+            AdsFacade.shared.fetchFavoriteAds { [weak self] (ads) in
+                DispatchQueue.main.async {
+                    self?.render(ads)
+                }
             }
+        case false:
+            fetchAds(onCompletion: nil)
         }
     }
     
     @objc func pullToRefresh() {
-        fetchAds(onCompletion: { [unowned self] in
-            self.refreshControl.endRefreshing()
+        fetchAds(onCompletion: { [weak self] in
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+            }
         })
     }
 }
@@ -177,9 +190,8 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        let leftRightInset = self.view.frame.width * 0.015
-        let topBottomInset = self.view.frame.height * 0.02
+        let leftRightInset = collectionView.frame.width * 0.015
+        let topBottomInset = collectionView.frame.height * 0.02
 
         return UIEdgeInsets(top: topBottomInset, left: leftRightInset,
                             bottom: topBottomInset, right: leftRightInset)
@@ -188,9 +200,9 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        let cellWidth = self.view.frame.width * 0.475
-        let cellHeight = self.view.frame.height * 0.30
+        
+        let cellWidth = collectionView.frame.width * 0.475
+        let cellHeight = collectionView.frame.height * 0.30
 
         return CGSize(width: cellWidth, height: cellHeight)
     }
