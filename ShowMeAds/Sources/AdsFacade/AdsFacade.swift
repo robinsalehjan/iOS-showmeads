@@ -14,34 +14,27 @@ import UIKit
 class AdsFacade {
     
     // MARK: - Properties
-    fileprivate var adRemoteService: AdRemoteService
-    fileprivate var adPersistenceService: AdPersistenceService
+    fileprivate var adRemoteService = AdRemoteService()
+    fileprivate var adPersistenceService = AdPersistenceService()
     
     static let shared = AdsFacade()
-
-    private init() {
-        let endpoint = Endpoint.forResource(type: .endpoint)
-        adRemoteService = AdRemoteService.init(endpoint: endpoint)
-        adPersistenceService = AdPersistenceService()
-    }
+    private init() {}
     
     // MARK: - Public
     
     /** Fetch ads from the remote API
      */
-    public func fetchAds(completionHandler: @escaping ((_ ads: [AdItem], _ isOffline: Bool) -> Void)) {
-        guard Reachability.isConnectedToNetwork() else {
-            let isOffline = true
-            completionHandler([], isOffline)
-            return
-        }
-
-        adRemoteService.fetchRemote(completionHandler: { [unowned self] (ads, isOffline) in
-            let alreadyFavorited: [AdItem] = ads.map {
-                if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
+    public func fetchAds(completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
+        adRemoteService.fetchRemote(completionHandler: { [unowned self] (response) in
+            switch response {
+            case .success(let ads):
+                let alreadyFavorited: [AdItem] = ads.map {
+                    if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
+                }
+                completionHandler(Result.success(alreadyFavorited))
+            case .error(let error):
+                completionHandler(Result.error(error))
             }
-            
-            completionHandler(alreadyFavorited, isOffline)
         })
     }
     

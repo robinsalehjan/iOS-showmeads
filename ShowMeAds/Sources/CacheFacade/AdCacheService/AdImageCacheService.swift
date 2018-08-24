@@ -61,7 +61,7 @@ class AdImageCacheService: GenericCacheService<NSString, NSData> {
         guard Reachability.isConnectedToNetwork() else { return }
         
         
-        URLSession.shared.dataTask(with: url) { [unowned self] (data, response, error) in
+        URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             guard error == nil else {
                 debugPrint("[ERROR]: Failed to send request")
                 return
@@ -75,7 +75,7 @@ class AdImageCacheService: GenericCacheService<NSString, NSData> {
                     let key = url.absoluteString as NSString
                     let responseDataToNSData = NSData.init(data: responseData)
                     
-                    self.memoryCache.setObject(responseDataToNSData, forKey: key)
+                    self?.memoryCache.setObject(responseDataToNSData, forKey: key)
                     
                     onCompletion(responseDataToNSData)
                 default:
