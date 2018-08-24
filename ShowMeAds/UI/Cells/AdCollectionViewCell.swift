@@ -52,7 +52,7 @@ class AdCollectionViewCell: UICollectionViewCell {
         let filledHeartIcon = UIImage.init(named: "favorite-selected")
         heartButton.setImage(unfilledHeartIcon, for: .normal)
         heartButton.setImage(filledHeartIcon, for: .selected)
-        heartButton.addTarget(self, action: #selector(didTapHeartButton), for: .touchUpInside)
+        heartButton.addTarget(self, action: #selector(didTapHeartButton(sender:)), for: .touchUpInside)
     }
 
     override func prepareForReuse() {
@@ -75,7 +75,13 @@ class AdCollectionViewCell: UICollectionViewCell {
 // MARK: - Selector methods
 
 extension AdCollectionViewCell {
-    @objc func didTapHeartButton() {
+    @objc func didTapHeartButton(sender: UIButton) {
+        UIView.animate(withDuration: 0.1, animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+        }) { (didAnimate) in
+            sender.transform = CGAffineTransform.identity
+        }
+        
         if heartButton.isSelected {
             heartButton.isSelected = false
             delegate?.removeAdFromCollectionView(cell: self)

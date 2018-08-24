@@ -28,7 +28,7 @@ class AdErrorViewController: UIViewController {
         button.backgroundColor = .softBlue
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setAttributedTitle(attributedString, for: .normal)
-        button.addTarget(self, action: #selector(didTapRefreshButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(didTapRefreshButton(sender:)), for: .touchUpInside)
         return button
     }()
     
@@ -53,7 +53,13 @@ class AdErrorViewController: UIViewController {
         super.didReceiveMemoryWarning()
     }
     
-    @objc private func didTapRefreshButton() {
+    @objc private func didTapRefreshButton(sender: UIButton) {
+        UIButton.animate(withDuration: 0.1, animations: {
+            sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
+        }) { (didAnimate) in
+            sender.transform = CGAffineTransform.identity
+        }
+        
         AdsFacade.shared.fetchAds { [weak self] (result) in
             switch result {
             case .success(let ads):
