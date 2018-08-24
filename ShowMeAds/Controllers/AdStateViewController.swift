@@ -8,6 +8,13 @@
 
 import UIKit
 
+extension AdStateViewController {
+    enum State {
+        case loading
+        case loaded(UIViewController)
+        case error
+    }
+}
 
 class AdStateViewController: UIViewController {
     private var state: State?
@@ -19,14 +26,6 @@ class AdStateViewController: UIViewController {
         }
         
         fetchAds()
-    }
-}
-
-extension AdStateViewController {
-    enum State {
-        case loading
-        case loaded(UIViewController)
-        case error
     }
 }
 

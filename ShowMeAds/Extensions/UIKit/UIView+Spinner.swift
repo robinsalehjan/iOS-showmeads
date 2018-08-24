@@ -9,7 +9,6 @@
 import UIKit
 
 extension UIView {
-    
     ///  Adds a loading spinner to the given `UIView`
  
     static func displaySpinner(parentView: UIView) -> UIView {

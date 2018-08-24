@@ -9,22 +9,21 @@
 import UIKit
 
 class AdCollectionViewController: UICollectionViewController {
-    
     // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
     
-    fileprivate let refreshControl: UIRefreshControl = {
+    fileprivate lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 10) ?? UIFont.systemFont(ofSize: 10, weight: .medium)
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 12) ?? UIFont.systemFont(ofSize: 12, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font]
         refreshControl.attributedTitle = NSMutableAttributedString(string: "Oppdaterer", attributes: attributes)
         refreshControl.addTarget(self, action: #selector(pullToRefresh), for: .valueChanged)
         return refreshControl
     }()
     
-    fileprivate let favoritesTitleLabel: UILabel = {
+    fileprivate lazy var favoritesTitleLabel: UILabel = {
         let label = UILabel()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 18) ?? UIFont.systemFont(ofSize: 18, weight: .medium)
+        let font = UIFont.scaledFINNFont(fontType: .bold, size: 24) ?? UIFont.systemFont(ofSize: 24, weight: .bold)
         let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributeString = NSMutableAttributedString(string: "Kun favoritter", attributes: attributes)
         label.attributedText = attributeString
@@ -32,15 +31,15 @@ class AdCollectionViewController: UICollectionViewController {
         return label
     }()
     
-    fileprivate let offlineSwitch: UISwitch = {
+    fileprivate lazy var offlineSwitch: UISwitch = {
         let offlineSwitch = UISwitch()
         offlineSwitch.onTintColor = .softBlue
         return offlineSwitch
     }()
     
-    fileprivate let noFavoritesLabel: UILabel = {
+    fileprivate lazy var noFavoritesLabel: UILabel = {
         let label = UILabel()
-        let font = UIFont.scaledFINNFont(fontType: .medium, size: 20) ?? UIFont.systemFont(ofSize: 20, weight: .medium)
+        let font = UIFont.scaledFINNFont(fontType: .medium, size: 16) ?? UIFont.systemFont(ofSize: 16, weight: .medium)
         let attributes = [NSAttributedStringKey.font: font, NSAttributedStringKey.foregroundColor: UIColor.softBlue]
         let attributedString = NSMutableAttributedString(string: "Du har ingen favoritter tilgjengelig", attributes: attributes)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -69,14 +68,13 @@ class AdCollectionViewController: UICollectionViewController {
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 2.5
         self.init(collectionViewLayout: layout)
+        self.ads = ads
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
         parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-        
-        fetchAds(onCompletion: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -93,16 +91,12 @@ class AdCollectionViewController: UICollectionViewController {
 // MARK: - Private methods for state modifications
 
 extension AdCollectionViewController {
-    private func render(_ ads: [AdItem]) {
-        self.ads = ads
-        collectionView?.reloadData()
-    }
-    
     private func fetchAds(onCompletion: (() -> Void)?) {
         AdsFacade.shared.fetchAds { [weak self] (result) in
             switch result {
             case .error(let error):
                 DispatchQueue.main.async {
+                    self?.render(error)
                     if let completionHandler = onCompletion { completionHandler() }
                 }
             case .success(let ads):
@@ -112,6 +106,16 @@ extension AdCollectionViewController {
                 }
             }
         }
+    }
+    
+    private func render(_ ads: [AdItem]) {
+        self.ads = ads
+        collectionView?.reloadData()
+    }
+    
+    private func render(_ error: Error) {
+        guard let state = parent as? AdStateViewController else { return }
+        state.transition(to: .error)
     }
 }
 
@@ -136,7 +140,6 @@ extension AdCollectionViewController {
         switch offlineSwitch.isOn {
         case true:
             AdsFacade.shared.fetchFavoriteAds { [weak self] (ads) in
-                self?.ads = ads
                 DispatchQueue.main.async {
                     self?.render(ads)
                 }
@@ -148,7 +151,9 @@ extension AdCollectionViewController {
     
     @objc func pullToRefresh() {
         fetchAds(onCompletion: { [weak self] in
-            self?.refreshControl.endRefreshing()
+            DispatchQueue.main.async {
+                self?.refreshControl.endRefreshing()
+            }
         })
     }
 }

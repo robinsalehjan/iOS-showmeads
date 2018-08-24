@@ -9,8 +9,8 @@
 import Foundation
 import SystemConfiguration
 
-/** Check if we have network availability
- */
+/// Check if we have network availability
+
 public class Reachability {
     class func isConnectedToNetwork() -> Bool {
 
