@@ -136,6 +136,10 @@ extension AdCollectionViewController {
             noFavoritesLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -.veryLargeSpacing),
         ])
     }
+    
+    private func removeNoFavoritesLabel() {
+        noFavoritesLabel.removeFromSuperview()
+    }
 }
 
 // MARK: - Private selector methods
@@ -159,11 +163,8 @@ extension AdCollectionViewController {
                 }
             })
         case false:
-            fetchAds(endpoint: .remote, onCompletion: { [weak self] in
-                DispatchQueue.main.async {
-                    self?.refreshControl.endRefreshing()
-                }
-            })
+            refreshControl.endRefreshing()
+            transition(to: .loading)
         }
     }
 }
@@ -176,7 +177,7 @@ extension AdCollectionViewController {
         case true:
             showNoFavoritesLabel()
         default:
-            noFavoritesLabel.removeFromSuperview()
+            removeNoFavoritesLabel()
         }
         return ads.count
     }
