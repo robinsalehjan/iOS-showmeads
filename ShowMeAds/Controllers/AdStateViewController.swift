@@ -8,12 +8,10 @@
 
 import UIKit
 
-extension AdStateViewController {
-    enum State {
-        case loading
-        case loaded(UIViewController)
-        case error
-    }
+enum State {
+    case loading
+    case loaded(UIViewController)
+    case error
 }
 
 class AdStateViewController: UIViewController {
