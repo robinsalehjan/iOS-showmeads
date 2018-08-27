@@ -14,7 +14,6 @@ import CoreData
 class AdPersistenceService {
 
     // MARK: Properties
-
     fileprivate lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ShowMeAds")
         container.loadPersistentStores(completionHandler: { (_, error) in
@@ -31,10 +30,11 @@ class AdPersistenceService {
      */
     func fetchFavoriteAds(completionHandler: ((_ ads: [AdItem]) -> Void)) {
         var ads: [AdItem] = []
-
+        
         let backgroundContext = self.persistentContainer.newBackgroundContext()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
-
+        request.predicate = NSPredicate(format: "isFavorited == true")
+        
         do {
             let result = try backgroundContext.fetch(request)
             if let adObjects = result as? [Ads] {

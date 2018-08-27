@@ -203,22 +203,19 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
         
         let cellWidth = collectionView.frame.width * 0.475
         let cellHeight = collectionView.frame.height * 0.30
-
+        
         return CGSize(width: cellWidth, height: cellHeight)
     }
 }
 
 // MARK: - AdCollectionViewCellDelegate
 
-extension AdCollectionViewController: AdCollectionViewCellDelegate {
-    func removeAdFromCollectionView(cell: AdCollectionViewCell) {
-        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
-        let adItem = ads[indexPath.row]
-        AdsFacade.shared.delete(ad: adItem)
+extension AdCollectionViewController: AdCollectionViewCellDataSource {
+    func didFavorite(ad: AdItem) {
+        AdsFacade.shared.insert(ad: ad)
     }
     
-    func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem) {
-        guard collectionView?.indexPath(for: cell) != nil else { return }
-        AdsFacade.shared.insert(ad: adItem)
+    func didUnfavorite(ad: AdItem) {
+        AdsFacade.shared.delete(ad: ad)
     }
 }

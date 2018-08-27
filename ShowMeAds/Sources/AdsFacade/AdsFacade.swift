@@ -28,10 +28,15 @@ class AdsFacade {
         adRemoteService.fetchRemote(completionHandler: { [unowned self] (response) in
             switch response {
             case .success(let ads):
+                
+                // MARK - TODO: Perform diffing between json and core data, If any changes, then update core data entity
                 let alreadyFavorited: [AdItem] = ads.map {
                     if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
                 }
+                
+                alreadyFavorited.forEach({ self?.insert(ad: $0) })
                 completionHandler(Result.success(alreadyFavorited))
+                
             case .error(let error):
                 completionHandler(Result.error(error))
             }
@@ -46,6 +51,7 @@ class AdsFacade {
         })
     }
     
+        
     /** Insert an ad into Core Data
      Saves the Ad image data to disk
     */
@@ -57,6 +63,7 @@ class AdsFacade {
             CacheFacade.shared.saveToDisk(key: key, data: data)
         }
         
+        // Make sure the item isn't already favorited
         adPersistenceService.insert(ad: ad)
     }
     
@@ -66,7 +73,6 @@ class AdsFacade {
     public func delete(ad: AdItem) {
         let key = ad.imageUrl
         CacheFacade.shared.deleteFromDisk(key: key)
-        
         adPersistenceService.delete(ad: ad)
     }
 }
