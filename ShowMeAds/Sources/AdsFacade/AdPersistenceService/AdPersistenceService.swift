@@ -15,25 +15,25 @@ class AdPersistenceService {
     
     // MARK: Public
     
-    /** Fetch ads that has been favorited from Core Data
+    /** Fetch ads that matches the given predicate
      */
-    func fetchFavoriteAds(completionHandler: ((_ ads: [AdItem]) -> Void)) {
+    func fetchAds(where predicate: NSPredicate?) -> [AdItem] {        
         var ads: [AdItem] = []
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
-        request.predicate = NSPredicate(format: "isFavorited == true")
+        request.predicate = predicate
         
         do {
             let result = try backgroundContext.fetch(request)
-            if let adObjects = result as? [Ads] {
-                ads = adObjects.map { $0.convertToAdItem() }
-                completionHandler(ads)
+            if let objects = result as? [Ads] {
+                ads = objects.map { $0.convertToAdItem() }
             }
         } catch {
-            debugPrint("[ERROR]: Failed to fetch data from CoreData")
-            completionHandler(ads)
+            debugPrint("[ERROR]: Failed to fetch data from CoreData: \(error)")
         }
+        
+        return ads
     }
     
     /** Insert an ad into Core Data

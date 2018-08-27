@@ -91,8 +91,8 @@ class AdCollectionViewController: UICollectionViewController {
 // MARK: - Private methods for state modifications
 
 extension AdCollectionViewController {
-    private func fetchAds(onCompletion: (() -> Void)?) {
-        AdsFacade.shared.fetchAds { [weak self] (result) in
+    private func fetchAds(endpoint: EndpointType, onCompletion: (() -> Void)?) {
+        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
             switch result {
             case .error(let error):
                 DispatchQueue.main.async {
@@ -139,22 +139,28 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            AdsFacade.shared.fetchFavoriteAds { [weak self] (ads) in
-                DispatchQueue.main.async {
-                    self?.render(ads)
-                }
-            }
+            fetchAds(endpoint: .Favorited, onCompletion: nil)
         case false:
-            fetchAds(onCompletion: nil)
+            noFavoritesLabel.removeFromSuperview()
+            fetchAds(endpoint: .Remote, onCompletion: nil)
         }
     }
     
     @objc func pullToRefresh() {
-        fetchAds(onCompletion: { [weak self] in
-            DispatchQueue.main.async {
-                self?.refreshControl.endRefreshing()
-            }
-        })
+        switch offlineSwitch.isOn {
+        case true:
+            fetchAds(endpoint: .Favorited, onCompletion: { [weak self] in
+                DispatchQueue.main.async {
+                    self?.refreshControl.endRefreshing()
+                }
+            })
+        case false:
+            fetchAds(endpoint: .Remote, onCompletion: { [weak self] in
+                DispatchQueue.main.async {
+                    self?.refreshControl.endRefreshing()
+                }
+            })
+        }
     }
 }
 
