@@ -117,6 +117,7 @@ extension AdCollectionViewController {
         guard let state = parent as? AdStateViewController else { return }
         state.transition(to: .error)
     }
+    
 }
 
 // MARK: - Private methods for UI modifications
@@ -139,23 +140,23 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            fetchAds(endpoint: .Favorited, onCompletion: nil)
+            fetchAds(endpoint: .favorited, onCompletion: nil)
         case false:
             noFavoritesLabel.removeFromSuperview()
-            fetchAds(endpoint: .Remote, onCompletion: nil)
+            fetchAds(endpoint: .remote, onCompletion: nil)
         }
     }
     
     @objc func pullToRefresh() {
         switch offlineSwitch.isOn {
         case true:
-            fetchAds(endpoint: .Favorited, onCompletion: { [weak self] in
+            fetchAds(endpoint: .favorited, onCompletion: { [weak self] in
                 DispatchQueue.main.async {
                     self?.refreshControl.endRefreshing()
                 }
             })
         case false:
-            fetchAds(endpoint: .Remote, onCompletion: { [weak self] in
+            fetchAds(endpoint: .remote, onCompletion: { [weak self] in
                 DispatchQueue.main.async {
                     self?.refreshControl.endRefreshing()
                 }

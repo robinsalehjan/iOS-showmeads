@@ -11,9 +11,9 @@ import UIKit
 
 
 enum EndpointType {
-    case Remote
-    case Database
-    case Favorited
+    case remote
+    case database
+    case favorited
 }
 
 /** Abstraction that provides a simple interface to use and interact with the AdService and AdPersistenceService
@@ -33,7 +33,7 @@ class AdsFacade {
      */
     public func fetchAds(endpoint: EndpointType, completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
         switch endpoint {
-        case .Remote:
+        case .remote:
             adRemoteService.fetchRemote(completionHandler: { [weak self] (response) in
                 switch response {
                 case .success(let ads):
@@ -41,15 +41,16 @@ class AdsFacade {
                     ads.forEach({ self?.insert(ad: $0) })
                     completionHandler(Result.success(ads))
                 case .error(let error):
+                    
                     completionHandler(Result.error(error))
                 }
             })
         
-        case .Database:
+        case .database:
             let ads = adPersistenceService.fetchAds(where: nil)
             completionHandler(Result.success(ads))
         
-        case .Favorited:
+        case .favorited:
             let predicate = NSPredicate(format: "isFavorited == true")
             let ads = adPersistenceService.fetchAds(where: predicate)
             completionHandler(Result.success(ads))

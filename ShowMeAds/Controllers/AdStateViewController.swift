@@ -23,7 +23,7 @@ class AdStateViewController: UIViewController {
             transition(to: .loading)
         }
         
-        AdsFacade.shared.fetchAds(endpoint: .Remote) { [weak self] (result) in
+        AdsFacade.shared.fetchAds(endpoint: .remote) { [weak self] (result) in
             switch result {
             case .error(let error):
                 DispatchQueue.main.async {
