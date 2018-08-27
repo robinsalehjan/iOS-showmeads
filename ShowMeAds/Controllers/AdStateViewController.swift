@@ -22,24 +22,37 @@ class AdStateViewController: UIViewController {
         if state == nil {
             transition(to: .loading)
         }
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        guard let state = state else { return }
         
-        AdsFacade.shared.fetchAds(endpoint: .remote) { [weak self] (result) in
-            switch result {
-            case .error(let error):
-                DispatchQueue.main.async {
-                    self?.render(error)
-                }
-            case .success(let ads):
-                DispatchQueue.main.async {
-                    self?.render(ads)
+        switch state {
+        case .loading:
+            AdsFacade.shared.fetchAds(endpoint: .remote) { [weak self] (result) in
+                switch result {
+                case .error(let error):
+                    DispatchQueue.main.async {
+                        self?.render(error)
+                    }
+                case .success(let ads):
+                    DispatchQueue.main.async {
+                        self?.render(ads)
+                    }
                 }
             }
+        default:
+            break
         }
     }
 }
 
+// MARK: Methods for transitioning between states
+
 extension AdStateViewController {
     func transition(to newState: State) {
+
         shownViewController?.remove()
         
         let vc = viewController(for: newState)
@@ -60,6 +73,8 @@ extension AdStateViewController {
         }
     }
 }
+
+// MARK: Methods for rendering child controllers
 
 extension AdStateViewController {
     private func render(_ ads: [AdItem]) {

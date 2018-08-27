@@ -54,23 +54,16 @@ class AdErrorViewController: UIViewController {
     }
     
     @objc private func didTapRefreshButton(sender: UIButton) {
-        UIButton.animate(withDuration: 0.1, animations: {
+        UIButton.animate(withDuration: 0.1, animations: { [weak self] in
             sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
-        }) { (didAnimate) in
-            sender.transform = CGAffineTransform.identity
-        }
-        
-        AdsFacade.shared.fetchAds(endpoint: .remote) { [weak self] (result) in
-            switch result {
-            case .success(let ads):
+            
+            DispatchQueue.main.async {
                 guard let state = self?.parent as? AdStateViewController else { return }
-                let vc = AdCollectionViewController.init(ads)
-                DispatchQueue.main.async {
-                    state.transition(to: .loaded(vc))
-                }
-            case .error(_):
-                print("Still offline - No state has changed.")
+                state.transition(to: .loading)
             }
+            
+        }) { (_) in
+            sender.transform = CGAffineTransform.identity
         }
     }
 }
