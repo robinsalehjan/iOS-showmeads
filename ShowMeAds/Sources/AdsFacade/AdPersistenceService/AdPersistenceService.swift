@@ -12,18 +12,7 @@ import CoreData
 /** Provides an API to interact with Core Data
  */
 class AdPersistenceService {
-
-    // MARK: Properties
-    fileprivate lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "ShowMeAds")
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-
+    
     // MARK: Public
     
     /** Fetch ads that has been favorited from Core Data
@@ -31,7 +20,7 @@ class AdPersistenceService {
     func fetchFavoriteAds(completionHandler: ((_ ads: [AdItem]) -> Void)) {
         var ads: [AdItem] = []
         
-        let backgroundContext = self.persistentContainer.newBackgroundContext()
+        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
         request.predicate = NSPredicate(format: "isFavorited == true")
         
@@ -50,7 +39,7 @@ class AdPersistenceService {
     /** Insert an ad into Core Data
      */
     func insert(ad: AdItem) {
-        let backgroundContext = self.persistentContainer.newBackgroundContext()
+        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext)
 
         let newAd = Ads.init(entity: entity!, insertInto: backgroundContext)
@@ -75,7 +64,7 @@ class AdPersistenceService {
     /** Delete an ad from Core Data
      */
     func delete(ad: AdItem) {
-        let backgroundContext = self.persistentContainer.newBackgroundContext()
+        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
         fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", ad.imageUrl)
 
@@ -95,7 +84,7 @@ class AdPersistenceService {
     /** Check if ad exists in Core Data
      */
     func exists(ad: AdItem) -> AdItem? {
-        let backgroundContext = self.persistentContainer.newBackgroundContext()
+        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
         fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", ad.imageUrl)
         fetchRequest.fetchLimit = 1
