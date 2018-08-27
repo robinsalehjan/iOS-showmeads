@@ -8,9 +8,9 @@
 
 import UIKit
 
-protocol AdCollectionViewCellDelegate: NSObjectProtocol {
-    func removeAdFromCollectionView(cell: AdCollectionViewCell)
-    func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem)
+protocol AdCollectionViewCellDataSource: NSObjectProtocol {
+    func didFavorite(ad: AdItem)
+    func didUnfavorite(ad: AdItem)
 }
 
 class AdCollectionViewCell: UICollectionViewCell {
@@ -20,7 +20,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     public static let nib = "AdCollectionViewCell"
     public static let identifier = "AdCollectionViewCellIdentifier"
     
-    public weak var delegate: AdCollectionViewCellDelegate?
+    public weak var delegate: AdCollectionViewCellDataSource?
     
     // MARK: - Private properties
     
@@ -84,11 +84,12 @@ extension AdCollectionViewCell {
         
         if heartButton.isSelected {
             heartButton.isSelected = false
-            delegate?.removeAdFromCollectionView(cell: self)
+            ad.isFavorited = false
+            delegate?.didUnfavorite(ad: ad)
         } else {
             heartButton.isSelected = true
             ad.isFavorited = true
-            delegate?.saveAdFromCollectionView(cell: self, adItem: ad)
+            delegate?.didFavorite(ad: ad)
         }
     }
 }
