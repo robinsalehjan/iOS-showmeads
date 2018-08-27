@@ -27,23 +27,32 @@ class AdStateViewController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         guard let state = state else { return }
-        
-        switch state {
-        case .loading:
-            AdsFacade.shared.fetchAds(endpoint: .remote) { [weak self] (result) in
-                switch result {
-                case .error(let error):
-                    DispatchQueue.main.async {
-                        self?.render(error)
-                    }
-                case .success(let ads):
-                    DispatchQueue.main.async {
-                        self?.render(ads)
-                    }
+        guard case State.loading = state else { return }
+    
+        switch Reachability.isConnectedToNetwork() {
+        case true:
+            fetchAds(endpoint: .remote)
+        case false:
+            fetchAds(endpoint: .database)
+        }
+    }
+}
+
+// MARK: Method to fetch ads from any given endpoint
+
+extension AdStateViewController {
+    private func fetchAds(endpoint: EndpointType) {
+        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
+            switch result {
+            case .error(let error):
+                DispatchQueue.main.async {
+                    self?.render(error)
+                }
+            case .success(let ads):
+                DispatchQueue.main.async {
+                    self?.render(ads)
                 }
             }
-        default:
-            break
         }
     }
 }
@@ -74,7 +83,7 @@ extension AdStateViewController {
     }
 }
 
-// MARK: Methods for rendering child controllers
+// MARK: Render child controllers given argument
 
 extension AdStateViewController {
     private func render(_ ads: [AdItem]) {
@@ -86,4 +95,5 @@ extension AdStateViewController {
         transition(to: .error)
     }
 }
+
 
