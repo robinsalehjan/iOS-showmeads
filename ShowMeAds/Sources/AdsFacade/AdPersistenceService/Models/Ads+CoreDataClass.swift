@@ -23,6 +23,11 @@ public struct AdItem {
                 " title: \(title)" +
                 " isFavorited: \(isFavorited)"
     }
+    
+    func diff(ad: AdItem) -> Bool {
+        if self.title != ad.title { return true }
+        return false
+    }
 }
 
 @objc(Ads)
