@@ -11,13 +11,19 @@
 - Resources: Application resources, images and so on
 
 ## Classes
-- `AppDelegate`: Initalizes an `UINavigationController` with an instance of the `AdCollectionViewController` class as the root view controller
-- `AdCollectionViewController`: The view controller manages and provides logic for the generic `UICollectionView` and the `AdCollectionViewCell`
+- `AppDelegate`: Initalizes an instance of `UINavigationController` with an instance of the `AdStateViewController` class as the root view controller
+
+- `AdStateViewController`: The parent view controller manages the different states the app  can be in: `loading`, `loaded` and `error`
+- `AdCollectionViewController`: When the app is in a `loaded` state the parent view controller will present this collection view
+- `AdLoadingViewController`: When the app is in a `loading` state the parent view controller presents this view.
+- `AdErrorStateViewController`: When the app is in a `error` state the parent view controller presents this view.
 - `AdsFacade`: A `Facade` abstraction with an simpler interface for the `AdService` and `AdPersistenceService` services
   - `AdService`: Responsible for fetching and parsing the response from the API to domain entities.
   - `AdPersistenceService`: Responsible for fetching, saving and deleting entities to and from Core Data
 - `CacheFacade`: A `Facade` abstraction for the underlying `AdImageCacheService` and `DiskCacheService`
-
+  - `AdImageCacheService`: In-memory cache for the `Data` instance that belongs to the image.
+  - `DiskCacheService`: Caches images to disk.
+  
 The `AdCollectionViewController` is the glue between the UI layer and the service layer. All requests made in the `AdCollectionViewController` instance to external services goes through the API provided by the `AdsFacade` class.
 
 # Proud of
