@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class AdCollectionViewController: UICollectionViewController {
     // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
+    fileprivate var fetchedResultsController = NSFetchedResultsController<Ads>()
     
     fileprivate lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -102,6 +104,25 @@ extension AdCollectionViewController {
         }
     }
     
+    private func fetchFavoritedAds() {
+        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
+        let request = NSFetchRequest<Ads>(entityName: "Ads")
+        request.sortDescriptors = [NSSortDescriptor.init(key: "title", ascending: false)]
+        request.predicate = NSPredicate(format: "isFavorited == true")
+        fetchedResultsController = NSFetchedResultsController.init(fetchRequest: request, managedObjectContext: backgroundContext,
+                                                                   sectionNameKeyPath: nil, cacheName: nil)
+        do {
+            try fetchedResultsController.performFetch()
+            guard let objects = fetchedResultsController.fetchedObjects else { return }
+            DispatchQueue.main.async {
+                let ads = objects.map({ $0.convertToAdItem() })
+                self.render(ads)
+            }
+        } catch {
+            debugPrint("[ERROR]: Failed to fetch from CoreData: \(error)")
+        }
+    }
+
     private func render(_ ads: [AdItem]) {
         self.ads = ads
         collectionView?.reloadData()
@@ -148,22 +169,19 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            fetchAds(endpoint: .favorited, onCompletion: nil)
+            fetchFavoritedAds()
         case false:
             transition(to: .loading)
         }
     }
     
     @objc func pullToRefresh() {
+        refreshControl.endRefreshing()
+        
         switch offlineSwitch.isOn {
         case true:
-            fetchAds(endpoint: .favorited, onCompletion: { [weak self] in
-                DispatchQueue.main.async {
-                    self?.refreshControl.endRefreshing()
-                }
-            })
+            fetchFavoritedAds()
         case false:
-            refreshControl.endRefreshing()
             transition(to: .loading)
         }
     }
