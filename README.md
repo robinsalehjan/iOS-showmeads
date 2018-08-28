@@ -18,10 +18,10 @@
 - `AdLoadingViewController`: When the app is in a `loading` state the parent view controller presents this view.
 - `AdErrorStateViewController`: When the app is in a `error` state the parent view controller presents this view.
 - `AdsFacade`: A `Facade` abstraction with an simpler interface for the `AdService` and `AdPersistenceService` services
-  - `AdService`: Responsible for fetching and parsing the response from the API to domain entities.
+  - `AdService`: Responsible for fetching and parsing the response from the API to entities.
   - `AdPersistenceService`: Responsible for fetching, saving and deleting entities to and from Core Data
 - `CacheFacade`: A `Facade` abstraction for the underlying `AdImageCacheService` and `DiskCacheService`
-  - `AdImageCacheService`: In-memory cache maps the `imageURL` to the `Data` for every ad entity.
+  - `AdImageCacheService`: In-memory cache maps the `imageURL` to the `Data` for every entity.
   - `DiskCacheService`: Caches images to disk.
   
 # Proud of
