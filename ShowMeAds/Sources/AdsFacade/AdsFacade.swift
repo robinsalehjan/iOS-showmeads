@@ -39,12 +39,13 @@ class AdsFacade {
                 case .success(let ads):
                     let alreadyFavorited: [AdItem] = ads.map {
                         if let exists = self?.adPersistenceService.exists(ad: $0) {
+                            self?.adPersistenceService.update(newAd: exists)
                             return exists
                         } else {
+                            self?.adPersistenceService.insert(ad: $0)
                             return $0
                         }
                     }
-                    
                     completionHandler(Result.success(alreadyFavorited))
                 case .error(let error):
                     
@@ -74,6 +75,11 @@ class AdsFacade {
         
         // Make sure the item isn't already favorited
         adPersistenceService.insert(ad: ad)
+    }
+    
+    public func update(ad: AdItem) {
+        guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
+        adPersistenceService.update(newAd: ad)
     }
     
     /** Delete an ad from Core Data
