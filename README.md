@@ -21,11 +21,9 @@
   - `AdService`: Responsible for fetching and parsing the response from the API to domain entities.
   - `AdPersistenceService`: Responsible for fetching, saving and deleting entities to and from Core Data
 - `CacheFacade`: A `Facade` abstraction for the underlying `AdImageCacheService` and `DiskCacheService`
-  - `AdImageCacheService`: In-memory cache for the `Data` instance that belongs to the image.
+  - `AdImageCacheService`: In-memory cache maps the `imageURL` to the `Data` for every ad entity.
   - `DiskCacheService`: Caches images to disk.
   
-The `AdCollectionViewController` is the glue between the UI layer and the service layer. All requests made in the `AdCollectionViewController` instance to external services goes through the API provided by the `AdsFacade` class.
-
 # Proud of
 I managed to finish the project before my deadline (Wednesday).
 
