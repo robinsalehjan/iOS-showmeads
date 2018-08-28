@@ -13,7 +13,6 @@ import UIKit
 enum EndpointType {
     case remote
     case database
-    case favorited
 }
 
 /** Abstraction that provides a simple interface to use and interact with the AdService and AdPersistenceService
@@ -54,10 +53,6 @@ class AdsFacade {
             })
         case .database:
             let ads = adPersistenceService.fetchAds(where: nil)
-            completionHandler(Result.success(ads))
-        case .favorited:
-            let predicate = NSPredicate(format: "isFavorited == true")
-            let ads = adPersistenceService.fetchAds(where: predicate)
             completionHandler(Result.success(ads))
         }
     }
