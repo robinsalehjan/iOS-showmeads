@@ -37,19 +37,23 @@ class AdsFacade {
             adRemoteService.fetchRemote(completionHandler: { [weak self] (response) in
                 switch response {
                 case .success(let ads):
-                    // MARK - TODO: Perform diffing between json and core data, If any changes, then update core data entity
-                    ads.forEach({ self?.insert(ad: $0) })
-                    completionHandler(Result.success(ads))
+                    let alreadyFavorited: [AdItem] = ads.map {
+                        if let exists = self?.adPersistenceService.exists(ad: $0) {
+                            return exists
+                        } else {
+                            return $0
+                        }
+                    }
+                    
+                    completionHandler(Result.success(alreadyFavorited))
                 case .error(let error):
                     
                     completionHandler(Result.error(error))
                 }
             })
-        
         case .database:
             let ads = adPersistenceService.fetchAds(where: nil)
             completionHandler(Result.success(ads))
-        
         case .favorited:
             let predicate = NSPredicate(format: "isFavorited == true")
             let ads = adPersistenceService.fetchAds(where: predicate)
