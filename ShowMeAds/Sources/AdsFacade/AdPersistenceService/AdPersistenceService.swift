@@ -40,9 +40,9 @@ class AdPersistenceService {
      */
     func insert(ad: AdItem) {
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
-        let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext)
+        guard let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext) else { return }
 
-        let newAd = Ads.init(entity: entity!, insertInto: backgroundContext)
+        let newAd = Ads.init(entity: entity, insertInto: backgroundContext)
         newAd.setValue(ad.imageUrl, forKey: "imageUrl")
         newAd.setValue(ad.price, forKey: "price")
         newAd.setValue(ad.location, forKey: "location")
