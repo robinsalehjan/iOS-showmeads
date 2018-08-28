@@ -3,11 +3,12 @@
 ![Loading](https://github.com/robinsalehjan/showmeads/blob/fix/update-images/Images/1.png) ![Loaded](https://github.com/robinsalehjan/showmeads/blob/fix/update-images/Images/2.png) ![Favorites](https://github.com/robinsalehjan/showmeads/blob/fix/update-images/Images/3.png)
 
 ## Folders
-- Components: UI and XIB related files
+- UI: Customized UI elements
 - Controllers: Application logic
-- Services: Abstraction for external services such as the network service, caching service and the Core Data service
-- Utilities: Helper classes
-- Extensions: Functions added as extensions to the `Foundation` classes
+- Extensions: Useful functions for `UIKit` and `Foundation` classes
+- Library: Reusable classes and functions
+- Sources: Components such as network/database service
+- Resources: Application resources, images and so on
 
 ## Classes
 - `AppDelegate`: Initalizes an `UINavigationController` with an instance of the `AdCollectionViewController` class as the root view controller
