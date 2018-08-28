@@ -77,12 +77,6 @@ class AdCollectionViewController: UICollectionViewController {
         parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        parent?.navigationItem.leftBarButtonItem = nil
-        parent?.navigationItem.rightBarButtonItem = nil
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("Not implemented")
     }
@@ -114,10 +108,20 @@ extension AdCollectionViewController {
     }
     
     private func render(_ error: Error) {
-        guard let state = parent as? AdStateViewController else { return }
-        state.transition(to: .error)
+        transition(to: .error)
     }
     
+    private func transition(to newState: State) {
+        guard let currentState = parent as? AdStateViewController else { return }
+        switch newState {
+        case .error:
+            currentState.transition(to: .error)
+        case .loading:
+            currentState.transition(to: .loading)
+        default:
+            break
+        }
+    }
 }
 
 // MARK: - Private methods for UI modifications
@@ -132,9 +136,13 @@ extension AdCollectionViewController {
             noFavoritesLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -.veryLargeSpacing),
         ])
     }
+    
+    private func removeNoFavoritesLabel() {
+        noFavoritesLabel.removeFromSuperview()
+    }
 }
 
-// MARK: - Selector methods
+// MARK: - Private selector methods
 
 extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
@@ -142,8 +150,7 @@ extension AdCollectionViewController {
         case true:
             fetchAds(endpoint: .favorited, onCompletion: nil)
         case false:
-            noFavoritesLabel.removeFromSuperview()
-            fetchAds(endpoint: .remote, onCompletion: nil)
+            transition(to: .loading)
         }
     }
     
@@ -156,11 +163,8 @@ extension AdCollectionViewController {
                 }
             })
         case false:
-            fetchAds(endpoint: .remote, onCompletion: { [weak self] in
-                DispatchQueue.main.async {
-                    self?.refreshControl.endRefreshing()
-                }
-            })
+            refreshControl.endRefreshing()
+            transition(to: .loading)
         }
     }
 }
@@ -173,7 +177,7 @@ extension AdCollectionViewController {
         case true:
             showNoFavoritesLabel()
         default:
-            noFavoritesLabel.removeFromSuperview()
+            removeNoFavoritesLabel()
         }
         return ads.count
     }
