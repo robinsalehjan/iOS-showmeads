@@ -1,6 +1,6 @@
 # Description
 
-![Loading](https://github.com/robinsalehjan/showmeads/blob/fix/update-images/Images/1.png) ![Loaded](https://github.com/robinsalehjan/showmeads/blob/fix/update-images/Images/2.png) ![Favorites](https://github.com/robinsalehjan/showmeads/blob/fix/update-images/Images/3.png)
+![Loading](https://github.com/robinsalehjan/showmeads/blob/master/Images/1.png) ![Loaded](https://github.com/robinsalehjan/showmeads/blob/master/Images/2.png) ![Favorites](https://github.com/robinsalehjan/showmeads/blob/master/Images/3.png)
 
 ## Folders
 - UI: Customized UI elements
