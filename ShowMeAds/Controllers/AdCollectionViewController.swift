@@ -91,8 +91,8 @@ class AdCollectionViewController: UICollectionViewController {
 // MARK: - Private methods for state modifications
 
 extension AdCollectionViewController {
-    private func fetchAds(onCompletion: (() -> Void)?) {
-        AdsFacade.shared.fetchAds { [weak self] (result) in
+    private func fetchAds(endpoint: EndpointType, onCompletion: (() -> Void)?) {
+        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
             switch result {
             case .error(let error):
                 DispatchQueue.main.async {
@@ -117,6 +117,7 @@ extension AdCollectionViewController {
         guard let state = parent as? AdStateViewController else { return }
         state.transition(to: .error)
     }
+    
 }
 
 // MARK: - Private methods for UI modifications
@@ -139,22 +140,28 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            AdsFacade.shared.fetchFavoriteAds { [weak self] (ads) in
-                DispatchQueue.main.async {
-                    self?.render(ads)
-                }
-            }
+            fetchAds(endpoint: .favorited, onCompletion: nil)
         case false:
-            fetchAds(onCompletion: nil)
+            noFavoritesLabel.removeFromSuperview()
+            fetchAds(endpoint: .remote, onCompletion: nil)
         }
     }
     
     @objc func pullToRefresh() {
-        fetchAds(onCompletion: { [weak self] in
-            DispatchQueue.main.async {
-                self?.refreshControl.endRefreshing()
-            }
-        })
+        switch offlineSwitch.isOn {
+        case true:
+            fetchAds(endpoint: .favorited, onCompletion: { [weak self] in
+                DispatchQueue.main.async {
+                    self?.refreshControl.endRefreshing()
+                }
+            })
+        case false:
+            fetchAds(endpoint: .remote, onCompletion: { [weak self] in
+                DispatchQueue.main.async {
+                    self?.refreshControl.endRefreshing()
+                }
+            })
+        }
     }
 }
 
@@ -203,22 +210,19 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
         
         let cellWidth = collectionView.frame.width * 0.475
         let cellHeight = collectionView.frame.height * 0.30
-
+        
         return CGSize(width: cellWidth, height: cellHeight)
     }
 }
 
 // MARK: - AdCollectionViewCellDelegate
 
-extension AdCollectionViewController: AdCollectionViewCellDelegate {
-    func removeAdFromCollectionView(cell: AdCollectionViewCell) {
-        guard let indexPath = collectionView?.indexPath(for: cell) else { return }
-        let adItem = ads[indexPath.row]
-        AdsFacade.shared.delete(ad: adItem)
+extension AdCollectionViewController: AdCollectionViewCellDataSource {
+    func didFavorite(ad: AdItem) {
+        AdsFacade.shared.insert(ad: ad)
     }
     
-    func saveAdFromCollectionView(cell: AdCollectionViewCell, adItem: AdItem) {
-        guard collectionView?.indexPath(for: cell) != nil else { return }
-        AdsFacade.shared.insert(ad: adItem)
+    func didUnfavorite(ad: AdItem) {
+        AdsFacade.shared.delete(ad: ad)
     }
 }

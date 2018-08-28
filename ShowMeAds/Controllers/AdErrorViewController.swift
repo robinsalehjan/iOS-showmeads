@@ -60,7 +60,7 @@ class AdErrorViewController: UIViewController {
             sender.transform = CGAffineTransform.identity
         }
         
-        AdsFacade.shared.fetchAds { [weak self] (result) in
+        AdsFacade.shared.fetchAds(endpoint: .remote) { [weak self] (result) in
             switch result {
             case .success(let ads):
                 guard let state = self?.parent as? AdStateViewController else { return }

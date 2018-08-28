@@ -9,6 +9,13 @@
 import Foundation
 import UIKit
 
+
+enum EndpointType {
+    case remote
+    case database
+    case favorited
+}
+
 /** Abstraction that provides a simple interface to use and interact with the AdService and AdPersistenceService
  */
 class AdsFacade {
@@ -24,26 +31,30 @@ class AdsFacade {
     
     /** Fetch ads from the remote API
      */
-    public func fetchAds(completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
-        adRemoteService.fetchRemote(completionHandler: { [unowned self] (response) in
-            switch response {
-            case .success(let ads):
-                let alreadyFavorited: [AdItem] = ads.map {
-                    if let exists = self.adPersistenceService.exists(ad: $0) { return exists } else { return $0 }
+    public func fetchAds(endpoint: EndpointType, completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
+        switch endpoint {
+        case .remote:
+            adRemoteService.fetchRemote(completionHandler: { [weak self] (response) in
+                switch response {
+                case .success(let ads):
+                    // MARK - TODO: Perform diffing between json and core data, If any changes, then update core data entity
+                    ads.forEach({ self?.insert(ad: $0) })
+                    completionHandler(Result.success(ads))
+                case .error(let error):
+                    
+                    completionHandler(Result.error(error))
                 }
-                completionHandler(Result.success(alreadyFavorited))
-            case .error(let error):
-                completionHandler(Result.error(error))
-            }
-        })
-    }
-    
-    /** Fetch ads from Core Data
-     */
-    public func fetchFavoriteAds(completionHandler: @escaping ((_ ads: [AdItem]) -> Void)) {
-        adPersistenceService.fetchFavoriteAds(completionHandler: { (ads) in
-            completionHandler(ads)
-        })
+            })
+        
+        case .database:
+            let ads = adPersistenceService.fetchAds(where: nil)
+            completionHandler(Result.success(ads))
+        
+        case .favorited:
+            let predicate = NSPredicate(format: "isFavorited == true")
+            let ads = adPersistenceService.fetchAds(where: predicate)
+            completionHandler(Result.success(ads))
+        }
     }
     
     /** Insert an ad into Core Data
@@ -57,6 +68,7 @@ class AdsFacade {
             CacheFacade.shared.saveToDisk(key: key, data: data)
         }
         
+        // Make sure the item isn't already favorited
         adPersistenceService.insert(ad: ad)
     }
     
@@ -66,7 +78,6 @@ class AdsFacade {
     public func delete(ad: AdItem) {
         let key = ad.imageUrl
         CacheFacade.shared.deleteFromDisk(key: key)
-        
         adPersistenceService.delete(ad: ad)
     }
 }

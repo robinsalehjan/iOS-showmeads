@@ -14,9 +14,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        
+    // MARK: - Core Data stack
+    
+    static var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "ShowMeAds")
+        container.loadPersistentStores(completionHandler: { (_, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+    
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let controller = AdStateViewController()
         let navController = UINavigationController.init(rootViewController: controller)
         
@@ -42,23 +52,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         self.saveContext()
     }
-
-    // MARK: - Core Data stack
-
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "ShowMeAds")
-        container.loadPersistentStores(completionHandler: { (_, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-
+    
+    
     // MARK: - Core Data Saving support
 
     func saveContext () {
-        let context = persistentContainer.viewContext
+        let context = AppDelegate.persistentContainer.viewContext
         if context.hasChanges {
             do {
                 try context.save()
@@ -72,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: - Core Data purge data
 
     func purgeData() {
-        let context = persistentContainer.viewContext
+        let context = AppDelegate.persistentContainer.viewContext
 
         let deleteFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: deleteFetch)
