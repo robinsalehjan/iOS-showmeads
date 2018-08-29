@@ -13,11 +13,11 @@ import CoreData
 
 class AdPersistenceService {
     
-    /// Query for records matching an given predicate
-    /// - returns: All records matching the predicate
+    /// Query for records matching the given predicate
+    /// - returns: All records matching the given predicate
     
     func fetch(where predicate: NSPredicate?) -> [AdItem] {
-        var ads: [AdItem] = []
+        var matchingAds: [AdItem] = []
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
@@ -26,13 +26,13 @@ class AdPersistenceService {
         do {
             let result = try backgroundContext.fetch(request)
             if let objects = result as? [Ads] {
-                ads = objects.map { $0.convertToAdItem() }
+                matchingAds = objects.map { $0.convertToAdItem() }
             }
         } catch {
             debugPrint("[ERROR]: Failed to fetch data from CoreData: \(error)")
         }
         
-        return ads
+        return matchingAds
     }
     
     /// Insert an record into core data
@@ -43,7 +43,7 @@ class AdPersistenceService {
         guard exists(ad) == nil else { return false }
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
-        guard let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext) else { return false}
+        guard let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext) else { return false }
         
         let newAd = Ads.init(entity: entity, insertInto: backgroundContext)
         newAd.setValue(ad.imageUrl, forKey: "imageUrl")
@@ -51,7 +51,7 @@ class AdPersistenceService {
         newAd.setValue(ad.location, forKey: "location")
         newAd.setValue(ad.title, forKey: "title")
         newAd.setValue(ad.isFavorited, forKey: "isFavorited")
-
+        
         do {
             try backgroundContext.save()
         } catch {
@@ -79,9 +79,9 @@ class AdPersistenceService {
         
         do {
             let results = try backgroundContext.fetch(fetchRequest)
-            if let ads = results as? [Ads] {
-                for ad in ads {
-                    backgroundContext.delete(ad)
+            if let existingAds = results as? [Ads] {
+                for existingAd in existingAds {
+                    backgroundContext.delete(existingAd)
                 }
             }
             try backgroundContext.save()
@@ -134,8 +134,8 @@ class AdPersistenceService {
 
         do {
             let result = try backgroundContext.fetch(fetchRequest)
-            if let ads = result as? [Ads] {
-                if ads.isEmpty { return nil } else { return ads.first?.convertToAdItem() }
+            if let existingAds = result as? [Ads] {
+                if existingAds.isEmpty { return nil } else { return existingAds.first?.convertToAdItem() }
             }
         } catch {
             debugPrint("[ERROR]: Failed to fetch data from CoreData, error:\(error)")
