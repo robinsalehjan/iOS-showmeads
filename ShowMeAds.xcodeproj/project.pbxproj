@@ -147,6 +147,7 @@
 				6C3764202061C62C00233E98 /* Extensions */,
 				6CC72474205C7BEF00E7D103 /* UI */,
 				6CC4E3CE205C6A99007587B6 /* Controllers */,
+				F2A2518C2136964400E5D719 /* Networking */,
 				F2586DF0212C579C0043DC25 /* Services */,
 				F2586DEF212C578F0043DC25 /* Resources */,
 				6C205D20205C3ED7002B8BAA /* AppDelegate.swift */,
@@ -236,7 +237,6 @@
 			isa = PBXGroup;
 			children = (
 				6C527B4E20603AD40046DB50 /* AdsFacade.swift */,
-				6CC72479205C7CF300E7D103 /* AdNetworkService */,
 				6C527B5020603D7F0046DB50 /* AdPersistenceService */,
 				F2D1080A2124073100BF4E4A /* AdCacheService */,
 			);
@@ -281,6 +281,14 @@
 				F273465D212DAEE000F8AFF2 /* Result.swift */,
 			);
 			path = Library;
+			sourceTree = "<group>";
+		};
+		F2A2518C2136964400E5D719 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				6CC72479205C7CF300E7D103 /* AdNetworkService */,
+			);
+			path = Networking;
 			sourceTree = "<group>";
 		};
 		F2D1080A2124073100BF4E4A /* AdCacheService */ = {
