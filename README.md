@@ -23,9 +23,3 @@
 - `CacheFacade`: A `Facade` abstraction for the underlying `AdImageCacheService` and `DiskCacheService`
   - `AdImageCacheService`: In-memory cache maps the `imageURL` to the `Data` for every entity.
   - `DiskCacheService`: Caches images to disk.
-  
-# Proud of
-I managed to finish the project before my deadline (Wednesday).
-
-# Could have been better
-The UI does not have the the polish that I would like it to have. 
