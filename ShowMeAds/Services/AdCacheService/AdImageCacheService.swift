@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-class GenericCacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjectProtocol, ObjectType: NSObjectProtocol {
+class CacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjectProtocol, ObjectType: NSObjectProtocol {
     fileprivate let memoryCache = NSCache<KeyType, ObjectType>()
 }
 
 /** Image caching service
  responsible for caching images from both remote endpoints and disk.
  */
-class AdImageCacheService: GenericCacheService<NSString, NSData> {
+class AdImageCacheService: CacheService<NSString, NSData> {
     
     // MARK - Public methods
     

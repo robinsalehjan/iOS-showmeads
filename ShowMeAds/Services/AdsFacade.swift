@@ -64,8 +64,8 @@ class AdsFacade {
         guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
         
         let key = ad.imageUrl
-        CacheFacade.shared.fetch(cacheType: .image, key: key) { (data: NSData) in
-            CacheFacade.shared.saveToDisk(key: key, data: data)
+        AdCacheService.shared.fetch(cacheType: .image, key: key) { (data: NSData) in
+            AdCacheService.shared.saveToDisk(key: key, data: data)
         }
         
         // Make sure the item isn't already favorited
@@ -82,7 +82,7 @@ class AdsFacade {
      */
     public func delete(_ ad: AdItem) {
         let key = ad.imageUrl
-        CacheFacade.shared.deleteFromDisk(key: key)
+        AdCacheService.shared.deleteFromDisk(key: key)
         adPersistenceService.delete(ad)
     }
 }

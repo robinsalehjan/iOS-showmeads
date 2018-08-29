@@ -38,7 +38,7 @@
 		F2D107F52121A67F00BF4E4A /* AdImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */; };
 		F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */; };
 		F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */; };
-		F2D1080C2124074400BF4E4A /* CacheFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D1080B2124074400BF4E4A /* CacheFacade.swift */; };
+		F2D1080C2124074400BF4E4A /* AdCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D1080B2124074400BF4E4A /* AdCacheService.swift */; };
 		F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D1080F2124396C00BF4E4A /* String+Hashing.swift */; };
 		F2D10813212556F500BF4E4A /* TestCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D10812212556F500BF4E4A /* TestCache.swift */; };
 /* End PBXBuildFile section */
@@ -89,7 +89,7 @@
 		F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdImageCacheService.swift; sourceTree = "<group>"; };
 		F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validation.swift"; sourceTree = "<group>"; };
 		F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDiskCacheService.swift; sourceTree = "<group>"; };
-		F2D1080B2124074400BF4E4A /* CacheFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheFacade.swift; sourceTree = "<group>"; };
+		F2D1080B2124074400BF4E4A /* AdCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdCacheService.swift; sourceTree = "<group>"; };
 		F2D1080F2124396C00BF4E4A /* String+Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Hashing.swift"; sourceTree = "<group>"; };
 		F2D10812212556F500BF4E4A /* TestCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCache.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -294,7 +294,7 @@
 		F2D1080A2124073100BF4E4A /* AdCacheService */ = {
 			isa = PBXGroup;
 			children = (
-				F2D1080B2124074400BF4E4A /* CacheFacade.swift */,
+				F2D1080B2124074400BF4E4A /* AdCacheService.swift */,
 				F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */,
 				F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */,
 			);
@@ -427,7 +427,7 @@
 				F273465E212DAEE000F8AFF2 /* Result.swift in Sources */,
 				6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */,
 				F2734656212D9F0A00F8AFF2 /* UIViewController+ChildControllers.swift in Sources */,
-				F2D1080C2124074400BF4E4A /* CacheFacade.swift in Sources */,
+				F2D1080C2124074400BF4E4A /* AdCacheService.swift in Sources */,
 				F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */,
 				6C0F613D205D13A300F4BF71 /* AdNetworkService.swift in Sources */,
 				F273465B212DA2E200F8AFF2 /* AdLoadingViewController.swift in Sources */,

@@ -14,10 +14,10 @@ enum CacheType: String {
 
 /// Client API to interact with different caching services
 
-final class CacheFacade {
+final class AdCacheService {
     fileprivate var adImageCacheService = AdImageCacheService()
     
-    static let shared = CacheFacade()
+    static let shared = AdCacheService()
     private init() {}
     
     // MARK: Public methods for the cache
