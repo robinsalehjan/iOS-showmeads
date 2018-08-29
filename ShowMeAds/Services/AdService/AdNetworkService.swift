@@ -10,7 +10,7 @@ import Foundation
 
 /** Provides an API to interact with the remote API
  */
-final class AdRemoteService {
+final class AdNetworkService {
 
     // MARK: - Properties
     
