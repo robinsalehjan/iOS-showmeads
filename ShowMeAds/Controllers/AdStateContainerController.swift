@@ -79,7 +79,8 @@ extension AdStateContainerController {
                 }
             case .success(let ads):
                 DispatchQueue.main.async {
-                    let viewController = AdCollectionViewController(ads)
+                    let imageCacheService = AdImageCacheService()
+                    let viewController = AdCollectionViewController(ads, imageCacheService: imageCacheService)
                     self?.transition(to: .loaded(viewController))
                 }
             }

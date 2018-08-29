@@ -12,6 +12,8 @@ import CoreData
 class AdCollectionViewController: UICollectionViewController {
     // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
+    fileprivate var imageCacheService: AdImageCacheService = AdImageCacheService()
+    
     fileprivate var fetchedResultsController = NSFetchedResultsController<Ads>()
     
     fileprivate lazy var refreshControl: UIRefreshControl = {
@@ -65,12 +67,13 @@ class AdCollectionViewController: UICollectionViewController {
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
-    convenience init(_ ads: [AdItem]) {
+    convenience init(_ ads: [AdItem], imageCacheService: AdImageCacheService) {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 2.5
         self.init(collectionViewLayout: layout)
         self.ads = ads
+        self.imageCacheService = imageCacheService
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -207,7 +210,7 @@ extension AdCollectionViewController {
         
         let ad = ads[indexPath.row]
         cell.delegate = self
-        cell.setup(ad: ad)
+        cell.setup(ad: ad, imageCacheService: imageCacheService)
         
         return cell
     }
