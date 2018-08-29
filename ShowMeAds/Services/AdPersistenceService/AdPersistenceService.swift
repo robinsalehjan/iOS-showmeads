@@ -9,13 +9,12 @@
 import Foundation
 import CoreData
 
-/** Provides an API to interact with Core Data
- */
+/// Client API to interact with Core Data
+
 class AdPersistenceService {
     
-    
-    /** Fetch ads that matches the given predicate
-     */
+    /// Query for records matching an given predicate
+    /// - returns: All records matching the predicate
     
     func fetch(where predicate: NSPredicate?) -> [AdItem] {
         var ads: [AdItem] = []
@@ -36,8 +35,8 @@ class AdPersistenceService {
         return ads
     }
     
-    /** Insert an ad into Core Data
-     */
+    /// Insert an record into core data
+    /// - returns: true if it was inserted, false otherwise.
     
     @discardableResult
     func insert(_ ad: AdItem) -> Bool {
@@ -67,8 +66,8 @@ class AdPersistenceService {
         return true
     }
     
-    /** Delete an ad from Core Data
-     */
+    /// Delete an existing record from core data
+    /// - returns: true if it was deleted, false otherwise.
     
     @discardableResult
     func delete(_ ad: AdItem) -> Bool {
@@ -93,7 +92,8 @@ class AdPersistenceService {
         return true
     }
     
-    /// Update an record that is saved to Core Data
+    /// Update an existing record in core data
+    /// - returns: true if it did update the record, false otherwise.
     
     @discardableResult
     func update(_ ad: AdItem) -> Bool {
@@ -124,8 +124,9 @@ class AdPersistenceService {
         return true
     }
     
-    /** Check if ad exists in Core Data
-     */
+    /// Compares the `imageURL` property of the passed in `ad` to see if the `ad` already exists there.
+    /// - returns: An `AdItem` instance if an match was found, otherwise nil.
+ 
     func exists(_ ad: AdItem) -> AdItem? {
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
