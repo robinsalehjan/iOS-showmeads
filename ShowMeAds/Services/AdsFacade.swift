@@ -20,7 +20,7 @@ enum EndpointType {
 class AdsFacade {
     
     // MARK: - Properties
-    fileprivate var adRemoteService = AdRemoteService()
+    fileprivate var adRemoteService = AdNetworkService()
     fileprivate var adPersistenceService = AdPersistenceService()
     
     static let shared = AdsFacade()
