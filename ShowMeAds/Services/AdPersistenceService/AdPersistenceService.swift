@@ -13,12 +13,11 @@ import CoreData
  */
 class AdPersistenceService {
     
-    // MARK: Public
     
     /** Fetch ads that matches the given predicate
      */
     
-    func fetchAds(where predicate: NSPredicate?) -> [AdItem] {
+    func fetch(where predicate: NSPredicate?) -> [AdItem] {
         var ads: [AdItem] = []
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
@@ -41,8 +40,8 @@ class AdPersistenceService {
      */
     
     @discardableResult
-    func insert(ad: AdItem) -> Bool {
-        guard exists(ad: ad) == nil else { return false }
+    func insert(_ ad: AdItem) -> Bool {
+        guard exists(ad) == nil else { return false }
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         guard let entity = NSEntityDescription.entity(forEntityName: "Ads", in: backgroundContext) else { return false}
@@ -72,8 +71,8 @@ class AdPersistenceService {
      */
     
     @discardableResult
-    func delete(ad: AdItem) -> Bool {
-        guard exists(ad: ad) != nil else { return false }
+    func delete(_ ad: AdItem) -> Bool {
+        guard exists(ad) != nil else { return false }
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
@@ -97,24 +96,24 @@ class AdPersistenceService {
     /// Update an record that is saved to Core Data
     
     @discardableResult
-    func update(newAd: AdItem) -> Bool {
-        guard let ad = exists(ad: newAd) else { return false }
+    func update(_ ad: AdItem) -> Bool {
+        guard let existingAd = exists(ad) else { return false }
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
-        fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", ad.imageUrl)
+        fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", existingAd.imageUrl)
         
         do {
             let result = try backgroundContext.fetch(fetchRequest)
-            if let ads = result as? [Ads] {
-                if ads.isEmpty { return false }
+            if let existingAds = result as? [Ads] {
+                if existingAds.isEmpty { return false }
                 
-                for ad in ads {
-                    ad.setValue(newAd.imageUrl, forKey: "imageUrl")
-                    ad.setValue(newAd.price, forKey: "price")
-                    ad.setValue(newAd.location, forKey: "location")
-                    ad.setValue(newAd.title, forKey: "title")
-                    ad.setValue(newAd.isFavorited, forKey: "isFavorited")
+                for existingAd in existingAds {
+                    existingAd.setValue(ad.imageUrl, forKey: "imageUrl")
+                    existingAd.setValue(ad.price, forKey: "price")
+                    existingAd.setValue(ad.location, forKey: "location")
+                    existingAd.setValue(ad.title, forKey: "title")
+                    existingAd.setValue(ad.isFavorited, forKey: "isFavorited")
                     try backgroundContext.save()
                 }
             }
@@ -127,7 +126,7 @@ class AdPersistenceService {
     
     /** Check if ad exists in Core Data
      */
-    func exists(ad: AdItem) -> AdItem? {
+    func exists(_ ad: AdItem) -> AdItem? {
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
         fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", ad.imageUrl)

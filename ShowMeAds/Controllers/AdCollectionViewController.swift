@@ -241,10 +241,10 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
-        AdsFacade.shared.update(ad: ad)
+        AdsFacade.shared.update(ad)
     }
     
     func didUnfavorite(ad: AdItem) {
-        AdsFacade.shared.update(ad: ad)
+        AdsFacade.shared.update(ad)
     }
 }

@@ -37,11 +37,11 @@ class AdsFacade {
                 switch response {
                 case .success(let ads):
                     let alreadyFavorited: [AdItem] = ads.map {
-                        if let exists = self?.adPersistenceService.exists(ad: $0) {
-                            self?.adPersistenceService.update(newAd: exists)
-                            return exists
+                        if let existingAd = self?.adPersistenceService.exists($0) {
+                            self?.adPersistenceService.update(existingAd)
+                            return existingAd
                         } else {
-                            self?.adPersistenceService.insert(ad: $0)
+                            self?.adPersistenceService.insert($0)
                             return $0
                         }
                     }
@@ -52,7 +52,7 @@ class AdsFacade {
                 }
             })
         case .database:
-            let ads = adPersistenceService.fetchAds(where: nil)
+            let ads = adPersistenceService.fetch(where: nil)
             completionHandler(Result.success(ads))
         }
     }
@@ -60,7 +60,7 @@ class AdsFacade {
     /** Insert an ad into Core Data
      Saves the Ad image data to disk
     */
-    public func insert(ad: AdItem) {
+    public func insert(_ ad: AdItem) {
         guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
         
         let key = ad.imageUrl
@@ -69,20 +69,20 @@ class AdsFacade {
         }
         
         // Make sure the item isn't already favorited
-        adPersistenceService.insert(ad: ad)
+        adPersistenceService.insert(ad)
     }
     
-    public func update(ad: AdItem) {
+    public func update(_ ad: AdItem) {
         guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
-        adPersistenceService.update(newAd: ad)
+        adPersistenceService.update(ad)
     }
     
     /** Delete an ad from Core Data
      Removes any related data from the disk cache
      */
-    public func delete(ad: AdItem) {
+    public func delete(_ ad: AdItem) {
         let key = ad.imageUrl
         CacheFacade.shared.deleteFromDisk(key: key)
-        adPersistenceService.delete(ad: ad)
+        adPersistenceService.delete(ad)
     }
 }
