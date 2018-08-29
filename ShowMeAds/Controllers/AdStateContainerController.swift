@@ -14,7 +14,7 @@ enum State {
     case error
 }
 
-class AdStateViewController: UIViewController {
+class AdStateContainerController: UIViewController {
     private var state: State?
     private var shownViewController: UIViewController?
     
@@ -40,7 +40,7 @@ class AdStateViewController: UIViewController {
 
 // MARK: Methods for transitioning between states
 
-extension AdStateViewController {
+extension AdStateContainerController {
     public func transition(to newState: State) {
         shownViewController?.remove()
         
@@ -54,7 +54,7 @@ extension AdStateViewController {
 
 // MARK: Methods for modifying the internal state of the parent view controller
 
-extension AdStateViewController {
+extension AdStateContainerController {
     private func viewControllerFor(state: State) -> UIViewController {
         switch state {
         case .loading:
@@ -69,7 +69,7 @@ extension AdStateViewController {
 
 // MARK: Method to fetch ads from any given resource (database/server)
 
-extension AdStateViewController {
+extension AdStateContainerController {
     private func fetchAds(endpoint: EndpointType) {
         AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
             switch result {

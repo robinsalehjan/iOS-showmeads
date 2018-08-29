@@ -133,7 +133,7 @@ extension AdCollectionViewController {
     }
     
     private func transition(to newState: State) {
-        guard let currentState = parent as? AdStateViewController else { return }
+        guard let currentState = parent as? AdStateContainerController else { return }
         switch newState {
         case .error:
             currentState.transition(to: .error)

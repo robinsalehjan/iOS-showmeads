@@ -58,7 +58,7 @@ class AdErrorViewController: UIViewController {
             sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
             
             DispatchQueue.main.async {
-                guard let state = self?.parent as? AdStateViewController else { return }
+                guard let state = self?.parent as? AdStateContainerController else { return }
                 state.transition(to: .loading)
             }
             
