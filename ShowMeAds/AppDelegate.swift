@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        let controller = AdStateViewController()
+        let controller = AdStateContainerController()
         let navController = UINavigationController.init(rootViewController: controller)
         
         window = UIWindow(frame: UIScreen.main.bounds)
