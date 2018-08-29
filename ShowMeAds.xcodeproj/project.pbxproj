@@ -210,16 +210,6 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		6CC72479205C7CF300E7D103 /* AdNetworkService */ = {
-			isa = PBXGroup;
-			children = (
-				6C0F613C205D13A300F4BF71 /* AdNetworkService.swift */,
-				6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */,
-			);
-			name = AdNetworkService;
-			path = AdService;
-			sourceTree = "<group>";
-		};
 		F2586DEF212C578F0043DC25 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,7 +275,8 @@
 		F2A2518C2136964400E5D719 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				6CC72479205C7CF300E7D103 /* AdNetworkService */,
+				6C0F613C205D13A300F4BF71 /* AdNetworkService.swift */,
+				6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
