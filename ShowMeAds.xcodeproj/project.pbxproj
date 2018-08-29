@@ -145,7 +145,6 @@
 				6C3764202061C62C00233E98 /* Extensions */,
 				6CC72474205C7BEF00E7D103 /* UI */,
 				6CC4E3CE205C6A99007587B6 /* Controllers */,
-				F2A2518C2136964400E5D719 /* Networking */,
 				F2586DF0212C579C0043DC25 /* Services */,
 				F2586DEF212C578F0043DC25 /* Resources */,
 				6C205D20205C3ED7002B8BAA /* AppDelegate.swift */,
@@ -173,12 +172,13 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		6C527B5020603D7F0046DB50 /* AdPersistenceService */ = {
+		6C527B5020603D7F0046DB50 /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
 				6C527B5120603DF60046DB50 /* AdPersistenceService.swift */,
 				6C0F6148205D2F8200F4BF71 /* Models */,
 			);
+			name = Persistence;
 			path = AdPersistenceService;
 			sourceTree = "<group>";
 		};
@@ -235,8 +235,9 @@
 			isa = PBXGroup;
 			children = (
 				6C527B4E20603AD40046DB50 /* AdsFacade.swift */,
-				6C527B5020603D7F0046DB50 /* AdPersistenceService */,
-				F2D1080A2124073100BF4E4A /* AdCacheService */,
+				F2A2518C2136964400E5D719 /* Networking */,
+				6C527B5020603D7F0046DB50 /* Persistence */,
+				F2D1080A2124073100BF4E4A /* Caching */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -289,13 +290,13 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
-		F2D1080A2124073100BF4E4A /* AdCacheService */ = {
+		F2D1080A2124073100BF4E4A /* Caching */ = {
 			isa = PBXGroup;
 			children = (
 				F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */,
 				F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */,
 			);
-			path = AdCacheService;
+			path = Caching;
 			sourceTree = "<group>";
 		};
 		F2D10811212556DF00BF4E4A /* CacheTests */ = {
