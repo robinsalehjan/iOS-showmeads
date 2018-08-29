@@ -34,6 +34,7 @@
 		F273465B212DA2E200F8AFF2 /* AdLoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F273465A212DA2E200F8AFF2 /* AdLoadingViewController.swift */; };
 		F273465E212DAEE000F8AFF2 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = F273465D212DAEE000F8AFF2 /* Result.swift */; };
 		F2734662212EDC0B00F8AFF2 /* AdStateContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2734661212EDC0B00F8AFF2 /* AdStateContainerController.swift */; };
+		F2A2518B21368C0900E5D719 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = F2A2518A21368C0900E5D719 /* Assets */; };
 		F2D107F52121A67F00BF4E4A /* AdImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */; };
 		F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */; };
 		F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */; };
@@ -84,6 +85,7 @@
 		F273465A212DA2E200F8AFF2 /* AdLoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdLoadingViewController.swift; sourceTree = "<group>"; };
 		F273465D212DAEE000F8AFF2 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		F2734661212EDC0B00F8AFF2 /* AdStateContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdStateContainerController.swift; sourceTree = "<group>"; };
+		F2A2518A21368C0900E5D719 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
 		F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdImageCacheService.swift; sourceTree = "<group>"; };
 		F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validation.swift"; sourceTree = "<group>"; };
 		F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDiskCacheService.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				F2586DF1212C59580043DC25 /* Fonts */,
+				F2A2518A21368C0900E5D719 /* Assets */,
 				6C055788205EAD90005703D9 /* Assets.xcassets */,
 				6C205D2C205C3ED7002B8BAA /* LaunchScreen.storyboard */,
 			);
@@ -397,6 +400,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2586DFA212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf in Resources */,
+				F2A2518B21368C0900E5D719 /* Assets in Resources */,
 				6C205D2E205C3ED7002B8BAA /* LaunchScreen.storyboard in Resources */,
 				F2586DFB212C59C40043DC25 /* FINNTypeWebStrippet-Bold.ttf in Resources */,
 				6C055789205EAD90005703D9 /* Assets.xcassets in Resources */,
