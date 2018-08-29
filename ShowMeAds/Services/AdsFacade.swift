@@ -23,7 +23,7 @@ class AdsFacade {
     fileprivate var adRemoteService = AdNetworkService()
     fileprivate var adPersistenceService = AdPersistenceService()
     fileprivate var adImageCacheService = AdImageCacheService()
-    fileprivate var adDiskCacheService = AdDiskCacheService.shared
+    fileprivate var adDiskCacheService = AdDiskCacheService()
     
     static let shared = AdsFacade()
     private init() {}
