@@ -17,9 +17,10 @@ class CacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjectProtoc
  responsible for caching images from both remote endpoints and disk.
  */
 class AdImageCacheService: CacheService<NSString, NSData> {
+    fileprivate let diskCacheService = AdDiskCacheService()
     
     // MARK - Public methods
-    
+
     func fetch(url: String, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard let validUrl = URL.isValid(url) else {
             debugPrint("[ERROR]: The URL string: \(url) is not valid")
@@ -27,7 +28,7 @@ class AdImageCacheService: CacheService<NSString, NSData> {
         }
         
         guard let valueInCache = memoryCache.object(forKey: url as NSString) else {
-            guard let valueOnDisk = AdDiskCacheService.shared.fetchFromDisk(key: url) else {
+            guard let valueOnDisk = diskCacheService.fetchFromDisk(key: url) else {
                 // Value does not exist in cache or on disk.
                 fetchFromRemote(url: validUrl, onCompletion: onCompletion)
                 return
