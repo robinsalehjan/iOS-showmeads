@@ -15,6 +15,7 @@ enum Result<Value, Error: Swift.Error> {
 
 enum Error: Swift.Error {
     case networkUnavailable
+    case invalidResponse
     case invalidStatusCode
     case invalidURL
 }
