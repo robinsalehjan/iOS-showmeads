@@ -38,62 +38,51 @@ class AdStateViewController: UIViewController {
     }
 }
 
-// MARK: Method to fetch ads from any given endpoint
-
-extension AdStateViewController {
-    private func fetchAds(endpoint: EndpointType) {
-        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
-            switch result {
-            case .error(let error):
-                DispatchQueue.main.async {
-                    self?.render(error)
-                }
-            case .success(let ads):
-                DispatchQueue.main.async {
-                    self?.render(ads)
-                }
-            }
-        }
-    }
-}
-
 // MARK: Methods for transitioning between states
 
 extension AdStateViewController {
-    func transition(to newState: State) {
-
+    public func transition(to newState: State) {
         shownViewController?.remove()
         
-        let vc = viewController(for: newState)
-        add(child: vc)
+        let viewController = viewControllerFor(state: newState)
+        add(child: viewController)
         
         state = newState
-        shownViewController = vc
+        shownViewController = viewController
     }
-    
-    private func viewController(for state: State) -> UIViewController {
+}
+
+// MARK: Methods for modifying the internal state of the parent view controller
+
+extension AdStateViewController {
+    private func viewControllerFor(state: State) -> UIViewController {
         switch state {
         case .loading:
             return AdLoadingViewController()
-        case .loaded(let vc):
-            return vc
+        case .loaded(let viewController):
+            return viewController
         case .error:
             return AdErrorViewController()
         }
     }
 }
 
-// MARK: Render child controllers given argument
+// MARK: Method to fetch ads from any given resource (database/server)
 
 extension AdStateViewController {
-    private func render(_ ads: [AdItem]) {
-        let vc = AdCollectionViewController(ads)
-        transition(to: .loaded(vc))
-    }
-    
-    private func render(_ error: Error) {
-        transition(to: .error)
+    private func fetchAds(endpoint: EndpointType) {
+        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
+            switch result {
+            case .error(_):
+                DispatchQueue.main.async {
+                    self?.transition(to: .error)
+                }
+            case .success(let ads):
+                DispatchQueue.main.async {
+                    let viewController = AdCollectionViewController(ads)
+                    self?.transition(to: .loaded(viewController))
+                }
+            }
+        }
     }
 }
-
-
