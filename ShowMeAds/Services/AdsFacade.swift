@@ -22,6 +22,8 @@ class AdsFacade {
     // MARK: - Properties
     fileprivate var adRemoteService = AdNetworkService()
     fileprivate var adPersistenceService = AdPersistenceService()
+    fileprivate var adImageCacheService = AdImageCacheService()
+    fileprivate var adDiskCacheService = AdDiskCacheService.shared
     
     static let shared = AdsFacade()
     private init() {}
@@ -63,9 +65,9 @@ class AdsFacade {
     public func insert(_ ad: AdItem) {
         guard !ad.imageUrl.isEmpty && !ad.location.isEmpty && !ad.title.isEmpty else { return }
         
-        let key = ad.imageUrl
-        CacheFacade.shared.fetch(cacheType: .image, key: key) { (data: NSData) in
-            CacheFacade.shared.saveToDisk(key: key, data: data)
+        let url = ad.imageUrl
+        adImageCacheService.fetch(url: url) { [weak self] (data) in
+            self?.adDiskCacheService.saveToDisk(key: url, data: data)
         }
         
         // Make sure the item isn't already favorited
@@ -82,7 +84,7 @@ class AdsFacade {
      */
     public func delete(_ ad: AdItem) {
         let key = ad.imageUrl
-        CacheFacade.shared.deleteFromDisk(key: key)
+        adDiskCacheService.deleteFromDisk(key: key)
         adPersistenceService.delete(ad)
     }
 }

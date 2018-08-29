@@ -16,7 +16,7 @@ protocol AdCollectionViewCellDataSource: NSObjectProtocol {
 class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Public properties
-
+    
     public static let nib = "AdCollectionViewCell"
     public static let identifier = "AdCollectionViewCellIdentifier"
     
@@ -25,6 +25,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     // MARK: - Private properties
     
     private var ad: AdItem = AdItem()
+    private var imageCacheService: AdImageCacheService? = nil
 
     @IBOutlet weak var adImageView: UIImageView!
     @IBOutlet weak var heartButton: UIButton!
@@ -61,8 +62,9 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Public methods
     
-    func setup(ad: AdItem) {
+    func setup(ad: AdItem, imageCacheService: AdImageCacheService) {
         self.ad = ad
+        self.imageCacheService = imageCacheService
         
         loadImage(imageUrl: ad.imageUrl)
         locationLabel.text = ad.location
@@ -100,13 +102,13 @@ extension AdCollectionViewCell {
     fileprivate func loadImage(imageUrl: String) {
         guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
-        CacheFacade.shared.fetch(cacheType: .image, key: imageUrl) { [weak self] (data: NSData) in
+        imageCacheService?.fetch(url: imageUrl, onCompletion: { [weak self] (data) in
             let toData = data as Data
             let image = UIImage.init(data: toData)
             
             DispatchQueue.main.async {
                 self?.adImageView.image = image
             }
-        }
+        })
     }
 }
