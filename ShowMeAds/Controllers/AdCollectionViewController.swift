@@ -93,31 +93,8 @@ class AdCollectionViewController: UICollectionViewController {
 
 extension AdCollectionViewController {
     private func fetchFavoritedAds() {
-        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
-        let request = NSFetchRequest<Ads>(entityName: "Ads")
-        request.sortDescriptors = [NSSortDescriptor.init(key: "title", ascending: false)]
-        request.predicate = NSPredicate(format: "isFavorited == true")
-        fetchedResultsController = NSFetchedResultsController.init(fetchRequest: request, managedObjectContext: backgroundContext,
-                                                                   sectionNameKeyPath: nil, cacheName: nil)
-        do {
-            try fetchedResultsController.performFetch()
-            guard let objects = fetchedResultsController.fetchedObjects else { return }
-            DispatchQueue.main.async {
-                let ads = objects.map({ $0.convertToAdItem() })
-                self.render(ads)
-            }
-        } catch {
-            debugPrint("[ERROR]: Failed to fetch from CoreData: \(error)")
-        }
-    }
-
-    private func render(_ ads: [AdItem]) {
-        self.ads = ads
+        self.ads = persistenceService.fetch(where: NSPredicate(format: "isFavorited == true"))
         collectionView?.reloadData()
-    }
-    
-    private func render(_ error: Error) {
-        transition(to: .error)
     }
     
     private func transition(to newState: State) {
