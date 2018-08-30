@@ -19,7 +19,6 @@
 		6C205D46205C4557002B8BAA /* AdCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */; };
 		6C2183E3205D57EE009E57EF /* Ads+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2183E1205D57ED009E57EF /* Ads+CoreDataClass.swift */; };
 		6C2183E4205D57EE009E57EF /* Ads+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C2183E2205D57EE009E57EF /* Ads+CoreDataProperties.swift */; };
-		6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B4E20603AD40046DB50 /* AdsFacade.swift */; };
 		6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C527B5120603DF60046DB50 /* AdPersistenceService.swift */; };
 		F2586DEE212C50AF0043DC25 /* UIColor+Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2586DED212C50AF0043DC25 /* UIColor+Colors.swift */; };
 		F2586DFA212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F2586DF6212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf */; };
@@ -68,7 +67,6 @@
 		6C205D44205C4557002B8BAA /* AdCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AdCollectionViewCell.xib; sourceTree = "<group>"; };
 		6C2183E1205D57ED009E57EF /* Ads+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ads+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6C2183E2205D57EE009E57EF /* Ads+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Ads+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		6C527B4E20603AD40046DB50 /* AdsFacade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdsFacade.swift; sourceTree = "<group>"; };
 		6C527B5120603DF60046DB50 /* AdPersistenceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdPersistenceService.swift; sourceTree = "<group>"; };
 		F2586DED212C50AF0043DC25 /* UIColor+Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Colors.swift"; sourceTree = "<group>"; };
 		F2586DF6212C59C40043DC25 /* FINNTypeWebStrippet-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "FINNTypeWebStrippet-Light.ttf"; sourceTree = "<group>"; };
@@ -222,7 +220,6 @@
 		F2586DF0212C579C0043DC25 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				6C527B4E20603AD40046DB50 /* AdsFacade.swift */,
 				F2A2518C2136964400E5D719 /* Networking */,
 				6C527B5020603D7F0046DB50 /* Persistence */,
 				F2D1080A2124073100BF4E4A /* Caching */,
@@ -411,7 +408,6 @@
 				F273464C212D7E0000F8AFF2 /* CGFloat+Spacing.swift in Sources */,
 				F2734654212D9CC300F8AFF2 /* AdErrorViewController.swift in Sources */,
 				F273465E212DAEE000F8AFF2 /* Result.swift in Sources */,
-				6C527B4F20603AD40046DB50 /* AdsFacade.swift in Sources */,
 				F2734656212D9F0A00F8AFF2 /* UIViewController+ChildControllers.swift in Sources */,
 				F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */,
 				6C0F613D205D13A300F4BF71 /* AdNetworkService.swift in Sources */,

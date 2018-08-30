@@ -15,14 +15,37 @@ enum State {
 }
 
 class AdStateContainerController: UIViewController {
+    
+    // MARK: State properties
+    
     private var state: State?
     private var shownViewController: UIViewController?
     
+    // MARK: Dependencies
+    
+    fileprivate var networkService: AdNetworkService
+    fileprivate var persistenceService: AdPersistenceService
+    fileprivate var imageCache: AdImageCacheService
+    
     override func viewDidLoad() {
+        super.viewDidLoad()
         if state == nil {
             transition(to: .loading)
         }
     }
+    
+    init(_ networkService: AdNetworkService, _ persistenceService: AdPersistenceService, _ imageCache: AdImageCacheService) {
+        self.networkService = networkService
+        self.persistenceService = persistenceService
+        self.imageCache = imageCache
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -67,22 +90,45 @@ extension AdStateContainerController {
     }
 }
 
-// MARK: Method to fetch ads from any given resource (database/server)
+// MARK: Method to fetch ads from an given resource (remote/database)
 
 extension AdStateContainerController {
+    enum EndpointType {
+        case remote
+        case database
+    }
+    
     private func fetchAds(endpoint: EndpointType) {
-        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
-            switch result {
-            case .error(_):
-                DispatchQueue.main.async {
-                    self?.transition(to: .error)
+        switch endpoint {
+        case .remote:
+            networkService.fetch(completionHandler: { [unowned self] (response) in
+                switch response {
+                case .error(_):
+                    DispatchQueue.main.async {
+                        self.transition(to: .error)
+                    }
+                case .success(let ads):
+                    let filteredOutExistingAds: [AdItem] = ads.map {
+                        if let existingAd = self.persistenceService.exists($0) {
+                            self.persistenceService.update(existingAd)
+                            return existingAd
+                        } else {
+                            self.persistenceService.insert($0)
+                            return $0
+                        }
+                    }
+                    DispatchQueue.main.async {
+                        let viewController = AdCollectionViewController(filteredOutExistingAds, self.persistenceService, self.imageCache)
+                        self.transition(to: .loaded(viewController))
+                    }
                 }
-            case .success(let ads):
-                DispatchQueue.main.async {
-                    let imageCacheService = AdImageCacheService()
-                    let viewController = AdCollectionViewController(ads, imageCacheService: imageCacheService)
-                    self?.transition(to: .loaded(viewController))
-                }
+            })
+            
+        case .database:
+            let ads = persistenceService.fetch(where: nil)
+            DispatchQueue.main.async { [unowned self] in
+                let viewController = AdCollectionViewController(ads, self.persistenceService, self.imageCache)
+                self.transition(to: .loaded(viewController))
             }
         }
     }
