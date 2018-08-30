@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6C055789205EAD90005703D9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C055788205EAD90005703D9 /* Assets.xcassets */; };
 		6C0F613D205D13A300F4BF71 /* AdNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613C205D13A300F4BF71 /* AdNetworkService.swift */; };
-		6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */; };
 		6C0F6147205D2C0700F4BF71 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0F6146205D2C0600F4BF71 /* Reachability.swift */; };
 		6C205D21205C3ED7002B8BAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D20205C3ED7002B8BAA /* AppDelegate.swift */; };
 		6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C205D22205C3ED7002B8BAA /* AdCollectionViewController.swift */; };
@@ -55,7 +54,6 @@
 /* Begin PBXFileReference section */
 		6C055788205EAD90005703D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6C0F613C205D13A300F4BF71 /* AdNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdNetworkService.swift; sourceTree = "<group>"; };
-		6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdProcessorService.swift; sourceTree = "<group>"; };
 		6C0F6146205D2C0600F4BF71 /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		6C205D1D205C3ED7002B8BAA /* ShowMeAds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowMeAds.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C205D20205C3ED7002B8BAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -276,7 +274,6 @@
 			isa = PBXGroup;
 			children = (
 				6C0F613C205D13A300F4BF71 /* AdNetworkService.swift */,
-				6C0F613E205D13AF00F4BF71 /* AdProcessorService.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -421,7 +418,6 @@
 				F273465B212DA2E200F8AFF2 /* AdLoadingViewController.swift in Sources */,
 				F2586DEE212C50AF0043DC25 /* UIColor+Colors.swift in Sources */,
 				6C205D45205C4557002B8BAA /* AdCollectionViewCell.swift in Sources */,
-				6C0F613F205D13AF00F4BF71 /* AdProcessorService.swift in Sources */,
 				F2586DFF212C5CFD0043DC25 /* UIFont+Fonts.swift in Sources */,
 				F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */,
 				6C0F6147205D2C0700F4BF71 /* Reachability.swift in Sources */,
