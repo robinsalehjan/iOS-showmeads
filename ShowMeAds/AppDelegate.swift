@@ -37,8 +37,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.makeKeyAndVisible()
         window?.rootViewController = navController
         
-        imageCache.removeAll()
-        
         return true
     }
 
