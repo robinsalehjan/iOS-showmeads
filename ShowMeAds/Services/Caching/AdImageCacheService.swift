@@ -17,50 +17,56 @@ class CacheService<KeyType, ObjectType> : NSObject where KeyType: NSObjectProtoc
  responsible for caching images from both remote endpoints and disk.
  */
 class AdImageCacheService: CacheService<NSString, NSData> {
-    fileprivate let diskCacheService = AdDiskCacheService()
+    fileprivate let diskCache = AdDiskCacheService()
     
     // MARK - Public methods
-
+    
     func fetch(url: String, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard let validUrl = URL.isValid(url) else {
             debugPrint("[ERROR]: The URL string: \(url) is not valid")
             return
         }
         
+        let key = url as NSString
+        
         guard let valueInCache = memoryCache.object(forKey: url as NSString) else {
-            guard let valueOnDisk = diskCacheService.fetchFromDisk(key: url) else {
-                // Value does not exist in cache or on disk.
-                fetchFromRemote(url: validUrl, onCompletion: onCompletion)
+            guard let valueOnDisk = diskCache.fetchFromDisk(key: url) else {
+                fetch(url: validUrl, onCompletion: onCompletion)
                 return
             }
             
-            let key = url as NSString
             memoryCache.setObject(valueOnDisk, forKey: key)
             onCompletion(valueOnDisk)
-            
             return
         }
         
-        // Value exists in cache
         onCompletion(valueInCache)
         return
     }
     
-    func remove(url: String) {
+    @discardableResult
+    func remove(url: String) -> Bool {
         let key = url as NSString
-        guard let _ = memoryCache.object(forKey: key) else { return }
+        
+        guard let _ = memoryCache.object(forKey: key) else { return false }
         memoryCache.removeObject(forKey: key)
+        diskCache.deleteFromDisk(key: url)
+        
+        return true
     }
     
-    func removeAll() {
+    @discardableResult
+    func removeAll() -> Bool {
         memoryCache.removeAllObjects()
+        diskCache.clearDisk()
+        
+        return true
     }
     
     // MARK: Private methods
     
-    private func fetchFromRemote(url: URL, onCompletion: @escaping (_ data: NSData) -> Void) {
+    private func fetch(url: URL, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard Reachability.isConnectedToNetwork() else { return }
-        
         
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             guard error == nil else {
