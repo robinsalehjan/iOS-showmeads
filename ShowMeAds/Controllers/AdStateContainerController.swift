@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum State {
+public enum State {
     case loading
     case loaded(UIViewController)
     case error
@@ -44,8 +44,6 @@ class AdStateContainerController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -93,7 +91,7 @@ extension AdStateContainerController {
 // MARK: Method to fetch ads from an given resource (remote/database)
 
 extension AdStateContainerController {
-    enum EndpointType {
+    private enum EndpointType {
         case remote
         case database
     }
@@ -108,17 +106,9 @@ extension AdStateContainerController {
                         self.transition(to: .error)
                     }
                 case .success(let ads):
-                    let filteredOutExistingAds: [AdItem] = ads.map {
-                        if let existingAd = self.persistenceService.exists($0) {
-                            self.persistenceService.update(existingAd)
-                            return existingAd
-                        } else {
-                            self.persistenceService.insert($0)
-                            return $0
-                        }
-                    }
+                    let filteredAds = self.persistenceService.updateOrInsert(ads)
                     DispatchQueue.main.async {
-                        let viewController = AdCollectionViewController(filteredOutExistingAds, self.persistenceService, self.imageCache)
+                        let viewController = AdCollectionViewController(filteredAds, self.persistenceService, self.imageCache)
                         self.transition(to: .loaded(viewController))
                     }
                 }

@@ -143,4 +143,21 @@ class AdPersistenceService {
         
         return nil
     }
+    
+    func updateOrInsert(_ ads: [AdItem]) -> [AdItem] {
+        var entries: [AdItem] = []
+        
+        for ad in ads {
+            guard let existingAd = exists(ad) else {
+                insert(ad)
+                entries.append(ad)
+            }
+            
+            if existingAd.diff(ad: ad) {
+                update(existingAd)
+                entries.append(existingAd)
+            }
+        }
+        return entries
+    }
 }
