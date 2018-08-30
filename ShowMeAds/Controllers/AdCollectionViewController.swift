@@ -12,7 +12,9 @@ import CoreData
 class AdCollectionViewController: UICollectionViewController {
     // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
-    fileprivate var imageCacheService: AdImageCacheService = AdImageCacheService()
+    
+    fileprivate var persistenceService: AdPersistenceService
+    fileprivate var imageCache: AdImageCacheService
     
     fileprivate var fetchedResultsController = NSFetchedResultsController<Ads>()
     
@@ -54,26 +56,26 @@ class AdCollectionViewController: UICollectionViewController {
     }()
     
     // MARK: - Initalizers
-    
-    override init(collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(collectionViewLayout: layout)
-        collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil),
-                                 forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil), forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = .white
-        
         collectionView?.refreshControl = refreshControl
+        
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
-    convenience init(_ ads: [AdItem], imageCacheService: AdImageCacheService) {
+    init(_ ads: [AdItem], _ persistenceService: AdPersistenceService, _ imageCache: AdImageCacheService) {
+        self.ads = ads
+        self.persistenceService = persistenceService
+        self.imageCache = imageCache
+        
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
         layout.minimumInteritemSpacing = 2.5
-        self.init(collectionViewLayout: layout)
-        self.ads = ads
-        self.imageCacheService = imageCacheService
+        super.init(collectionViewLayout: layout)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -193,7 +195,7 @@ extension AdCollectionViewController {
         
         let ad = ads[indexPath.row]
         cell.delegate = self
-        cell.setup(ad: ad, imageCacheService: imageCacheService)
+        cell.setup(ad, self.imageCache)
         
         return cell
     }
@@ -227,10 +229,11 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
-        AdsFacade.shared.update(ad)
+        persistenceService.update(ad)
+        
     }
     
     func didUnfavorite(ad: AdItem) {
-        AdsFacade.shared.update(ad)
+        persistenceService.update(ad)
     }
 }

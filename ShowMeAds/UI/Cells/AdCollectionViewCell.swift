@@ -62,7 +62,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Public methods
     
-    func setup(ad: AdItem, imageCacheService: AdImageCacheService) {
+    func setup(_ ad: AdItem, _ imageCacheService: AdImageCacheService) {
         self.ad = ad
         self.imageCacheService = imageCacheService
         

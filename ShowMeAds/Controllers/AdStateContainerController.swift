@@ -90,9 +90,14 @@ extension AdStateContainerController {
     }
 }
 
-// MARK: Method to fetch ads from any given resource (database/server)
+// MARK: Method to fetch ads from an given resource (remote/database)
 
 extension AdStateContainerController {
+    enum EndpointType {
+        case remote
+        case database
+    }
+    
     private func fetchAds(endpoint: EndpointType) {
         switch endpoint {
         case .remote:
@@ -113,7 +118,7 @@ extension AdStateContainerController {
                         }
                     }
                     DispatchQueue.main.async {
-                        let viewController = AdCollectionViewController(filteredOutExistingAds, imageCacheService: self.imageCache)
+                        let viewController = AdCollectionViewController(filteredOutExistingAds, self.persistenceService, self.imageCache)
                         self.transition(to: .loaded(viewController))
                     }
                 }
@@ -121,16 +126,10 @@ extension AdStateContainerController {
             
         case .database:
             let ads = persistenceService.fetch(where: nil)
-            DispatchQueue.main.async {
-                let viewController = AdCollectionViewController(ads, imageCacheService: self.imageCache)
+            DispatchQueue.main.async { [unowned self] in
+                let viewController = AdCollectionViewController(ads, self.persistenceService, self.imageCache)
                 self.transition(to: .loaded(viewController))
             }
         }
     }
-    
-    private func handleRemote() {
-        
-    }
-    
-    
 }
