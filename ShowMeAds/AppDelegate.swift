@@ -29,13 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let networkService = AdNetworkService()
         let persistenceService = AdPersistenceService()
-        let imageCacheService = AdImageCacheService()
-        let controller = AdStateContainerController(networkService, persistenceService, imageCacheService)
+        let imageCache = AdImageCacheService()
+        let controller = AdStateContainerController(networkService, persistenceService, imageCache)
         let navController = UINavigationController.init(rootViewController: controller)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = navController
+        
+        imageCache.removeAll()
         
         return true
     }
