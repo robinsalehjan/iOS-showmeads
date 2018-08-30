@@ -20,7 +20,6 @@ enum EndpointType {
 class AdsFacade {
     
     // MARK: - Properties
-    fileprivate var adRemoteService = AdNetworkService()
     fileprivate var adPersistenceService = AdPersistenceService()
     fileprivate var adImageCacheService = AdImageCacheService()
     fileprivate var adDiskCacheService = AdDiskCacheService()
@@ -29,35 +28,6 @@ class AdsFacade {
     private init() {}
     
     // MARK: - Public
-    
-    /** Fetch ads from the remote API
-     */
-    public func fetchAds(endpoint: EndpointType, completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
-        switch endpoint {
-        case .remote:
-            adRemoteService.fetchRemote(completionHandler: { [weak self] (response) in
-                switch response {
-                case .success(let ads):
-                    let alreadyFavorited: [AdItem] = ads.map {
-                        if let existingAd = self?.adPersistenceService.exists($0) {
-                            self?.adPersistenceService.update(existingAd)
-                            return existingAd
-                        } else {
-                            self?.adPersistenceService.insert($0)
-                            return $0
-                        }
-                    }
-                    completionHandler(Result.success(alreadyFavorited))
-                case .error(let error):
-                    
-                    completionHandler(Result.error(error))
-                }
-            })
-        case .database:
-            let ads = adPersistenceService.fetch(where: nil)
-            completionHandler(Result.success(ads))
-        }
-    }
     
     /** Insert an ad into Core Data
      Saves the Ad image data to disk

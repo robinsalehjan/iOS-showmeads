@@ -21,7 +21,7 @@ final class AdNetworkService {
     /** Send an GET request to the API
     */
     
-    func fetchRemote(completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
+    func fetch(completionHandler: @escaping ((Result<[AdItem], Error>) -> Void)) {
         guard let endpoint = URL.isValid(self.endpoint) else {
             debugPrint("[ERROR]: Could not construct a valid URL instance with the given url: \(self.endpoint)")
             completionHandler(Result.error(Error.invalidURL))

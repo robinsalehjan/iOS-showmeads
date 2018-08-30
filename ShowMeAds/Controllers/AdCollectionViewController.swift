@@ -90,23 +90,6 @@ class AdCollectionViewController: UICollectionViewController {
 // MARK: - Private methods for state modifications
 
 extension AdCollectionViewController {
-    private func fetchAds(endpoint: EndpointType, onCompletion: (() -> Void)?) {
-        AdsFacade.shared.fetchAds(endpoint: endpoint) { [weak self] (result) in
-            switch result {
-            case .error(let error):
-                DispatchQueue.main.async {
-                    self?.render(error)
-                    if let completionHandler = onCompletion { completionHandler() }
-                }
-            case .success(let ads):
-                DispatchQueue.main.async {
-                    self?.render(ads)
-                    if let completionHandler = onCompletion { completionHandler() }
-                }
-            }
-        }
-    }
-    
     private func fetchFavoritedAds() {
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
         let request = NSFetchRequest<Ads>(entityName: "Ads")
