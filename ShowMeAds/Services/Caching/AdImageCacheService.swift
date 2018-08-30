@@ -30,7 +30,7 @@ class AdImageCacheService: CacheService<NSString, NSData> {
         guard let valueInCache = memoryCache.object(forKey: url as NSString) else {
             guard let valueOnDisk = diskCacheService.fetchFromDisk(key: url) else {
                 // Value does not exist in cache or on disk.
-                fetchFromRemote(url: validUrl, onCompletion: onCompletion)
+                fetch(url: validUrl, onCompletion: onCompletion)
                 return
             }
             
@@ -46,19 +46,26 @@ class AdImageCacheService: CacheService<NSString, NSData> {
         return
     }
     
-    func remove(url: String) {
+    @discardableResult
+    func remove(url: String) -> Bool {
         let key = url as NSString
-        guard let _ = memoryCache.object(forKey: key) else { return }
+        
+        guard let _ = memoryCache.object(forKey: key) else { return false }
         memoryCache.removeObject(forKey: key)
+        
+        return true
     }
     
-    func removeAll() {
+    @discardableResult
+    func removeAll() -> Bool {
         memoryCache.removeAllObjects()
+        
+        return true
     }
     
     // MARK: Private methods
     
-    private func fetchFromRemote(url: URL, onCompletion: @escaping (_ data: NSData) -> Void) {
+    private func fetch(url: URL, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard Reachability.isConnectedToNetwork() else { return }
         
         
