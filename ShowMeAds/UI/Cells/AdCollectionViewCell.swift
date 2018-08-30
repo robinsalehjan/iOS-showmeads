@@ -25,7 +25,7 @@ class AdCollectionViewCell: UICollectionViewCell {
     // MARK: - Private properties
     
     private var ad: AdItem = AdItem()
-    private var imageCache: AdImageCacheService? = nil
+    private var imageCacheService: AdImageCacheService? = nil
 
     @IBOutlet weak var adImageView: UIImageView!
     @IBOutlet weak var heartButton: UIButton!
@@ -62,9 +62,9 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Public methods
     
-    func setup(_ ad: AdItem, _ imageCache: AdImageCacheService) {
+    func setup(_ ad: AdItem, _ imageCacheService: AdImageCacheService) {
         self.ad = ad
-        self.imageCache = imageCache
+        self.imageCacheService = imageCacheService
         
         loadImage(imageUrl: ad.imageUrl)
         locationLabel.text = ad.location
@@ -102,7 +102,7 @@ extension AdCollectionViewCell {
     fileprivate func loadImage(imageUrl: String) {
         guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
-        imageCache?.fetch(url: imageUrl, onCompletion: { [weak self] (data) in
+        imageCacheService?.fetch(url: imageUrl, onCompletion: { [weak self] (data) in
             let toData = data as Data
             let image = UIImage.init(data: toData)
             
