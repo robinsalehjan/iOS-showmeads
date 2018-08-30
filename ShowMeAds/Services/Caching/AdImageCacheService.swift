@@ -68,7 +68,6 @@ class AdImageCacheService: CacheService<NSString, NSData> {
     private func fetch(url: URL, onCompletion: @escaping (_ data: NSData) -> Void) {
         guard Reachability.isConnectedToNetwork() else { return }
         
-        
         URLSession.shared.dataTask(with: url) { [weak self] (data, response, error) in
             guard error == nil else {
                 debugPrint("[ERROR]: Failed to send request")
