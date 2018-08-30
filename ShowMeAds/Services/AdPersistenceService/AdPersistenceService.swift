@@ -148,14 +148,17 @@ class AdPersistenceService {
         var entries: [AdItem] = []
         
         for ad in ads {
-            guard let existingAd = exists(ad) else {
+            switch exists(ad) {
+            case .some(let existingAd):
+                if existingAd.diff(ad: ad) {
+                    update(ad)
+                    entries.append(existingAd)
+                } else {
+                    entries.append(existingAd)
+                }
+            case .none:
                 insert(ad)
                 entries.append(ad)
-            }
-            
-            if existingAd.diff(ad: ad) {
-                update(existingAd)
-                entries.append(existingAd)
             }
         }
         return entries
