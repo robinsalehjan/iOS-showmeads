@@ -48,13 +48,19 @@ class AdStateContainerController: UIViewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         guard let state = state else { return }
-        guard case State.loading = state else { return }
-    
-        switch Reachability.isConnectedToNetwork() {
-        case true:
-            fetchAds(endpoint: .remote)
-        case false:
-            fetchAds(endpoint: .database)
+        
+        switch state {
+        case .loading:
+            switch Reachability.isConnectedToNetwork() {
+            case true:
+                fetchAds(endpoint: .remote)
+            case false:
+                fetchAds(endpoint: .database)
+            }
+        case .error:
+            break
+        case .loaded(_):
+            break
         }
     }
 }
