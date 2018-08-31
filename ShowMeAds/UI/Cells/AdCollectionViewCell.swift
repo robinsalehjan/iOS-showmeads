@@ -102,10 +102,10 @@ extension AdCollectionViewCell {
         
         if heartButton.isSelected {
             heartButton.isSelected = false
-//            delegate?.didUnfavorite(ad: ad)
+            delegate?.didUnfavorite(ad: ad)
         } else {
             heartButton.isSelected = true
-//            delegate?.didFavorite(ad: ad)
+            delegate?.didFavorite(ad: ad)
         }
     }
 }
