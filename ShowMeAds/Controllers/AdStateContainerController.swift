@@ -99,26 +99,29 @@ extension AdStateContainerController {
     private func fetchAds(endpoint: EndpointType) {
         switch endpoint {
         case .remote:
-            networkService.fetch(completionHandler: { [unowned self] (response) in
+            networkService.fetch(completionHandler: { [weak self] (response) in
+                guard let strongSelf = self else { return }
+                
                 switch response {
                 case .error(_):
                     DispatchQueue.main.async {
-                        self.transition(to: .error)
+                        strongSelf.transition(to: .error)
                     }
                 case .success(let ads):
-                    let filteredAds = self.persistenceService.updateOrInsert(ads)
+                    let filteredAds = strongSelf.persistenceService.updateOrInsert(ads)
                     DispatchQueue.main.async {
-                        let viewController = AdCollectionViewController(filteredAds, self.persistenceService, self.imageCache)
-                        self.transition(to: .loaded(viewController))
+                        let viewController = AdCollectionViewController(filteredAds, strongSelf.persistenceService, strongSelf.imageCache)
+                        strongSelf.transition(to: .loaded(viewController))
                     }
                 }
             })
             
         case .database:
             let ads = persistenceService.fetch(where: nil)
-            DispatchQueue.main.async { [unowned self] in
-                let viewController = AdCollectionViewController(ads, self.persistenceService, self.imageCache)
-                self.transition(to: .loaded(viewController))
+            DispatchQueue.main.async { [weak self] in
+                guard let strongSelf = self else { return }
+                let viewController = AdCollectionViewController(ads, strongSelf.persistenceService, strongSelf.imageCache)
+                strongSelf.transition(to: .loaded(viewController))
             }
         }
     }
