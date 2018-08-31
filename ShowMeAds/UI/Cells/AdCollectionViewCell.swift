@@ -100,10 +100,13 @@ extension AdCollectionViewCell {
             sender.transform = CGAffineTransform.identity
         }
         
-        if heartButton.isSelected {
+        guard let ad = model?.adItem() else { return }
+        
+        switch heartButton.isSelected {
+        case true:
             heartButton.isSelected = false
             delegate?.didUnfavorite(ad: ad)
-        } else {
+        case false:
             heartButton.isSelected = true
             delegate?.didFavorite(ad: ad)
         }
