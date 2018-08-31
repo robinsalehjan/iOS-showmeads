@@ -69,13 +69,13 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     public var imageCache: AdImageCacheService?
     
-    public var model: AdCollectionViewCellModel? {
+    public var model: AdItem? {
         didSet {
             guard let model = model else { return }
             loadImage(imageUrl: model.imageUrl)
             priceLabel.text = (model.price == 0) ?  "Gis bort" : "\(model.price),-"
             locationLabel.text = model.location
-            titleLabel.text = model.title
+            titleLabel.text =  model.title
             heartButton.isSelected  = (model.isFavorited == true) ? true : false
         }
     }
@@ -100,7 +100,7 @@ extension AdCollectionViewCell {
             sender.transform = CGAffineTransform.identity
         }
         
-        guard let ad = model?.adItem() else { return }
+        guard let ad = model else { return }
         
         switch heartButton.isSelected {
         case true:
