@@ -17,7 +17,6 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Public properties
     
-    public static let nib = "AdCollectionViewCell"
     public static let identifier = "AdCollectionViewCellIdentifier"
     
     public weak var delegate: AdCollectionViewCellDataSource?

@@ -58,7 +58,7 @@ class AdCollectionViewController: UICollectionViewController {
     // MARK: - Initalizers
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil), forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
+        collectionView?.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = .white
@@ -170,9 +170,8 @@ extension AdCollectionViewController {
                                                             for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
         guard ads.count > 0 else { return cell }
         
-        let ad = ads[indexPath.row]
+        let _ = ads[indexPath.row]
         cell.delegate = self
-        cell.setup(ad, self.imageCache)
         
         return cell
     }
