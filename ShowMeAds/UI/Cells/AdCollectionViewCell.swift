@@ -23,53 +23,70 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Private properties
     
-    private var ad: AdItem = AdItem()
-    private var imageCache: AdImageCacheService? = nil
-
-    @IBOutlet weak var adImageView: UIImageView!
-    @IBOutlet weak var heartButton: UIButton!
-    @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var locationLabel: UILabel!
-    @IBOutlet weak var titleLabel: UILabel!
+    fileprivate lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        return label
+    }()
     
-    // MARK: - Lifecycle
+    fileprivate lazy var locationLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        return label
+    }()
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        
-        priceLabel.adjustsFontForContentSizeCategory = true
-        locationLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.adjustsFontForContentSizeCategory = true
-        
-        adImageView.layer.cornerRadius = 10
-        adImageView.layer.masksToBounds = true
-
-        priceLabel.layer.cornerRadius = 10
-        priceLabel.layer.masksToBounds = true
-        priceLabel.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMaxYCorner]
-
+    fileprivate lazy var priceLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.adjustsFontForContentSizeCategory = true
+        label.layer.cornerRadius = 10
+        label.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
+        return label
+    }()
+    
+    fileprivate lazy var heartButton: UIButton = {
+        let button = UIButton()
         let unfilledHeartIcon = UIImage.init(named: "favorite-deselected")
         let filledHeartIcon = UIImage.init(named: "favorite-selected")
-        heartButton.setImage(unfilledHeartIcon, for: .normal)
-        heartButton.setImage(filledHeartIcon, for: .selected)
-        heartButton.addTarget(self, action: #selector(didTapHeartButton(sender:)), for: .touchUpInside)
-    }
-
-    override func prepareForReuse() {
-        self.heartButton.isSelected = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(unfilledHeartIcon, for: .normal)
+        button.setImage(filledHeartIcon, for: .selected)
+        button.addTarget(self, action: #selector(didTapHeartButton(sender:)), for: .touchUpInside)
+        return button
+    }()
+    
+    fileprivate lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 10
+        return imageView
+    }()
+    
+    // MARK: - Property injection
+    
+    public var imageCache: AdImageCacheService?
+    
+    public var model: AdCollectionViewCellModel? {
+        didSet {
+            guard let model = model else { return }
+            titleLabel.text = model.title
+            locationLabel.text = model.location
+            priceLabel.text = (model.price == 0) ?  "Gis bort" : "\(model.price),-"
+            heartButton.isSelected  = (model.isFavorited == true) ? true : false
+            loadImage(imageUrl: model.imageUrl)
+        }
     }
     
-    // MARK: - Public methods
+    // MARK: - Lifecycle
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
     
-    func setup(_ ad: AdItem, _ imageCache: AdImageCacheService) {
-        self.ad = ad
-        self.imageCache = imageCache
-        
-        loadImage(imageUrl: ad.imageUrl)
-        locationLabel.text = ad.location
-        titleLabel.text = ad.title
-        priceLabel.text = (ad.price == 0) ?  "Gis bort" : "\(ad.price),-"
-        heartButton.isSelected  = (ad.isFavorited == true) ? true : false
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -85,12 +102,10 @@ extension AdCollectionViewCell {
         
         if heartButton.isSelected {
             heartButton.isSelected = false
-            ad.isFavorited = false
-            delegate?.didUnfavorite(ad: ad)
+//            delegate?.didUnfavorite(ad: ad)
         } else {
             heartButton.isSelected = true
-            ad.isFavorited = true
-            delegate?.didFavorite(ad: ad)
+//            delegate?.didFavorite(ad: ad)
         }
     }
 }
@@ -101,12 +116,12 @@ extension AdCollectionViewCell {
     fileprivate func loadImage(imageUrl: String) {
         guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
-        imageCache?.fetch(url: imageUrl, onCompletion: { [weak self] (data) in
+        imageCache?.fetch(url: imageUrl, onCompletion: { [unowned self] (data) in
             let toData = data as Data
             let image = UIImage.init(data: toData)
             
             DispatchQueue.main.async {
-                self?.adImageView.image = image
+                self.imageView.image = image
             }
         })
     }
