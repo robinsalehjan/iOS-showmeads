@@ -10,18 +10,26 @@ import Foundation
 import CoreData
 
 public struct AdItem {
-    var imageUrl: String = ""
-    var price: Int32 = 0
-    var location: String = ""
-    var title: String = ""
-    var isFavorited: Bool = false
-
+    var imageUrl: String
+    var price: Int32
+    var location: String
+    var title: String
+    var isFavorited: Bool
+    
     var description: String {
         return "imageUrl: \(imageUrl)" +
                 " price: \(price)" +
                 " location: \(location)" +
                 " title: \(title)" +
                 " isFavorited: \(isFavorited)"
+    }
+    
+    init(_ imageUrl: String = "", _ price: Int32 = 0, _ location: String = "", _ title: String = "", _ isFavorited: Bool = false) {
+        self.imageUrl = imageUrl
+        self.price = price
+        self.location = location
+        self.title = title
+        self.isFavorited = isFavorited
     }
     
     func diff(ad: AdItem) -> Bool {
