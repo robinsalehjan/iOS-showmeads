@@ -23,4 +23,8 @@ struct AdCollectionViewCellModel: AdCollectionViewCellModelProtocol {
     var location: String
     var title: String
     var isFavorited: Bool
+    
+    func adItem() -> AdItem {
+        return AdItem.init(self.imageUrl, self.price, self.location, self.title, self.isFavorited)
+    }
 }
