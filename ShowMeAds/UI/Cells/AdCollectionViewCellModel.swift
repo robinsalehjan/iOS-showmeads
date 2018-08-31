@@ -10,17 +10,17 @@ import Foundation
 
 
 protocol AdCollectionViewCellModelProtocol {
-    var title: String { get set }
-    var location: String { get set }
-    var price: Int { get set }
-    var isFavorited: Bool { get set }
     var imageUrl: String { get set }
+    var price: Int32 { get set }
+    var location: String { get set }
+    var title: String { get set }
+    var isFavorited: Bool { get set }
 }
 
 struct AdCollectionViewCellModel: AdCollectionViewCellModelProtocol {
-    var title: String
-    var location: String
-    var price: Int
-    var isFavorited: Bool
     var imageUrl: String
+    var price: Int32
+    var location: String
+    var title: String
+    var isFavorited: Bool
 }

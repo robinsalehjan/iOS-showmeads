@@ -23,10 +23,20 @@ class AdCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Private properties
     
-    fileprivate lazy var titleLabel: UILabel = {
+    fileprivate lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 10
+        return imageView
+    }()
+    
+    fileprivate lazy var priceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
+        label.layer.cornerRadius = 10
+        label.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
         return label
     }()
     
@@ -37,12 +47,10 @@ class AdCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    fileprivate lazy var priceLabel: UILabel = {
+    fileprivate lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.adjustsFontForContentSizeCategory = true
-        label.layer.cornerRadius = 10
-        label.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner]
         return label
     }()
     
@@ -57,14 +65,6 @@ class AdCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    fileprivate lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = 10
-        return imageView
-    }()
-    
     // MARK: - Property injection
     
     public var imageCache: AdImageCacheService?
@@ -72,11 +72,11 @@ class AdCollectionViewCell: UICollectionViewCell {
     public var model: AdCollectionViewCellModel? {
         didSet {
             guard let model = model else { return }
-            titleLabel.text = model.title
-            locationLabel.text = model.location
-            priceLabel.text = (model.price == 0) ?  "Gis bort" : "\(model.price),-"
-            heartButton.isSelected  = (model.isFavorited == true) ? true : false
             loadImage(imageUrl: model.imageUrl)
+            priceLabel.text = (model.price == 0) ?  "Gis bort" : "\(model.price),-"
+            locationLabel.text = model.location
+            titleLabel.text = model.title
+            heartButton.isSelected  = (model.isFavorited == true) ? true : false
         }
     }
     
