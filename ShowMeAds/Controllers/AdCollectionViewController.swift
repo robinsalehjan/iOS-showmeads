@@ -58,7 +58,7 @@ class AdCollectionViewController: UICollectionViewController {
     // MARK: - Initalizers
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.register(UINib.init(nibName: AdCollectionViewCell.nib, bundle: nil), forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
+        collectionView?.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = .white
@@ -172,7 +172,7 @@ extension AdCollectionViewController {
         
         let ad = ads[indexPath.row]
         cell.delegate = self
-        cell.setup(ad, self.imageCache)
+        cell.model = ad
         
         return cell
     }
@@ -202,15 +202,14 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - AdCollectionViewCellDelegate
+// MARK: - AdCollectionViewCellDelegatead
 
 extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
-        persistenceService.update(ad)
-        
+        persistenceService.update(ad, imageUrl: nil, price: nil, location: nil, title: nil, isFavorited: true)
     }
     
     func didUnfavorite(ad: AdItem) {
-        persistenceService.update(ad)
+        persistenceService.update(ad, imageUrl: nil, price: nil, location: nil, title: nil, isFavorited: false)
     }
 }

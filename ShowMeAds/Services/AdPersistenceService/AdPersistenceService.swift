@@ -124,6 +124,38 @@ class AdPersistenceService {
         return true
     }
     
+    /// Update the field of an existing record in core data
+    /// - returns: true if it did update the record, false otherwise.
+    
+    @discardableResult
+    func update(_ ad: AdItem, imageUrl: String?, price: Int32?, location: String?, title: String?, isFavorited: Bool?) -> Bool {
+        guard let existingAd = exists(ad) else { return false }
+        
+        let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Ads")
+        fetchRequest.predicate = NSPredicate(format: "imageUrl ==[c] %@", existingAd.imageUrl)
+        
+        do {
+            let result = try backgroundContext.fetch(fetchRequest)
+            if let existingAds = result as? [Ads] {
+                if existingAds.isEmpty { return false }
+                
+                for existingAd in existingAds {
+                    existingAd.setValue(imageUrl ?? ad.imageUrl, forKey: "imageUrl")
+                    existingAd.setValue(price ?? ad.price, forKey: "price")
+                    existingAd.setValue(location ?? ad.location, forKey: "location")
+                    existingAd.setValue(title ?? ad.title, forKey: "title")
+                    existingAd.setValue(isFavorited ?? ad.isFavorited, forKey: "isFavorited")
+                    try backgroundContext.save()
+                }
+            }
+        } catch {
+            debugPrint("[ERROR]: Failed to update record, error:\(error)")
+        }
+        
+        return true
+    }
+    
     /// Compares the `imageURL` property of the passed in `ad` to see if the `ad` already exists there.
     /// - returns: An `AdItem` instance if an match was found, otherwise nil.
  
