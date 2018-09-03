@@ -170,8 +170,9 @@ extension AdCollectionViewController {
                                                             for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
         guard ads.count > 0 else { return cell }
         
-        let _ = ads[indexPath.row]
+        let ad = ads[indexPath.row]
         cell.delegate = self
+        cell.model = ad
         
         return cell
     }

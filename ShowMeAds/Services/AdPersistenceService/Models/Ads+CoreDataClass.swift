@@ -24,6 +24,10 @@ public struct AdItem {
                 " isFavorited: \(isFavorited)"
     }
     
+    // MARK: - Dependency injection
+    
+    static var imageCache = AdImageCacheService()
+    
     init(_ imageUrl: String = "", _ price: Int32 = 0, _ location: String = "", _ title: String = "", _ isFavorited: Bool = false) {
         self.imageUrl = imageUrl
         self.price = price
@@ -32,9 +36,20 @@ public struct AdItem {
         self.isFavorited = isFavorited
     }
     
+    // MARK: - Public methods
+    
     func diff(ad: AdItem) -> Bool {
         if self.title != ad.title { return true }
         return false
+    }
+    
+    func loadImage(imageUrl: String, onCompletion: @escaping (_ Data: Data) -> Void) {
+        guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
+        
+        AdItem.imageCache.fetch(url: imageUrl, onCompletion: { (data) in
+            let toData = data as Data
+            onCompletion(toData)
+        })
     }
 }
 
