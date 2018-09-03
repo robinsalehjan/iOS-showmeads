@@ -202,15 +202,14 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - AdCollectionViewCellDelegate
+// MARK: - AdCollectionViewCellDelegatead
 
 extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
-        persistenceService.update(ad)
-        
+        persistenceService.update(ad, imageUrl: nil, price: nil, location: nil, title: nil, isFavorited: true)
     }
     
     func didUnfavorite(ad: AdItem) {
-        persistenceService.update(ad)
+        persistenceService.update(ad, imageUrl: nil, price: nil, location: nil, title: nil, isFavorited: false)
     }
 }
