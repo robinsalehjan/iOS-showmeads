@@ -102,8 +102,9 @@ class AdCollectionViewCell: UICollectionViewCell {
             guard let model = model else { return }
             
             model.loadImage(imageUrl: model.imageUrl) { (imageData) in
+                let image = UIImage.init(data: imageData)
                 DispatchQueue.main.async {
-                    self.imageView.image = UIImage.init(data: imageData)
+                    self.imageView.image = image
                 }
             }
             
