@@ -26,14 +26,19 @@ public struct AdItem {
     
     // MARK: - Dependency injection
     
-    static var imageCache = AdImageCacheService()
+    var imageCache: AdImageCacheService
+    var diskCache: AdDiskCacheService
     
-    init(_ imageUrl: String = "", _ price: Int32 = 0, _ location: String = "", _ title: String = "", _ isFavorited: Bool = false) {
+    init(_ imageUrl: String = "", _ price: Int32 = 0, _ location: String = "",
+         _ title: String = "", _ isFavorited: Bool = false,
+         _ imageCache: AdImageCacheService = AdImageCacheService(), _ diskCache: AdDiskCacheService = AdDiskCacheService()) {
         self.imageUrl = imageUrl
         self.price = price
         self.location = location
         self.title = title
         self.isFavorited = isFavorited
+        self.imageCache = imageCache
+        self.diskCache = diskCache
     }
     
     // MARK: - Public methods
@@ -46,9 +51,9 @@ public struct AdItem {
     func loadImage(imageUrl: String, onCompletion: @escaping (_ Data: Data) -> Void) {
         guard URL.init(string: imageUrl) != nil else { fatalError("[ERROR]: The \(imageUrl) is of invalid format") }
         
-        AdItem.imageCache.fetch(url: imageUrl, onCompletion: { (data) in
-            let toData = data as Data
-            onCompletion(toData)
+        imageCache.fetch(url: imageUrl, onCompletion: { (data) in
+            self.diskCache.saveToDisk(key: imageUrl, data: data)
+            onCompletion(data as Data)
         })
     }
 }

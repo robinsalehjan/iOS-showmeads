@@ -34,14 +34,11 @@ class AdImageCacheService: CacheService<NSString, NSData> {
                 fetch(url: validUrl, onCompletion: onCompletion)
                 return
             }
-            
             memoryCache.setObject(valueOnDisk, forKey: key)
             onCompletion(valueOnDisk)
             return
         }
-        
         onCompletion(valueInCache)
-        return
     }
     
     @discardableResult
