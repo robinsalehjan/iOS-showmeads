@@ -128,7 +128,7 @@ class AdPersistenceService {
     /// - returns: true if it did update the record, false otherwise.
     
     @discardableResult
-    func update(_ ad: AdItem, imageUrl: String?, price: Int32?, location: String?, title: String?, isFavorited: Bool?) -> Bool {
+    func update(_ ad: AdItem, imageUrl: String? = nil, price: Int32? = nil, location: String? = nil, title: String? = nil, isFavorited: Bool? = nil) -> Bool {
         guard let existingAd = exists(ad) else { return false }
         
         let backgroundContext = AppDelegate.persistentContainer.newBackgroundContext()
