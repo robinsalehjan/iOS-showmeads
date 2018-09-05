@@ -25,7 +25,6 @@ class AdStateContainerController: UIViewController {
     
     fileprivate var networkService: AdNetworkService
     fileprivate var persistenceService: AdPersistenceService
-    fileprivate var imageCache: AdImageCacheService
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,15 +33,14 @@ class AdStateContainerController: UIViewController {
         }
     }
     
-    init(_ networkService: AdNetworkService, _ persistenceService: AdPersistenceService, _ imageCache: AdImageCacheService) {
-        self.networkService = networkService
-        self.persistenceService = persistenceService
-        self.imageCache = imageCache
-        super.init(nibName: nil, bundle: nil)
-    }
-    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(_ networkService: AdNetworkService, _ persistenceService: AdPersistenceService) {
+        self.networkService = networkService
+        self.persistenceService = persistenceService
+        super.init(nibName: nil, bundle: nil)
     }
     
     override func viewWillLayoutSubviews() {
@@ -116,7 +114,7 @@ extension AdStateContainerController {
                 case .success(let ads):
                     let filteredAds = strongSelf.persistenceService.updateOrInsert(ads)
                     DispatchQueue.main.async {
-                        let viewController = AdCollectionViewController(filteredAds, strongSelf.persistenceService, strongSelf.imageCache)
+                        let viewController = AdCollectionViewController(filteredAds, strongSelf.persistenceService)
                         strongSelf.transition(to: .loaded(viewController))
                     }
                 }
@@ -126,7 +124,7 @@ extension AdStateContainerController {
             let ads = persistenceService.fetch(where: nil)
             DispatchQueue.main.async { [weak self] in
                 guard let strongSelf = self else { return }
-                let viewController = AdCollectionViewController(ads, strongSelf.persistenceService, strongSelf.imageCache)
+                let viewController = AdCollectionViewController(ads, strongSelf.persistenceService)
                 strongSelf.transition(to: .loaded(viewController))
             }
         }
