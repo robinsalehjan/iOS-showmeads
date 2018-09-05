@@ -9,7 +9,13 @@
 import UIKit
 import CoreData
 
+protocol AdCollectionViewControllerDelegate: class {
+    func adCollectionViewController(_ adCollectionViewController: AdCollectionViewController, didFailWithError error: Error)
+}
+
 class AdCollectionViewController: UICollectionViewController {
+    weak var delegate: AdCollectionViewControllerDelegate?
+
     // MARK: - Private properties
     fileprivate var ads: [AdItem] = []
     
@@ -96,18 +102,6 @@ extension AdCollectionViewController {
         self.ads = persistenceService.fetch(where: NSPredicate(format: "isFavorited == true"))
         collectionView?.reloadData()
     }
-    
-    private func transition(to newState: State) {
-        guard let currentState = parent as? AdStateContainerController else { return }
-        switch newState {
-        case .error:
-            currentState.transition(to: .error)
-        case .loading:
-            currentState.transition(to: .loading)
-        default:
-            break
-        }
-    }
 }
 
 // MARK: - Private methods for UI modifications
@@ -136,7 +130,13 @@ extension AdCollectionViewController {
         case true:
             fetchFavoritedAds()
         case false:
-            transition(to: .loading)
+            fetchLocalAds {
+                refreshLocalAdsWithRemoteContent { error  in
+                    // if empty show full screen error
+                    // if data show
+                    self.delegate?.adCollectionViewController(self, didFailWithError: error)
+                }
+            }
         }
     }
     
@@ -147,8 +147,21 @@ extension AdCollectionViewController {
         case true:
             fetchFavoritedAds()
         case false:
-            transition(to: .loading)
+            refreshLocalAdsWithRemoteContent { error in
+                // if empty show full screen error
+                // if data show
+                self.delegate?.adCollectionViewController(self, didFailWithError: error)
+            }
+            break
         }
+    }
+
+    func fetchLocalAds(completion: () -> Void) {
+        // get ads from database and display them
+    }
+
+    func refreshLocalAdsWithRemoteContent(completion: (_ error: Error) -> Void) {
+        // get ads from database and refresh them with remote content
     }
 }
 

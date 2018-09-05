@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol StateContainable {
+    func setup()
+}
+
 public enum State {
     case loading
     case loaded(UIViewController)
@@ -26,14 +30,7 @@ class AdStateContainerController: UIViewController {
     fileprivate var networkService: AdNetworkService
     fileprivate var persistenceService: AdPersistenceService
     fileprivate var imageCache: AdImageCacheService
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if state == nil {
-            transition(to: .loading)
-        }
-    }
-    
+
     init(_ networkService: AdNetworkService, _ persistenceService: AdPersistenceService, _ imageCache: AdImageCacheService) {
         self.networkService = networkService
         self.persistenceService = persistenceService
@@ -44,23 +41,15 @@ class AdStateContainerController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        guard let state = state else { return }
-        
-        switch state {
-        case .loading:
-            switch Reachability.isConnectedToNetwork() {
-            case true:
-                fetchAds(endpoint: .remote)
-            case false:
-                fetchAds(endpoint: .database)
-            }
-        case .error:
-            break
-        case .loaded(_):
-            break
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        transition(to: .loading)
+        let items = persistenceService.fetch(where: nil)
+        if items.count > 0 {
+            let viewController = AdCollectionViewController(items, persistenceService, imageCache)
+            transition(to: .loaded(viewController))
         }
     }
 }
@@ -70,7 +59,7 @@ class AdStateContainerController: UIViewController {
 extension AdStateContainerController {
     public func transition(to newState: State) {
         shownViewController?.remove()
-        
+
         let viewController = viewControllerFor(state: newState)
         add(child: viewController)
         
