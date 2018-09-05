@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol StateContainable {
+public protocol StateContainable: class {
     func setup()
 }
 
@@ -65,6 +65,8 @@ extension AdStateContainerController {
         
         state = newState
         shownViewController = viewController
+        let containable = viewController as? StateContainable
+        containable?.setup()
     }
 }
 
@@ -75,8 +77,8 @@ extension AdStateContainerController {
         switch state {
         case .loading:
             return AdLoadingViewController()
-        case .loaded(let viewController):
-            return viewController
+        case .loaded:
+            return AdCollectionViewController(persistenceService, imageCache)
         case .error:
             return AdErrorViewController()
         }

@@ -13,7 +13,7 @@ protocol AdCollectionViewControllerDelegate: class {
     func adCollectionViewController(_ adCollectionViewController: AdCollectionViewController, didFailWithError error: Error)
 }
 
-class AdCollectionViewController: UICollectionViewController {
+class AdCollectionViewController: UICollectionViewController, StateContainable {
     weak var delegate: AdCollectionViewControllerDelegate?
 
     // MARK: - Private properties
@@ -62,17 +62,16 @@ class AdCollectionViewController: UICollectionViewController {
     }()
     
     // MARK: - Initalizers
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func setup() {
         collectionView?.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = .white
         collectionView?.refreshControl = refreshControl
-        
+
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
-    
+
     init(_ ads: [AdItem], _ persistenceService: AdPersistenceService, _ imageCache: AdImageCacheService) {
         self.ads = ads
         self.persistenceService = persistenceService

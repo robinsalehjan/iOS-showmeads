@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AdLoadingViewController: UIViewController {
+class AdLoadingViewController: UIViewController, StateContainable {
     fileprivate lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -16,18 +16,17 @@ class AdLoadingViewController: UIViewController {
         view.hidesWhenStopped = true
         return view
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    func setup() {
         view.backgroundColor = .white
         view.addSubview(activityIndicator)
-        
+
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+            ])
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         activityIndicator.startAnimating()

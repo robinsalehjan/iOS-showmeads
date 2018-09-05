@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AdErrorViewController: UIViewController {
+class AdErrorViewController: UIViewController, StateContainable {
     fileprivate lazy var errorLabel: UILabel = {
         let label = UILabel()
         let font = UIFont.scaledFINNFont(fontType: .medium, size: 24) ?? UIFont.systemFont(ofSize: 24, weight: .medium)
@@ -31,14 +31,13 @@ class AdErrorViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapRefreshButton(sender:)), for: .touchUpInside)
         return button
     }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+
+    func setup() {
         view.backgroundColor = .white
-        
+
         view.addSubview(errorLabel)
         view.addSubview(refreshButton)
-        
+
         NSLayoutConstraint.activate([
             errorLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             errorLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -46,9 +45,9 @@ class AdErrorViewController: UIViewController {
             refreshButton.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: .largeSpacing),
             refreshButton.centerXAnchor.constraint(equalTo: errorLabel.centerXAnchor),
             refreshButton.widthAnchor.constraint(equalTo: errorLabel.widthAnchor, multiplier: 0.25)
-        ])
+            ])
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
