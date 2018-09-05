@@ -14,9 +14,6 @@ class AdCollectionViewController: UICollectionViewController {
     fileprivate var ads: [AdItem] = []
     
     fileprivate var persistenceService: AdPersistenceService
-    fileprivate var imageCache: AdImageCacheService
-    
-    fileprivate var fetchedResultsController = NSFetchedResultsController<Ads>()
     
     fileprivate lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -67,10 +64,9 @@ class AdCollectionViewController: UICollectionViewController {
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
-    init(_ ads: [AdItem], _ persistenceService: AdPersistenceService, _ imageCache: AdImageCacheService) {
+    init(_ ads: [AdItem], _ persistenceService: AdPersistenceService) {
         self.ads = ads
         self.persistenceService = persistenceService
-        self.imageCache = imageCache
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
@@ -206,10 +202,10 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
 
 extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
-        persistenceService.update(ad, imageUrl: nil, price: nil, location: nil, title: nil, isFavorited: true)
+        persistenceService.update(ad, isFavorited: true)
     }
     
     func didUnfavorite(ad: AdItem) {
-        persistenceService.update(ad, imageUrl: nil, price: nil, location: nil, title: nil, isFavorited: false)
+        persistenceService.update(ad, isFavorited: false)
     }
 }
