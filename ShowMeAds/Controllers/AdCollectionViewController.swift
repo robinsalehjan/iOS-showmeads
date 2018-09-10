@@ -9,8 +9,11 @@
 import UIKit
 import CoreData
 
-class AdCollectionViewController: UICollectionViewController {
+class AdCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
+                                  StateContainmentable, StateContainmentableDataSource, AdCollectionViewCellDataSource {
+    
     // MARK: - Private properties
+    
     fileprivate var ads: [AdItem] = []
     
     fileprivate var persistenceService: AdPersistenceService
@@ -53,6 +56,7 @@ class AdCollectionViewController: UICollectionViewController {
     }()
     
     // MARK: - Initalizers
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
@@ -74,14 +78,8 @@ class AdCollectionViewController: UICollectionViewController {
         super.init(collectionViewLayout: layout)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
-        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-    }
-    
     required init?(coder aDecoder: NSCoder) {
-        fatalError("Not implemented")
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -148,7 +146,7 @@ extension AdCollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource conformence
 
 extension AdCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -174,19 +172,19 @@ extension AdCollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout conformence
 
-extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
+extension AdCollectionViewController {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         let leftRightInset = collectionView.frame.width * 0.015
         let topBottomInset = collectionView.frame.height * 0.02
-
+        
         return UIEdgeInsets(top: topBottomInset, left: leftRightInset,
                             bottom: topBottomInset, right: leftRightInset)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -198,9 +196,9 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - AdCollectionViewCellDelegatead
+// MARK: - AdCollectionViewCellDelegate conformence
 
-extension AdCollectionViewController: AdCollectionViewCellDataSource {
+extension AdCollectionViewController {
     func didFavorite(ad: AdItem) {
         persistenceService.update(ad, isFavorited: true)
     }

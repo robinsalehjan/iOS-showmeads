@@ -9,6 +9,9 @@
 import UIKit
 
 class AdLoadingViewController: UIViewController {
+    
+    // MARK: Private properties
+    
     fileprivate lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -16,6 +19,8 @@ class AdLoadingViewController: UIViewController {
         view.hidesWhenStopped = true
         return view
     }()
+    
+    // MARK: Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()

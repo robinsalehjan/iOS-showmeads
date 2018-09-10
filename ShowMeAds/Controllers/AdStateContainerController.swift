@@ -14,17 +14,25 @@ public enum State {
     case error
 }
 
-class AdStateContainerController: UIViewController {
+public protocol StateContainmentable {
+    func setupState()
+}
+
+public protocol StateContainmentableDataSource: NSObjectProtocol {
+    func didFetch(ads: [AdItem])
+}
+
+class AdStateContainerController: UIViewController, StateContainmentable {
     
-    // MARK: State properties
+    // MARK: Private properties
     
-    private var state: State?
-    private var shownViewController: UIViewController?
-    
-    // MARK: Dependencies
+    fileprivate var state: State?
+    fileprivate var shownViewController: UIViewController?
     
     fileprivate var networkService: AdNetworkService
     fileprivate var persistenceService: AdPersistenceService
+    
+    // MARK: Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,7 +71,7 @@ class AdStateContainerController: UIViewController {
     }
 }
 
-// MARK: Methods for transitioning between states
+// MARK: Public methods for transitioning between states from child viewcontrollers
 
 extension AdStateContainerController {
     public func transition(to newState: State) {
@@ -74,25 +82,30 @@ extension AdStateContainerController {
         
         state = newState
         shownViewController = viewController
+        
+        guard let child = shownViewController as? StateContainmentable else { return }
+        child.setupState()
     }
 }
 
-// MARK: Methods for modifying the internal state of the parent view controller
+// MARK: Private Methods for modifying state of the container viewcontroller
 
 extension AdStateContainerController {
     private func viewControllerFor(state: State) -> UIViewController {
         switch state {
         case .loading:
-            return AdLoadingViewController()
-        case .loaded(let viewController):
-            return viewController
+            let loadingViewController = AdLoadingViewController()
+            return loadingViewController
+        case .loaded(let loadedViewController):
+            return loadedViewController
         case .error:
-            return AdErrorViewController()
+            let errorViewController = AdErrorViewController()
+            return errorViewController
         }
     }
 }
 
-// MARK: Method to fetch ads from an given resource (remote/database)
+// MARK: Private method to fetch ads from an given resource (remote/database)
 
 extension AdStateContainerController {
     private enum EndpointType {
@@ -119,7 +132,6 @@ extension AdStateContainerController {
                     }
                 }
             })
-            
         case .database:
             let ads = persistenceService.fetch(where: nil)
             DispatchQueue.main.async { [weak self] in
@@ -129,4 +141,10 @@ extension AdStateContainerController {
             }
         }
     }
+}
+
+// MARK: StateContainmentable conformence
+
+extension AdStateContainerController {
+    func setupState() { }
 }

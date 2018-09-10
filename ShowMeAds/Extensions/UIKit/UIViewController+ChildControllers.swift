@@ -13,8 +13,8 @@ extension UIViewController {
     
     public func add(child: UIViewController) {
         addChildViewController(child)
-        view.addSubview(child.view)
         child.didMove(toParentViewController: self)
+        view.addSubview(child.view)
     }
     
     /// Removes the given controller from the parent controller
