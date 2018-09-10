@@ -207,3 +207,20 @@ extension AdCollectionViewController {
         persistenceService.update(ad, isFavorited: false)
     }
 }
+
+// MARK: StateContainmentable conformence
+
+extension AdCollectionViewController {
+    func setupState() {
+        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
+        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
+    }
+}
+
+// MARK: StateContainmentableDataSource conformence
+
+extension AdCollectionViewController {
+    func didFetch(ads: [AdItem]) {
+        print("Was called")
+    }
+}
