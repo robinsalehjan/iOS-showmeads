@@ -14,15 +14,19 @@ public enum State {
     case error
 }
 
-public protocol StateContainmentable {
+public protocol StateContainable {
     func setupState()
 }
 
-public protocol StateContainmentableDataSource: NSObjectProtocol {
+public protocol StateContainableDataSource: NSObjectProtocol {
     func didFetch(ads: [AdItem])
 }
 
-class AdStateContainerController: UIViewController, StateContainmentable {
+class AdStateContainerController: UIViewController, StateContainable, AdDataSource {
+    
+    // MARK: Public properties
+    
+    public weak var dataSource: StateContainableDataSource?
     
     // MARK: Private properties
     
@@ -83,7 +87,7 @@ extension AdStateContainerController {
         state = newState
         shownViewController = viewController
         
-        guard let child = shownViewController as? StateContainmentable else { return }
+        guard let child = shownViewController as? StateContainable else { return }
         child.setupState()
     }
 }

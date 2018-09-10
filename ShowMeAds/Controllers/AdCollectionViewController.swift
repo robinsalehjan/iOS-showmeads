@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class AdCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
-                                  StateContainmentable, StateContainmentableDataSource, AdCollectionViewCellDataSource {
+                                  StateContainable, StateContainableDataSource, AdCollectionViewCellDataSource {
     
     // MARK: - Private properties
     

@@ -8,7 +8,8 @@
 
 import UIKit
 
-class AdErrorViewController: UIViewController, StateContainmentable, StateContainmentableDataSource {
+class AdErrorViewController: UIViewController, StateContainable,
+                             StateContainableDataSource {
     
     // MARK: Private properties
     
