@@ -46,7 +46,7 @@ extension AdStateContainerController {
     public func transition(to newState: State) {
         guard state != newState else { return }
         
-        if let oldChild = shownViewController as? StateContainable { oldChild.willDisappear() }
+        if let oldChild = shownViewController as? StateContainable { oldChild.willDismiss() }
         shownViewController?.remove()
         
         let viewController = viewControllerFor(state: newState)
@@ -54,7 +54,7 @@ extension AdStateContainerController {
         
         state = newState
         shownViewController = viewController
-        if let newChild = shownViewController as? StateContainable { newChild.willAppear() }
+        if let newChild = shownViewController as? StateContainable { newChild.willPresent() }
     }
 }
 
