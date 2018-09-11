@@ -8,10 +8,11 @@
 
 import UIKit
 
-class AdErrorViewController: UIViewController, StateContainable,
-                             StateContainableDataSource {
+class AdErrorViewController: UIViewController {
     
     // MARK: Private properties
+    
+    fileprivate var adService: AdService
     
     fileprivate lazy var errorLabel: UILabel = {
         let label = UILabel()
@@ -55,6 +56,15 @@ class AdErrorViewController: UIViewController, StateContainable,
         ])
     }
     
+    init(adService: AdService) {
+        self.adService = adService
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -66,25 +76,9 @@ extension AdErrorViewController {
     @objc private func didTapRefreshButton(sender: UIButton) {
         UIButton.animate(withDuration: 0.1, animations: { [weak self] in
             sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
-            
-            DispatchQueue.main.async {
-                guard let state = self?.parent as? AdStateContainerController else { return }
-                state.transition(to: .loading)
-            }
+            self?.adService.fetchAds()
         }) { (_) in
             sender.transform = CGAffineTransform.identity
         }
     }
-}
-
-// MARK: StateContainmentable conformence
-
-extension AdErrorViewController {
-    func setupState() { }
-}
-
-// MARK: StateContainmentable conformence
-
-extension AdErrorViewController {
-    func didFetch(ads: [AdItem]) { }
 }

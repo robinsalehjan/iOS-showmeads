@@ -170,19 +170,24 @@ extension AdCollectionViewController: AdCollectionViewCellDataSource {
     }
 }
 
-// MARK: StateContainmentable conformence
+// MARK: StateContainable conformance
 
-extension AdCollectionViewController {
-    func setupState() {
+extension AdCollectionViewController: StateContainable {
+    func willPresent() {
         parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
         parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
     }
+    
+    func willDismiss() {
+        parent?.navigationItem.leftBarButtonItem = nil
+        parent?.navigationItem.rightBarButtonItem = nil
+    }
 }
 
-// MARK: StateContainmentableDataSource conformence
+// MARK: StateContainableDataSource conformance
 
-extension AdCollectionViewController {
-    func didFetch(ads: [AdItem]) {
-        print("Was called")
+extension AdCollectionViewController: StateContainableDataSource {
+    func willUpdateState(ads: [AdItem]) {
+        self.ads = ads
     }
 }
