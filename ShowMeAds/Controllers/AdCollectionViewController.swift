@@ -9,8 +9,7 @@
 import UIKit
 import CoreData
 
-class AdCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout,
-                                  StateContainable, StateContainableDataSource, AdCollectionViewCellDataSource {
+class AdCollectionViewController: UICollectionViewController {
     
     // MARK: - Private properties
     
@@ -135,9 +134,9 @@ extension AdCollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout conformence
+// MARK: - UICollectionViewDelegateFlowLayout conformance
 
-extension AdCollectionViewController {
+extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -159,9 +158,9 @@ extension AdCollectionViewController {
     }
 }
 
-// MARK: - AdCollectionViewCellDelegate conformence
+// MARK: - AdCollectionViewCellDelegate conformance
 
-extension AdCollectionViewController {
+extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
         adService.update(ad: ad, isFavorited: true)
     }
