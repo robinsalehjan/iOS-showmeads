@@ -14,9 +14,15 @@ class AdCollectionViewController: UICollectionViewController, UICollectionViewDe
     
     // MARK: - Private properties
     
-    fileprivate var ads: [AdItem] = []
+    fileprivate var ads: [AdItem] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView?.reloadData()
+            }
+        }
+    }
     
-    fileprivate var persistenceService: AdPersistenceService
+    fileprivate var adService: AdService
     
     fileprivate lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -68,9 +74,9 @@ class AdCollectionViewController: UICollectionViewController, UICollectionViewDe
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
-    init(_ ads: [AdItem], _ persistenceService: AdPersistenceService) {
+    init(_ ads: [AdItem], _ adService: AdService) {
         self.ads = ads
-        self.persistenceService = persistenceService
+        self.adService = adService
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
@@ -83,48 +89,25 @@ class AdCollectionViewController: UICollectionViewController, UICollectionViewDe
     }
 }
 
-// MARK: - Private methods for state modifications
-
-extension AdCollectionViewController {
-    private func fetchFavoritedAds() {
-        self.ads = persistenceService.fetch(where: NSPredicate(format: "isFavorited == true"))
-        collectionView?.reloadData()
-    }
-    
-    private func transition(to newState: State) {
-        guard let currentState = parent as? AdStateContainerController else { return }
-        switch newState {
-        case .error:
-            currentState.transition(to: .error)
-        case .loading:
-            currentState.transition(to: .loading)
-        default:
-            break
-        }
-    }
-}
-
-
 // MARK: - Private selector methods
 
 extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            fetchFavoritedAds()
+            adService.fetchFavoritedAds()
         case false:
-            transition(to: .loading)
+            adService.fetchAds()
         }
     }
     
     @objc func pullToRefresh() {
         refreshControl.endRefreshing()
-        
         switch offlineSwitch.isOn {
         case true:
-            fetchFavoritedAds()
+            adService.fetchFavoritedAds()
         case false:
-            transition(to: .loading)
+            adService.fetchAds()
         }
     }
 }
@@ -180,11 +163,11 @@ extension AdCollectionViewController {
 
 extension AdCollectionViewController {
     func didFavorite(ad: AdItem) {
-        persistenceService.update(ad, isFavorited: true)
+        adService.update(ad: ad, isFavorited: true)
     }
     
     func didUnfavorite(ad: AdItem) {
-        persistenceService.update(ad, isFavorited: false)
+        adService.update(ad: ad, isFavorited: false)
     }
 }
 
