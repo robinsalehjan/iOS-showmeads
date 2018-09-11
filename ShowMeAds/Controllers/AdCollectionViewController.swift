@@ -178,10 +178,7 @@ extension AdCollectionViewController: StateContainable {
         parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
     }
     
-    func willDismiss() {
-        parent?.navigationItem.leftBarButtonItem = nil
-        parent?.navigationItem.rightBarButtonItem = nil
-    }
+    func willDismiss() { }
 }
 
 // MARK: StateContainableDataSource conformance
