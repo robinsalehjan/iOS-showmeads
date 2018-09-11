@@ -30,7 +30,7 @@ class AdLoadingViewController: UIViewController {
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+            ])
     }
     
     override func viewWillAppear(_ animated: Bool) {

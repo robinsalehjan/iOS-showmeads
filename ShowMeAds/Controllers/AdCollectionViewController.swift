@@ -104,23 +104,6 @@ extension AdCollectionViewController {
     }
 }
 
-// MARK: - Private methods for UI modifications
-
-extension AdCollectionViewController {
-    private func showNoFavoritesLabel() {
-        guard let collectionView = collectionView else { return }
-        
-        collectionView.addSubview(noFavoritesLabel)
-        NSLayoutConstraint.activate([
-            noFavoritesLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-            noFavoritesLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -.veryLargeSpacing),
-        ])
-    }
-    
-    private func removeNoFavoritesLabel() {
-        noFavoritesLabel.removeFromSuperview()
-    }
-}
 
 // MARK: - Private selector methods
 
@@ -146,15 +129,15 @@ extension AdCollectionViewController {
     }
 }
 
-// MARK: - UICollectionViewDataSource conformence
+// MARK: - UICollectionViewDataSource conformance
 
 extension AdCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch ads.count == 0 && offlineSwitch.isOn {
         case true:
-            showNoFavoritesLabel()
+            collectionView.showEmptyCollectionViewLabel(label: noFavoritesLabel)
         default:
-            removeNoFavoritesLabel()
+            noFavoritesLabel.removeFromSuperview()
         }
         return ads.count
     }
@@ -162,12 +145,9 @@ extension AdCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.identifier,
                                                             for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
-        guard ads.count > 0 else { return cell }
-        
         let ad = ads[indexPath.row]
         cell.delegate = self
         cell.model = ad
-        
         return cell
     }
 }
