@@ -34,11 +34,6 @@ extension State: Equatable {
     }
 }
 
-public protocol StateContainable: NSObjectProtocol {
-    func willPresent()
-    func willDismiss()
-}
-
 public protocol StateContainableDataSource: NSObjectProtocol {
     func willUpdateState(ads: [AdItem])
 }

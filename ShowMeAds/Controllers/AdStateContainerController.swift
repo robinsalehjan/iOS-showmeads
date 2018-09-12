@@ -12,8 +12,8 @@ class AdStateContainerController: UIViewController {
     
     // MARK: Private properties
     
-    fileprivate var state: State?
-    fileprivate var shownViewController: UIViewController?
+    fileprivate var state: State? = nil
+    fileprivate var shownNavigationController: UINavigationController?
     
     // MARK: Dependencies
     
@@ -23,11 +23,10 @@ class AdStateContainerController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if state == nil {
+        adService.dataSource = self
+        
             transition(to: .loading)
         }
-        
-        adService.dataSource = self
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -46,31 +45,35 @@ extension AdStateContainerController {
     public func transition(to newState: State) {
         guard state != newState else { return }
         
-        if let oldChild = shownViewController as? StateContainable { oldChild.willDismiss() }
-        shownViewController?.remove()
+        shownNavigationController?.remove()
         
-        let viewController = viewControllerFor(state: newState)
-        add(child: viewController)
+        let navigationController = navigationControllerFor(state: newState)
+        add(child: navigationController)
         
         state = newState
-        shownViewController = viewController
-        if let newChild = shownViewController as? StateContainable { newChild.willPresent() }
+        shownNavigationController = navigationController
     }
 }
 
 // MARK: Private Methods for modifying state of the container viewcontroller
 
 extension AdStateContainerController {
-    private func viewControllerFor(state: State) -> UIViewController {
+    private func navigationControllerFor(state: State) -> UINavigationController {
         switch state {
         case .loading:
             let loadingViewController = AdLoadingViewController()
-            return loadingViewController
+            let navigationController = UINavigationController.init(rootViewController: loadingViewController)
+            navigationController.viewControllers = [loadingViewController]
+            return navigationController
         case .loaded(let loadedViewController):
-            return loadedViewController
+            let navigationController = UINavigationController.init(rootViewController: loadedViewController)
+            navigationController.viewControllers = [loadedViewController]
+            return navigationController
         case .error:
             let errorViewController = AdErrorViewController(adService: adService)
-            return errorViewController
+            let navigationController = UINavigationController.init(rootViewController: errorViewController)
+            navigationController.viewControllers = [errorViewController]
+            return navigationController
         }
     }
 }
@@ -78,17 +81,18 @@ extension AdStateContainerController {
 // MARK: AdDataSource conformance
 
 extension AdStateContainerController: AdServiceDataSource {
-    func willUpdate() {
-        transition(to: .loading)
-    }
-    
     func didUpdate(ads: [AdItem]) {
-        if let child = shownViewController as? StateContainableDataSource { child.willUpdateState(ads: ads) }
+        // On startup and between state transitions the navigation controller has no topViewController
+        // We have to check that it exists before calling protocol conformance methods
+        if let presentedViewController = shownNavigationController?.topViewController as? StateContainableDataSource {
+            presentedViewController.willUpdateState(ads: ads)
+        }
         
         DispatchQueue.main.async { [weak self] in
             guard let strongSelf = self else { return }
             let viewController = AdCollectionViewController(ads, strongSelf.adService)
             strongSelf.transition(to: .loaded(viewController))
+            
         }
     }
 }
