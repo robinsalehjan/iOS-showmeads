@@ -76,7 +76,7 @@ extension AdErrorViewController {
     @objc private func didTapRefreshButton(sender: UIButton) {
         UIButton.animate(withDuration: 0.1, animations: { [weak self] in
             sender.transform = CGAffineTransform(scaleX: 0.90, y: 0.90)
-            self?.adService.fetchAds()
+            self?.adService.fetchAds(endpoint: .remote)
         }) { (_) in
             sender.transform = CGAffineTransform.identity
         }
