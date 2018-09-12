@@ -25,7 +25,12 @@ class AdStateContainerController: UIViewController {
         super.viewDidLoad()
         adService.dataSource = self
         
+        switch adService.hasSavedAds() {
+        case true:
+            adService.fetchAds(endpoint: .database)
+        case false:
             transition(to: .loading)
+            adService.fetchAds(endpoint: .remote)
         }
     }
     

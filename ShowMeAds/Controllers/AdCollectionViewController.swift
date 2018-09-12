@@ -99,18 +99,13 @@ extension AdCollectionViewController {
         case true:
             adService.fetchFavoritedAds()
         case false:
-            adService.fetchAds()
+            adService.fetchAds(endpoint: .database)
         }
     }
     
     @objc func pullToRefresh() {
         refreshControl.endRefreshing()
-        switch offlineSwitch.isOn {
-        case true:
-            adService.fetchFavoritedAds()
-        case false:
-            adService.fetchAds()
-        }
+        adService.fetchAds(endpoint: .database)
     }
 }
 
