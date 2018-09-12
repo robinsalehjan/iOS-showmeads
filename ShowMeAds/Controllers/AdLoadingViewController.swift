@@ -9,6 +9,9 @@
 import UIKit
 
 class AdLoadingViewController: UIViewController {
+    
+    // MARK: Private properties
+    
     fileprivate lazy var activityIndicator: UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -16,6 +19,8 @@ class AdLoadingViewController: UIViewController {
         view.hidesWhenStopped = true
         return view
     }()
+    
+    // MARK: Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +30,7 @@ class AdLoadingViewController: UIViewController {
         NSLayoutConstraint.activate([
             activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+            ])
     }
     
     override func viewWillAppear(_ animated: Bool) {

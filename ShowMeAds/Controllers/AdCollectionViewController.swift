@@ -10,10 +10,18 @@ import UIKit
 import CoreData
 
 class AdCollectionViewController: UICollectionViewController {
-    // MARK: - Private properties
-    fileprivate var ads: [AdItem] = []
     
-    fileprivate var persistenceService: AdPersistenceService
+    // MARK: - Private properties
+    
+    fileprivate var ads: [AdItem] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView?.reloadData()
+            }
+        }
+    }
+    
+    fileprivate var adService: AdService
     
     fileprivate lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
@@ -53,6 +61,7 @@ class AdCollectionViewController: UICollectionViewController {
     }()
     
     // MARK: - Initalizers
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.register(AdCollectionViewCell.self, forCellWithReuseIdentifier: AdCollectionViewCell.identifier)
@@ -64,9 +73,9 @@ class AdCollectionViewController: UICollectionViewController {
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
     }
     
-    init(_ ads: [AdItem], _ persistenceService: AdPersistenceService) {
+    init(_ ads: [AdItem], _ adService: AdService) {
         self.ads = ads
-        self.persistenceService = persistenceService
+        self.adService = adService
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 10
@@ -74,53 +83,8 @@ class AdCollectionViewController: UICollectionViewController {
         super.init(collectionViewLayout: layout)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
-        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-    }
-    
     required init?(coder aDecoder: NSCoder) {
-        fatalError("Not implemented")
-    }
-}
-
-// MARK: - Private methods for state modifications
-
-extension AdCollectionViewController {
-    private func fetchFavoritedAds() {
-        self.ads = persistenceService.fetch(where: NSPredicate(format: "isFavorited == true"))
-        collectionView?.reloadData()
-    }
-    
-    private func transition(to newState: State) {
-        guard let currentState = parent as? AdStateContainerController else { return }
-        switch newState {
-        case .error:
-            currentState.transition(to: .error)
-        case .loading:
-            currentState.transition(to: .loading)
-        default:
-            break
-        }
-    }
-}
-
-// MARK: - Private methods for UI modifications
-
-extension AdCollectionViewController {
-    private func showNoFavoritesLabel() {
-        guard let collectionView = collectionView else { return }
-        
-        collectionView.addSubview(noFavoritesLabel)
-        NSLayoutConstraint.activate([
-            noFavoritesLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor),
-            noFavoritesLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor, constant: -.veryLargeSpacing),
-        ])
-    }
-    
-    private func removeNoFavoritesLabel() {
-        noFavoritesLabel.removeFromSuperview()
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
@@ -130,33 +94,32 @@ extension AdCollectionViewController {
     @objc func didTapOfflineMode() {
         switch offlineSwitch.isOn {
         case true:
-            fetchFavoritedAds()
+            adService.fetchFavoritedAds()
         case false:
-            transition(to: .loading)
+            adService.fetchAds()
         }
     }
     
     @objc func pullToRefresh() {
         refreshControl.endRefreshing()
-        
         switch offlineSwitch.isOn {
         case true:
-            fetchFavoritedAds()
+            adService.fetchFavoritedAds()
         case false:
-            transition(to: .loading)
+            adService.fetchAds()
         }
     }
 }
 
-// MARK: - UICollectionViewDataSource
+// MARK: - UICollectionViewDataSource conformance
 
 extension AdCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch ads.count == 0 && offlineSwitch.isOn {
         case true:
-            showNoFavoritesLabel()
+            collectionView.showEmptyCollectionViewLabel(label: noFavoritesLabel)
         default:
-            removeNoFavoritesLabel()
+            noFavoritesLabel.removeFromSuperview()
         }
         return ads.count
     }
@@ -164,17 +127,14 @@ extension AdCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdCollectionViewCell.identifier,
                                                             for: indexPath) as? AdCollectionViewCell else { return UICollectionViewCell() }
-        guard ads.count > 0 else { return cell }
-        
         let ad = ads[indexPath.row]
         cell.delegate = self
         cell.model = ad
-        
         return cell
     }
 }
 
-// MARK: - UICollectionViewDelegateFlowLayout
+// MARK: - UICollectionViewDelegateFlowLayout conformance
 
 extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
@@ -182,11 +142,11 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         let leftRightInset = collectionView.frame.width * 0.015
         let topBottomInset = collectionView.frame.height * 0.02
-
+        
         return UIEdgeInsets(top: topBottomInset, left: leftRightInset,
                             bottom: topBottomInset, right: leftRightInset)
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -198,14 +158,33 @@ extension AdCollectionViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - AdCollectionViewCellDelegatead
+// MARK: - AdCollectionViewCellDelegate conformance
 
 extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didFavorite(ad: AdItem) {
-        persistenceService.update(ad, isFavorited: true)
+        adService.update(ad: ad, isFavorited: true)
     }
     
     func didUnfavorite(ad: AdItem) {
-        persistenceService.update(ad, isFavorited: false)
+        adService.update(ad: ad, isFavorited: false)
+    }
+}
+
+// MARK: StateContainable conformance
+
+extension AdCollectionViewController: StateContainable {
+    func willPresent() {
+        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
+        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
+    }
+    
+    func willDismiss() { }
+}
+
+// MARK: StateContainableDataSource conformance
+
+extension AdCollectionViewController: StateContainableDataSource {
+    func willUpdateState(ads: [AdItem]) {
+        self.ads = ads
     }
 }

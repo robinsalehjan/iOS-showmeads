@@ -8,65 +8,45 @@
 
 import UIKit
 
-public enum State {
-    case loading
-    case loaded(UIViewController)
-    case error
-}
-
 class AdStateContainerController: UIViewController {
     
-    // MARK: State properties
+    // MARK: Private properties
     
-    private var state: State?
-    private var shownViewController: UIViewController?
+    fileprivate var state: State?
+    fileprivate var shownViewController: UIViewController?
     
     // MARK: Dependencies
     
-    fileprivate var networkService: AdNetworkService
-    fileprivate var persistenceService: AdPersistenceService
+    fileprivate var adService: AdService
+    
+    // MARK: Lifecycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if state == nil {
             transition(to: .loading)
         }
+        
+        adService.dataSource = self
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(_ networkService: AdNetworkService, _ persistenceService: AdPersistenceService) {
-        self.networkService = networkService
-        self.persistenceService = persistenceService
+    init(_ adService: AdService) {
+        self.adService = adService
         super.init(nibName: nil, bundle: nil)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        guard let state = state else { return }
-        
-        switch state {
-        case .loading:
-            switch Reachability.isConnectedToNetwork() {
-            case true:
-                fetchAds(endpoint: .remote)
-            case false:
-                fetchAds(endpoint: .database)
-            }
-        case .error:
-            break
-        case .loaded(_):
-            break
-        }
     }
 }
 
-// MARK: Methods for transitioning between states
+// MARK: Public methods for transitioning between states from child viewcontrollers
 
 extension AdStateContainerController {
     public func transition(to newState: State) {
+        guard state != newState else { return }
+        
+        if let oldChild = shownViewController as? StateContainable { oldChild.willDismiss() }
         shownViewController?.remove()
         
         let viewController = viewControllerFor(state: newState)
@@ -74,59 +54,41 @@ extension AdStateContainerController {
         
         state = newState
         shownViewController = viewController
+        if let newChild = shownViewController as? StateContainable { newChild.willPresent() }
     }
 }
 
-// MARK: Methods for modifying the internal state of the parent view controller
+// MARK: Private Methods for modifying state of the container viewcontroller
 
 extension AdStateContainerController {
     private func viewControllerFor(state: State) -> UIViewController {
         switch state {
         case .loading:
-            return AdLoadingViewController()
-        case .loaded(let viewController):
-            return viewController
+            let loadingViewController = AdLoadingViewController()
+            return loadingViewController
+        case .loaded(let loadedViewController):
+            return loadedViewController
         case .error:
-            return AdErrorViewController()
+            let errorViewController = AdErrorViewController(adService: adService)
+            return errorViewController
         }
     }
 }
 
-// MARK: Method to fetch ads from an given resource (remote/database)
+// MARK: AdDataSource conformance
 
-extension AdStateContainerController {
-    private enum EndpointType {
-        case remote
-        case database
+extension AdStateContainerController: AdServiceDataSource {
+    func willUpdate() {
+        transition(to: .loading)
     }
     
-    private func fetchAds(endpoint: EndpointType) {
-        switch endpoint {
-        case .remote:
-            networkService.fetch(completionHandler: { [weak self] (response) in
-                guard let strongSelf = self else { return }
-                
-                switch response {
-                case .error(_):
-                    DispatchQueue.main.async {
-                        strongSelf.transition(to: .error)
-                    }
-                case .success(let ads):
-                    let filteredAds = strongSelf.persistenceService.updateOrInsert(ads)
-                    DispatchQueue.main.async {
-                        let viewController = AdCollectionViewController(filteredAds, strongSelf.persistenceService)
-                        strongSelf.transition(to: .loaded(viewController))
-                    }
-                }
-            })
-            
-        case .database:
-            let ads = persistenceService.fetch(where: nil)
-            DispatchQueue.main.async { [weak self] in
-                guard let strongSelf = self else { return }
-                let viewController = AdCollectionViewController(ads, strongSelf.persistenceService)
-                strongSelf.transition(to: .loaded(viewController))
-            }
+    func didUpdate(ads: [AdItem]) {
+        if let child = shownViewController as? StateContainableDataSource { child.willUpdateState(ads: ads) }
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let strongSelf = self else { return }
+            let viewController = AdCollectionViewController(ads, strongSelf.adService)
+            strongSelf.transition(to: .loaded(viewController))
         }
     }
 }
