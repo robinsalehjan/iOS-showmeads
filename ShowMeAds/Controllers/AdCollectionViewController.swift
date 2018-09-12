@@ -71,6 +71,9 @@ class AdCollectionViewController: UICollectionViewController {
         collectionView?.refreshControl = refreshControl
         
         offlineSwitch.addTarget(self, action: #selector(didTapOfflineMode), for: .touchUpInside)
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
+        navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
     }
     
     init(_ ads: [AdItem], _ adService: AdService) {
@@ -168,17 +171,6 @@ extension AdCollectionViewController: AdCollectionViewCellDataSource {
     func didUnfavorite(ad: AdItem) {
         adService.update(ad: ad, isFavorited: false)
     }
-}
-
-// MARK: StateContainable conformance
-
-extension AdCollectionViewController: StateContainable {
-    func willPresent() {
-        parent?.navigationItem.leftBarButtonItem = UIBarButtonItem.init(customView: favoritesTitleLabel)
-        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: offlineSwitch)
-    }
-    
-    func willDismiss() { }
 }
 
 // MARK: StateContainableDataSource conformance

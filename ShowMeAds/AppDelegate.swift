@@ -32,11 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let adService = AdService(networkService, persistenceService)
         
         let containerController = AdStateContainerController(adService)
-        let navController = UINavigationController.init(rootViewController: containerController)
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = navController
+        window?.rootViewController = containerController
         
         return true
     }
