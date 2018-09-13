@@ -58,6 +58,16 @@ public struct AdItem {
     }
 }
 
+extension AdItem: Equatable {
+    public static func ==(lhs: AdItem, rhs: AdItem) -> Bool {
+        return lhs.imageUrl == rhs.imageUrl
+    }
+    
+    public static func !=(lhs: AdItem, rhs: AdItem) -> Bool {
+        return lhs.imageUrl != rhs.imageUrl
+    }
+}
+
 @objc(Ads)
 public class Ads: NSManagedObject {
     public func convertToAdItem() -> AdItem {
