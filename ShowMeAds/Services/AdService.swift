@@ -96,10 +96,10 @@ extension AdService {
 
 extension AdService {
     
-    /// Sends a GET request to the backend every 60 seconds.
+    /// Sends a GET request to the backend every 5 minutes.
     
     private func scheduleRequest() {
-        let scheduledTime = DispatchTime.now() + 60
+        let scheduledTime = DispatchTime.now() + (60 * 5)
         DispatchQueue.main.asyncAfter(deadline: scheduledTime) { [weak self] in
             self?.fetchAds(endpoint: .remote)
             self?.scheduleRequest()
