@@ -24,8 +24,6 @@ final class AdService {
     
     // MARK: Private properties
     
-    fileprivate var ads: [AdItem] = []
-    
     fileprivate var networkService: AdNetworkService
     fileprivate var persistenceService: AdPersistenceService
     

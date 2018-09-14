@@ -13,13 +13,7 @@ class AdCollectionViewController: UICollectionViewController {
     
     // MARK: - Private properties
     
-    fileprivate var ads: [AdItem] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.collectionView?.reloadData()
-            }
-        }
-    }
+    fileprivate var ads: [AdItem]
     
     fileprivate var adService: AdService
     
@@ -172,6 +166,37 @@ extension AdCollectionViewController: AdCollectionViewCellDataSource {
 
 extension AdCollectionViewController: StateContainableDataSource {
     func willUpdateState(ads: [AdItem]) {
-        self.ads = ads
+        // Edge case - User has no favorites
+        if self.ads.count == 0 || ads.count == 0 {
+            self.ads = ads
+            collectionView?.reloadData()
+        }
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let strongSelf = self else { return }
+            let (insertions, deletions) = Diff(new: ads, old: strongSelf.ads)
+            
+            if  insertions.count > 0 || deletions.count > 0 {
+                let updatedAdIndicies = strongSelf.ads.enumerated().filter({ !deletions.contains($0.offset) }).map({ $0.element })
+                
+                // Create an new array
+                // that contains all objects
+                // which has been updated
+                strongSelf.ads = ads.enumerated().filter({ updatedAdIndicies.contains($0.element) }).map({ $0.element })
+                
+                // Insert the new objects
+                insertions.forEach({ strongSelf.ads.insert(ads[$0], at: $0) })
+            
+                DispatchQueue.main.async {
+                    strongSelf.collectionView?.performBatchUpdates({
+                        let deleteIndexPaths = deletions.map({ IndexPath(row: $0, section: 0) })
+                        strongSelf.collectionView?.deleteItems(at: deleteIndexPaths)
+
+                        let insertIndexPaths = insertions.map({ IndexPath(row: $0, section: 0) })
+                        strongSelf.collectionView?.insertItems(at: insertIndexPaths)
+                    }, completion: nil)
+                }
+            }
+        }
     }
 }
