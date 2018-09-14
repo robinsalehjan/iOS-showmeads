@@ -172,7 +172,7 @@ extension AdCollectionViewController: AdCollectionViewCellDataSource {
 extension AdCollectionViewController: StateContainableDataSource {
     func willUpdateState(ads: [AdItem]) {
         // Edge case - User has no favorites
-        if self.ads.count == 0 || ads.count == 0 {
+        if ads.count == 0 {
             self.ads = ads
             collectionView?.reloadData()
         }
