@@ -30,8 +30,6 @@ final class AdService {
     init(_ networkService: AdNetworkService, _ persistenceService: AdPersistenceService) {
         self.networkService = networkService
         self.persistenceService = persistenceService
-
-        scheduleRequest()
     }
 }
 
