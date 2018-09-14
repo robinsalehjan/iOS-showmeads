@@ -60,7 +60,12 @@ struct ChangeSet<T: Equatable> {
     // MARK: Private methods
     
     private static func diff<T: Equatable>(new: [T], old: [T]) -> ([Int], [Int]) {
-        guard new.count > 0 && old.count > 0 else { return ([], []) }
+        // Edge case - The `old` array is empty, hence nothing to diff against.
+        guard old.count > 0 else {
+            let insertionIndicies = new.enumerated().map({ $0.offset})
+            let deletionIndicies: [Int] = []
+            return (insertionIndicies, deletionIndicies)
+        }
         
         let insertedObjects = new.filter({ !old.contains($0) })
         let insertionIndicies = insertedObjects.compactMap({ new.index(of: $0) })
