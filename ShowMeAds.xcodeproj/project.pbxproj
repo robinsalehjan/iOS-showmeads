@@ -35,12 +35,12 @@
 		F273465E212DAEE000F8AFF2 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = F273465D212DAEE000F8AFF2 /* Result.swift */; };
 		F2734662212EDC0B00F8AFF2 /* AdStateContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2734661212EDC0B00F8AFF2 /* AdStateContainerController.swift */; };
 		F2A2518B21368C0900E5D719 /* Assets in Resources */ = {isa = PBXBuildFile; fileRef = F2A2518A21368C0900E5D719 /* Assets */; };
-		F2C96412214929A0008B0415 /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C96411214929A0008B0415 /* Diff.swift */; };
 		F2D107F52121A67F00BF4E4A /* AdImageCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */; };
 		F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */; };
 		F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */; };
 		F2D108102124396C00BF4E4A /* String+Hashing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D1080F2124396C00BF4E4A /* String+Hashing.swift */; };
 		F2D10813212556F500BF4E4A /* TestCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D10812212556F500BF4E4A /* TestCache.swift */; };
+		F2FBB19F214B9A0900E524B5 /* ChangeSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FBB19E214B9A0900E524B5 /* ChangeSet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,12 +86,12 @@
 		F273465D212DAEE000F8AFF2 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		F2734661212EDC0B00F8AFF2 /* AdStateContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdStateContainerController.swift; sourceTree = "<group>"; };
 		F2A2518A21368C0900E5D719 /* Assets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Assets; sourceTree = "<group>"; };
-		F2C96411214929A0008B0415 /* Diff.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Diff.swift; sourceTree = "<group>"; };
 		F2D107F42121A67F00BF4E4A /* AdImageCacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdImageCacheService.swift; sourceTree = "<group>"; };
 		F2D107FC2121B87D00BF4E4A /* URL+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Validation.swift"; sourceTree = "<group>"; };
 		F2D108062121E29200BF4E4A /* AdDiskCacheService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdDiskCacheService.swift; sourceTree = "<group>"; };
 		F2D1080F2124396C00BF4E4A /* String+Hashing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Hashing.swift"; sourceTree = "<group>"; };
 		F2D10812212556F500BF4E4A /* TestCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCache.swift; sourceTree = "<group>"; };
+		F2FBB19E214B9A0900E524B5 /* ChangeSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeSet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -268,10 +268,10 @@
 		F273465C212DAD1500F8AFF2 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				F2FBB19E214B9A0900E524B5 /* ChangeSet.swift */,
 				6C0F6146205D2C0600F4BF71 /* Reachability.swift */,
 				F273465D212DAEE000F8AFF2 /* Result.swift */,
 				F205940D2147CDCD00B44A62 /* State.swift */,
-				F2C96411214929A0008B0415 /* Diff.swift */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -409,6 +409,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6C2183E3205D57EE009E57EF /* Ads+CoreDataClass.swift in Sources */,
+				F2FBB19F214B9A0900E524B5 /* ChangeSet.swift in Sources */,
 				F2734662212EDC0B00F8AFF2 /* AdStateContainerController.swift in Sources */,
 				6C527B5220603DF60046DB50 /* AdPersistenceService.swift in Sources */,
 				6C205D23205C3ED7002B8BAA /* AdCollectionViewController.swift in Sources */,
@@ -427,7 +428,6 @@
 				F2586DFF212C5CFD0043DC25 /* UIFont+Fonts.swift in Sources */,
 				F2D107FD2121B87D00BF4E4A /* URL+Validation.swift in Sources */,
 				6C0F6147205D2C0700F4BF71 /* Reachability.swift in Sources */,
-				F2C96412214929A0008B0415 /* Diff.swift in Sources */,
 				F2D108072121E29200BF4E4A /* AdDiskCacheService.swift in Sources */,
 				6C205D21205C3ED7002B8BAA /* AppDelegate.swift in Sources */,
 				6C2183E4205D57EE009E57EF /* Ads+CoreDataProperties.swift in Sources */,
