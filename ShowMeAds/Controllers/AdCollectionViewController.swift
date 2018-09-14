@@ -99,7 +99,12 @@ extension AdCollectionViewController {
     
     @objc func pullToRefresh() {
         refreshControl.endRefreshing()
-        adService.fetchAds(endpoint: .database)
+        switch offlineSwitch.isOn {
+        case true:
+            adService.fetchFavoritedAds()
+        case false:
+            adService.fetchAds(endpoint: .remote)
+        }
     }
 }
 
