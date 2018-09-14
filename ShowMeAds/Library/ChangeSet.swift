@@ -40,8 +40,9 @@ struct ChangeSet<T: Equatable> {
     // MARK: Public methods
     
     public func updatedObjects() -> [T] {
-        // Create an new array with the old elements that was not deleted during the update
-        var updatedObjects = self.old.enumerated().filter({ !self.deletions.contains($0.offset) }).map({ $0.element })
+        // Create an new array containing the old elements that was not deleted during the update
+        let updatedObjectsIndicies = self.old.enumerated().filter({ !deletions.contains($0.offset) }).map({ $0.element })
+        var updatedObjects = self.new.enumerated().filter({ updatedObjectsIndicies.contains($0.element) }).map({ $0.element })
         
         // Insert the new objects into the array
         self.insertions.forEach({ updatedObjects.insert(self.new[$0], at: $0) })
